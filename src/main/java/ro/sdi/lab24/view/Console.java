@@ -1,6 +1,72 @@
 package ro.sdi.lab24.view;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import picocli.CommandLine;
+import ro.sdi.lab24.controller.Controller;
+import ro.sdi.lab24.view.commands.MovieRentalCommand;
+
 public class Console
 {
-    //TODO
+    public static Controller controller;
+
+    public Console(Controller controller)
+    {
+        Console.controller = controller;
+    }
+
+    public void run(String[] args)
+    {
+
+        CommandLine commandLine = new CommandLine(MovieRentalCommand.class);
+
+        if (args.length == 0)
+        {
+            System.out.print("> ");
+            Scanner scanner = new Scanner(System.in);
+            while (scanner.hasNextLine())
+            {
+                String line = scanner.nextLine();
+                if (line.equals("exit"))
+                {
+                    break;
+                }
+                int exitCode = commandLine.execute(parseLine(line));
+                System.out.print("> ");
+            }
+            return;
+        }
+
+        int exitCode = commandLine.execute(args);
+        System.exit(exitCode);
+    }
+
+    protected static int executeCommand(CommandLine commandLine, String[] command)
+    {
+        return commandLine.execute(command);
+    }
+
+    protected static String[] parseLine(String line)
+    {
+        List<String> matchList = new ArrayList<String>();
+        Pattern regex = Pattern.compile("[^\\s\"']+|\"([^\"]*)\"|'([^']*)'");
+        Matcher regexMatcher = regex.matcher(line);
+        while (regexMatcher.find()) {
+            if (regexMatcher.group(1) != null) {
+                // Add double-quoted string without the quotes
+                matchList.add(regexMatcher.group(1));
+            } else if (regexMatcher.group(2) != null) {
+                // Add single-quoted string without the quotes
+                matchList.add(regexMatcher.group(2));
+            } else {
+                // Add unquoted word
+                matchList.add(regexMatcher.group());
+            }
+        }
+        return matchList.toArray(new String[0]);
+    }
 }

@@ -1,7 +1,7 @@
 package ro.sdi.lab24.repository;
 
 import java.util.Optional;
-import ro.sdi.lab24.model.BaseEntity;
+import ro.sdi.lab24.model.Entity;
 import ro.sdi.lab24.validation.ValidatorException;
 
 /**
@@ -10,7 +10,7 @@ import ro.sdi.lab24.validation.ValidatorException;
  * @author radu.
  *
  */
-public interface Repository<ID, T extends BaseEntity<ID>> {
+public interface Repository<ID, T extends Entity<ID>> {
     /**
      * Find the entity with the given {@code id}.
      * 
