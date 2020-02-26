@@ -22,5 +22,25 @@ public class RentalController
         this.rentalRepository = rentalRepository;
     }
 
+    public void addRental(int movieId, int clientId, String time)
+    {
+
+    }
+
+    public void deleteRental(int movieId, int clientId)
+    {
+
+    }
+
+    public Iterable<Rental> getRentals()
+    {
+        return null;
+    }
+
+    public void updateRental(int movieId, int clientId, String time)
+    {
+
+    }
+
     //TODO Razvan
 }
