@@ -1,8 +1,8 @@
 package ro.sdi.lab24.view.commands.rental;
 
-import picocli.CommandLine;
+import picocli.CommandLine.Command;
 
-@CommandLine.Command(description = "Manage rentals", subcommands = {
+@Command(name = "rental", description = "Manage rentals", subcommands = {
         AddRentalCommand.class,
         ListRentalsCommand.class,
         UpdateRentalCommand.class,

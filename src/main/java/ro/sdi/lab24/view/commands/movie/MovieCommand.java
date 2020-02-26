@@ -1,8 +1,8 @@
 package ro.sdi.lab24.view.commands.movie;
 
-import picocli.CommandLine;
+import picocli.CommandLine.Command;
 
-@CommandLine.Command(description = "Manage movies", subcommands = {
+@Command(name = "movie", description = "Manage movies", subcommands = {
         AddMovieCommand.class,
         ListMoviesCommand.class,
         UpdateMovieCommand.class,

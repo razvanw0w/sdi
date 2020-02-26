@@ -1,8 +1,8 @@
 package ro.sdi.lab24.view.commands.client;
 
-import picocli.CommandLine;
+import picocli.CommandLine.Command;
 
-@CommandLine.Command(description = "Manage clients", subcommands = {
+@Command(name = "client", description = "Manage clients", subcommands = {
         AddClientCommand.class,
         ListClientsCommand.class,
         UpdateClientCommand.class,

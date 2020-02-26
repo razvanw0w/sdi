@@ -1,6 +1,5 @@
 package ro.sdi.lab24.view.commands.rental;
 
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import ro.sdi.lab24.view.Console;
