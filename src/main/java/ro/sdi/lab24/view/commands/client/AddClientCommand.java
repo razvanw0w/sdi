@@ -1,9 +1,9 @@
 package ro.sdi.lab24.view.commands.client;
 
-import ro.sdi.lab24.view.Console;
-
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
+import ro.sdi.lab24.validation.ProgramException;
+import ro.sdi.lab24.view.Console;
 
 @Command(description = "Add a client", name = "add")
 public class AddClientCommand implements Runnable
@@ -17,6 +17,13 @@ public class AddClientCommand implements Runnable
     @Override
     public void run()
     {
-        Console.clientController.addClient(id, name);
+        try
+        {
+            Console.clientController.addClient(id, name);
+        }
+        catch (ProgramException e)
+        {
+            Console.handleException(e);
+        }
     }
 }

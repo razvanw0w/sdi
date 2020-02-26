@@ -2,7 +2,6 @@ package ro.sdi.lab24.view;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,6 +11,7 @@ import ro.sdi.lab24.controller.ClientController;
 import ro.sdi.lab24.controller.Controller;
 import ro.sdi.lab24.controller.MovieController;
 import ro.sdi.lab24.controller.RentalController;
+import ro.sdi.lab24.validation.ProgramException;
 import ro.sdi.lab24.view.commands.MovieRentalCommand;
 
 public class Console
@@ -32,6 +32,11 @@ public class Console
         Console.clientController = clientController;
         Console.movieController = movieController;
         Console.rentalController = rentalController;
+    }
+
+    public static void handleException(ProgramException e)
+    {
+        System.out.println(e.getMessage());
     }
 
     public void run(String[] args)

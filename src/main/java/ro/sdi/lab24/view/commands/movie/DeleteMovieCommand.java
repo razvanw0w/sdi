@@ -1,8 +1,8 @@
 package ro.sdi.lab24.view.commands.movie;
 
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
+import ro.sdi.lab24.validation.ProgramException;
 import ro.sdi.lab24.view.Console;
 
 @Command(description = "Delete a movie", name = "delete")
@@ -14,6 +14,13 @@ public class DeleteMovieCommand implements Runnable
     @Override
     public void run()
     {
-        Console.movieController.deleteMovie(id);
+        try
+        {
+            Console.movieController.deleteMovie(id);
+        }
+        catch (ProgramException e)
+        {
+            Console.handleException(e);
+        }
     }
 }

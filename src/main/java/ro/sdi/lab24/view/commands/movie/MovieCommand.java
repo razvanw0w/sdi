@@ -13,6 +13,6 @@ public class MovieCommand implements Runnable
     @Override
     public void run()
     {
-        System.out.println("Use a subcommad!");
+        System.out.println("Use a subcommand!");
     }
 }

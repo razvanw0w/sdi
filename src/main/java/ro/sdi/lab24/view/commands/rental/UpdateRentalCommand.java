@@ -2,6 +2,7 @@ package ro.sdi.lab24.view.commands.rental;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
+import ro.sdi.lab24.validation.ProgramException;
 import ro.sdi.lab24.view.Console;
 
 @Command(description = "Update rental", name = "update")
@@ -19,6 +20,13 @@ public class UpdateRentalCommand implements Runnable
     @Override
     public void run()
     {
-        Console.rentalController.updateRental(movieId, clientId, time);
+        try
+        {
+            Console.rentalController.updateRental(movieId, clientId, time);
+        }
+        catch (ProgramException e)
+        {
+            Console.handleException(e);
+        }
     }
 }

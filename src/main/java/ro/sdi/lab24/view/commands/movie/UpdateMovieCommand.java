@@ -2,6 +2,7 @@ package ro.sdi.lab24.view.commands.movie;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
+import ro.sdi.lab24.validation.ProgramException;
 import ro.sdi.lab24.view.Console;
 
 @Command(description = "Update movie", name = "update")
@@ -16,6 +17,13 @@ public class UpdateMovieCommand implements Runnable
     @Override
     public void run()
     {
-        Console.movieController.updateMovie(id, name);
+        try
+        {
+            Console.movieController.updateMovie(id, name);
+        }
+        catch (ProgramException e)
+        {
+            Console.handleException(e);
+        }
     }
 }

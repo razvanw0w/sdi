@@ -2,6 +2,7 @@ package ro.sdi.lab24.view.commands.movie;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
+import ro.sdi.lab24.validation.ProgramException;
 import ro.sdi.lab24.view.Console;
 
 @Command(description = "Adds a movie", name = "add")
@@ -16,6 +17,13 @@ public class AddMovieCommand implements Runnable
     @Override
     public void run()
     {
-        Console.movieController.addMovie(id, name);
+        try
+        {
+            Console.movieController.addMovie(id, name);
+        }
+        catch (ProgramException e)
+        {
+            Console.handleException(e);
+        }
     }
 }

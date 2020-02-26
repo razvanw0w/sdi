@@ -2,6 +2,7 @@ package ro.sdi.lab24.view.commands.client;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
+import ro.sdi.lab24.validation.ProgramException;
 import ro.sdi.lab24.view.Console;
 
 @Command(description = "Update a client", name = "update")
@@ -16,6 +17,13 @@ public class UpdateClientCommand implements Runnable
     @Override
     public void run()
     {
-        Console.clientController.updateClient(id, name);
+        try
+        {
+            Console.clientController.updateClient(id, name);
+        }
+        catch (ProgramException e)
+        {
+            Console.handleException(e);
+        }
     }
 }

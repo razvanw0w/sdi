@@ -2,6 +2,7 @@ package ro.sdi.lab24.view.commands.rental;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
+import ro.sdi.lab24.validation.ProgramException;
 import ro.sdi.lab24.view.Console;
 
 @Command(description = "Delete rental", name = "delete")
@@ -16,6 +17,13 @@ public class DeleteRentalCommand implements Runnable
     @Override
     public void run()
     {
-        Console.rentalController.deleteRental(movieId, clientId);
+        try
+        {
+            Console.rentalController.deleteRental(movieId, clientId);
+        }
+        catch (ProgramException e)
+        {
+            Console.handleException(e);
+        }
     }
 }
