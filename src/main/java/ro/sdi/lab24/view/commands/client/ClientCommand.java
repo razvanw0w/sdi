@@ -8,6 +8,11 @@ import picocli.CommandLine.Command;
         UpdateClientCommand.class,
         DeleteClientCommand.class,
 })
-public class ClientCommand
+public class ClientCommand implements Runnable
 {
+    @Override
+    public void run()
+    {
+        System.out.println("Use a subcommand!");
+    }
 }

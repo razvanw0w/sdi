@@ -11,7 +11,13 @@ import static picocli.CommandLine.Command;
                 ClientCommand.class,
                 MovieCommand.class,
                 RentalCommand.class
-        })
-public class MovieRentalCommand
+        },
+        mixinStandardHelpOptions = true)
+public class MovieRentalCommand implements Runnable
 {
+        @Override
+        public void run()
+        {
+                System.out.println("Use a command!");
+        }
 }

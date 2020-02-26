@@ -8,6 +8,11 @@ import picocli.CommandLine.Command;
         UpdateMovieCommand.class,
         DeleteMovieCommand.class,
 })
-public class MovieCommand
+public class MovieCommand implements Runnable
 {
+    @Override
+    public void run()
+    {
+        System.out.println("Use a subcommad!");
+    }
 }
