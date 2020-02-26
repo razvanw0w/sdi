@@ -29,7 +29,6 @@ public class ClientController
 
     public void updateClient(int id, String name)
     {
-
     }
 
     //TODO Razvan
