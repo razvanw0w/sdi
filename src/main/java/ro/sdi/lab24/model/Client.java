@@ -2,12 +2,17 @@ package ro.sdi.lab24.model;
 
 public class Client extends Entity<Integer>
 {
-    String name;
+    private String name;
 
     public Client(int id, String name)
     {
         super(id);
         this.name = name;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 
     @Override

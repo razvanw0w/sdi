@@ -5,13 +5,13 @@ import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
 import ro.sdi.lab24.repository.Repository;
 
-public class Controller
+public class RentalController
 {
     Repository<Integer, Client> clientRepository;
     Repository<Integer, Movie> movieRepository;
     Repository<Rental.RentalID, Rental> rentalRepository;
 
-    public Controller(
+    public RentalController(
             Repository<Integer, Client> clientRepository,
             Repository<Integer, Movie> movieRepository,
             Repository<Rental.RentalID, Rental> rentalRepository
@@ -21,4 +21,6 @@ public class Controller
         this.movieRepository = movieRepository;
         this.rentalRepository = rentalRepository;
     }
+
+    //TODO Razvan
 }

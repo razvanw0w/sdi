@@ -1,6 +1,20 @@
 package ro.sdi.lab24.view.commands.client;
 
-public class DeleteClientCommand
+import picocli.CommandLine.Parameters;
+
+import picocli.CommandLine.Command;
+import ro.sdi.lab24.view.Console;
+
+@Command(description = "Delete a client", name = "delete")
+public class DeleteClientCommand implements Runnable
 {
-    //TODO Horatiu
+    @Parameters(index = "0", description = "Client id")
+    int id;
+
+
+    @Override
+    public void run()
+    {
+        Console.clientController.deleteClient(id);
+    }
 }

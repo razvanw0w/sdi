@@ -1,6 +1,9 @@
 package ro.sdi.lab24;
 
+import ro.sdi.lab24.controller.ClientController;
 import ro.sdi.lab24.controller.Controller;
+import ro.sdi.lab24.controller.MovieController;
+import ro.sdi.lab24.controller.RentalController;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
@@ -20,7 +23,10 @@ public class Main
         Repository<Rental.RentalID, Rental> rentalRepository= new InMemoryRepository<>(new RentalValidator());
 
         Controller controller = new Controller(clientRepository, movieRepository, rentalRepository);
-        Console console = new Console(controller);
+        ClientController clientController = new ClientController(clientRepository);
+        MovieController movieController = new MovieController(movieRepository);
+        RentalController rentalController = new RentalController(clientRepository, movieRepository, rentalRepository);
+        Console console = new Console(controller, clientController, movieController, rentalController);
 
         console.run(args);
     }

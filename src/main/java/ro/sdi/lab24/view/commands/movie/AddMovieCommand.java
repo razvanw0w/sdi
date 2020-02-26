@@ -1,6 +1,21 @@
 package ro.sdi.lab24.view.commands.movie;
 
-public class AddMovieCommand
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Parameters;
+import ro.sdi.lab24.view.Console;
+
+@Command(description = "Adds a movie", name = "add")
+public class AddMovieCommand implements Runnable
 {
-    //TODO Horatiu
+    @Parameters(index = "0", description = "Movie id")
+    int id;
+
+    @Parameters(index = "1", description = "Movie name")
+    String name;
+
+    @Override
+    public void run()
+    {
+        Console.movieController.addMovie(id, name);
+    }
 }

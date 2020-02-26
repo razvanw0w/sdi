@@ -7,16 +7,30 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import picocli.CommandLine;
+import ro.sdi.lab24.controller.ClientController;
 import ro.sdi.lab24.controller.Controller;
+import ro.sdi.lab24.controller.MovieController;
+import ro.sdi.lab24.controller.RentalController;
 import ro.sdi.lab24.view.commands.MovieRentalCommand;
 
 public class Console
 {
     public static Controller controller;
+    public static ClientController clientController;
+    public static MovieController movieController;
+    public static RentalController rentalController;
 
-    public Console(Controller controller)
+    public Console(
+            Controller controller,
+            ClientController clientController,
+            MovieController movieController,
+            RentalController rentalController
+    )
     {
         Console.controller = controller;
+        Console.clientController = clientController;
+        Console.movieController = movieController;
+        Console.rentalController = rentalController;
     }
 
     public void run(String[] args)

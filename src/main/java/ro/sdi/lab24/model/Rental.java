@@ -4,12 +4,17 @@ import java.time.LocalDateTime;
 
 public class Rental extends Entity<Rental.RentalID>
 {
-    LocalDateTime time;
+    private LocalDateTime time;
 
     public Rental(int movieId, int clientId, LocalDateTime time)
     {
         super(new RentalID(movieId, clientId));
         this.time = time;
+    }
+
+    public LocalDateTime getTime()
+    {
+        return time;
     }
 
     public static class RentalID
