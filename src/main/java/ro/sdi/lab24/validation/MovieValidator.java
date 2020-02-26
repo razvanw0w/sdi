@@ -16,10 +16,10 @@ public class MovieValidator implements Validator<Movie>
     {
         StringBuilder errorMessages = new StringBuilder();
         if (entity.getId() < 0) {
-            errorMessages.append("Movie ").append(entity.toString()).append("has an invalid ID\n");
+            errorMessages.append("Movie ").append(entity.toString()).append(" has an invalid ID\n");
         }
         if (!entity.getName().matches("^[a-zA-Z]+$")) {
-            errorMessages.append("Movie ").append(entity.toString()).append("has an invalid name\n");
+            errorMessages.append("Movie ").append(entity.toString()).append(" has an invalid name\n");
         }
         if (errorMessages.length() > 0) {
             throw new ValidatorException(errorMessages.toString());
