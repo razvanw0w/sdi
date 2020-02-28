@@ -1,8 +1,6 @@
 package ro.sdi.lab24.validation;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ro.sdi.lab24.model.Rental;
 import java.time.LocalDateTime;
@@ -10,10 +8,10 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RentalValidatorTest {
-    private RentalValidator validator;
+    private static RentalValidator validator;
 
     @BeforeAll
-    void setUp() {
+    static void setUp() {
         validator = new RentalValidator();
     }
 

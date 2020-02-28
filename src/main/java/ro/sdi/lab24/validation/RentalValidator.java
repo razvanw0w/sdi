@@ -11,7 +11,7 @@ public class RentalValidator implements Validator<Rental>
      * In order for a rental to be valid, its IDs must be non-negative numbers and the rental date
      * should be less than today's date
      * @param entity: the supposed-to-be rental
-     * @throws ValidatorException
+     * @throws ValidatorException: thrown in case a validation error occurs with all the occured errors
      */
     @Override
     public void validate(Rental entity) throws ValidatorException
