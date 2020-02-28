@@ -2,6 +2,7 @@ package ro.sdi.lab24.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,12 +36,9 @@ public class Console
 
     public void run(String[] args)
     {
-
         CommandLine commandLine = new CommandLine(MovieRentalCommand.class);
-
         if (args.length == 0)
         {
-            System.out.print("> ");
             Scanner scanner = new Scanner(System.in);
             while (scanner.hasNextLine())
             {
@@ -50,7 +48,6 @@ public class Console
                     break;
                 }
                 int exitCode = commandLine.execute(parseLine(line));
-                System.out.print("> ");
             }
             return;
         }

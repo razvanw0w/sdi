@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'ro.sdi.lab2-4'
@@ -11,9 +12,28 @@ repositories {
     mavenCentral()
 }
 
+application {
+    mainClassName = "ro.sdi.lab24.Main"
+}
+
 dependencies {
     implementation 'info.picocli:picocli:4.2.0'
     testCompile 'org.junit.jupiter:junit-jupiter:5.4.2'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'ro.sdi.lab24.Main'
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+run {
+    standardInput = System.in
 }
 
 test {

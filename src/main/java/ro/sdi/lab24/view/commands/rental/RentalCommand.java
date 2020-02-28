@@ -8,6 +8,11 @@ import picocli.CommandLine.Command;
         UpdateRentalCommand.class,
         DeleteRentalCommand.class,
 })
-public class RentalCommand
+public class RentalCommand implements Runnable
 {
+    @Override
+    public void run()
+    {
+        System.out.println("Use a subcommand!");
+    }
 }
