@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import ro.sdi.lab24.model.Entity;
 import ro.sdi.lab24.validation.Validator;
-import ro.sdi.lab24.validation.ValidatorException;
+import ro.sdi.lab24.exception.ValidatorException;
 
 public class InMemoryRepository<ID, T extends Entity<ID>> implements Repository<ID, T>
 {

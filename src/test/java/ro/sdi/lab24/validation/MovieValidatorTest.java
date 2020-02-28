@@ -2,6 +2,7 @@ package ro.sdi.lab24.validation;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ro.sdi.lab24.exception.ValidatorException;
 import ro.sdi.lab24.model.Movie;
 
 import static org.junit.jupiter.api.Assertions.*;

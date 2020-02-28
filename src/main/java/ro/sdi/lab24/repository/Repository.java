@@ -2,7 +2,7 @@ package ro.sdi.lab24.repository;
 
 import java.util.Optional;
 import ro.sdi.lab24.model.Entity;
-import ro.sdi.lab24.validation.ValidatorException;
+import ro.sdi.lab24.exception.ValidatorException;
 
 /**
  * Interface for generic CRUD operations on a repository for a specific type.
