@@ -1,5 +1,6 @@
 package ro.sdi.lab24.controller;
 
+import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.model.Movie;
@@ -33,6 +34,7 @@ public class RentalController
      * @param clientId: the ID of the client
      * @param time: date and time of rental
      * @throws ElementNotFoundException if movie or client doesn't exist in the repository
+     * @throws AlreadyExistingElementException if the rental already exists in the repository
      */
     public void addRental(int movieId, int clientId, String time)
     {
@@ -41,7 +43,10 @@ public class RentalController
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         Rental rental = new Rental(movieId, clientId, LocalDateTime.parse(time, formatter));
-        rentalRepository.save(rental);
+        rentalRepository.save(rental).ifPresent(opt -> {throw new AlreadyExistingElementException("rental of movie " +
+                                                                                                  Integer.toString(movieId) +
+                                                                                                  " and client " + Integer.toString(clientId) +
+                                                                                                  " already exists");});
     }
 
     /**

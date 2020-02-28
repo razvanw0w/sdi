@@ -1,5 +1,6 @@
 package ro.sdi.lab24.controller;
 
+import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.repository.Repository;
@@ -17,11 +18,12 @@ public class ClientController
      * This function adds a client to the repository
      * @param id: the ID of the client
      * @param name: the name of the client
+     * @throws AlreadyExistingElementException if the client (the ID) is already there
      */
     public void addClient(int id, String name)
     {
         Client client = new Client(id, name);
-        clientRepository.save(client);
+        clientRepository.save(client).ifPresent(opt -> {throw new AlreadyExistingElementException("client" + Integer.toString(id) + " already exists");});
     }
 
     /**

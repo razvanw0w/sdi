@@ -1,5 +1,6 @@
 package ro.sdi.lab24.controller;
 
+import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.repository.Repository;
@@ -17,11 +18,12 @@ public class MovieController
      * This function adds a movie to the repository
      * @param id: the ID of the movie
      * @param name: the name of the movie
+     * @throws AlreadyExistingElementException if the movie (the ID) is already there
      */
     public void addMovie(int id, String name)
     {
         Movie movie = new Movie(id, name);
-        movieRepository.save(movie);
+        movieRepository.save(movie).ifPresent(opt -> {throw new AlreadyExistingElementException("movie" + Integer.toString(id) + " already exists");});
     }
 
     /**
