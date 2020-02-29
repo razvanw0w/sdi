@@ -1,4 +1,6 @@
-package ro.sdi.lab24.validation;
+package ro.sdi.lab24.exception;
+
+import ro.sdi.lab24.exception.ProgramException;
 
 /**
  * @author radu.

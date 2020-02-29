@@ -1,6 +1,7 @@
 package ro.sdi.lab24.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Rental extends Entity<Rental.RentalID>
 {
@@ -36,6 +37,20 @@ public class Rental extends Entity<Rental.RentalID>
         public int getClientId()
         {
             return clientId;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            RentalID rentalID = (RentalID) o;
+            return movieId == rentalID.movieId &&
+                    clientId == rentalID.clientId;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(movieId, clientId);
         }
     }
 
