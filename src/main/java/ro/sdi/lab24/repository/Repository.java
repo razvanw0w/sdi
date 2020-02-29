@@ -1,8 +1,8 @@
 package ro.sdi.lab24.repository;
 
 import java.util.Optional;
-import ro.sdi.lab24.model.BaseEntity;
-import ro.sdi.lab24.validation.ValidatorException;
+import ro.sdi.lab24.model.Entity;
+import ro.sdi.lab24.exception.ValidatorException;
 
 /**
  * Interface for generic CRUD operations on a repository for a specific type.
@@ -10,7 +10,7 @@ import ro.sdi.lab24.validation.ValidatorException;
  * @author radu.
  *
  */
-public interface Repository<ID, T extends BaseEntity<ID>> {
+public interface Repository<ID, T extends Entity<ID>> {
     /**
      * Find the entity with the given {@code id}.
      * 
@@ -33,7 +33,7 @@ public interface Repository<ID, T extends BaseEntity<ID>> {
      *
      * @param entity
      *            must not be null.
-     * @return an {@code Optional} - null if the entity was saved otherwise (e.g. id already exists) returns the entity.
+     * @return an {@code Optional} - null if the entity was saved, otherwise (e.g. id already exists) returns the entity.
      * @throws IllegalArgumentException
      *             if the given entity is null.
      * @throws ValidatorException
@@ -57,8 +57,7 @@ public interface Repository<ID, T extends BaseEntity<ID>> {
      * 
      * @param entity
      *            must not be null.
-     * @return an {@code Optional} - null if the entity was updated otherwise (e.g. id does not exist) returns the
-     *         entity.
+     * @return an {@code Optional} - the new entity if it was updated, otherwise (e.g. id does not exist) returns null.
      * @throws IllegalArgumentException
      *             if the given entity is null.
      * @throws ValidatorException

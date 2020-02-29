@@ -1,4 +1,4 @@
-package ro.sdi.lab24.validation;
+package ro.sdi.lab24.exception;
 
 /**
  * @author radu.
