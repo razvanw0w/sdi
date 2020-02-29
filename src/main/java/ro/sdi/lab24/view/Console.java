@@ -11,7 +11,7 @@ import ro.sdi.lab24.controller.ClientController;
 import ro.sdi.lab24.controller.Controller;
 import ro.sdi.lab24.controller.MovieController;
 import ro.sdi.lab24.controller.RentalController;
-import ro.sdi.lab24.validation.ProgramException;
+import ro.sdi.lab24.exception.ProgramException;
 import ro.sdi.lab24.view.commands.MovieRentalCommand;
 
 public class Console
@@ -41,6 +41,7 @@ public class Console
 
     public void run(String[] args)
     {
+        System.out.println("Movie rental software");
         CommandLine commandLine = new CommandLine(MovieRentalCommand.class);
         if (args.length == 0)
         {
@@ -59,11 +60,6 @@ public class Console
 
         int exitCode = commandLine.execute(args);
         System.exit(exitCode);
-    }
-
-    protected static int executeCommand(CommandLine commandLine, String[] command)
-    {
-        return commandLine.execute(command);
     }
 
     protected static String[] parseLine(String line)

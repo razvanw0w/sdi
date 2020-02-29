@@ -26,7 +26,7 @@ public class MovieController
         Movie movie = new Movie(id, name);
         movieRepository.save(movie).ifPresent(opt ->
         {
-            throw new AlreadyExistingElementException(String.format("movie %d already exists", id));
+            throw new AlreadyExistingElementException(String.format("Movie %d already exists", id));
         });
     }
 
@@ -38,7 +38,7 @@ public class MovieController
      */
     public void deleteMovie(int id)
     {
-        movieRepository.delete(id).orElseThrow(() -> new ElementNotFoundException(String.format("Movie %d does not exists", id)));
+        movieRepository.delete(id).orElseThrow(() -> new ElementNotFoundException(String.format("Movie %d does not exist", id)));
     }
 
     /**
@@ -61,6 +61,6 @@ public class MovieController
     public void updateMovie(int id, String name)
     {
         Movie movie = new Movie(id, name);
-        movieRepository.update(movie).orElseThrow(() -> new ElementNotFoundException(String.format("Movie %d does not exists", id)));
+        movieRepository.update(movie).orElseThrow(() -> new ElementNotFoundException(String.format("Movie %d does not exist", id)));
     }
 }

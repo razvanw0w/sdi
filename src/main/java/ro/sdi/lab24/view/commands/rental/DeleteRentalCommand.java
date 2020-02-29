@@ -2,7 +2,7 @@ package ro.sdi.lab24.view.commands.rental;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
-import ro.sdi.lab24.validation.ProgramException;
+import ro.sdi.lab24.exception.ProgramException;
 import ro.sdi.lab24.view.Console;
 
 @Command(description = "Delete rental", name = "delete")

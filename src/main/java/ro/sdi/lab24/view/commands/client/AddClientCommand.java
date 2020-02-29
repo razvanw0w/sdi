@@ -2,7 +2,7 @@ package ro.sdi.lab24.view.commands.client;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
-import ro.sdi.lab24.validation.ProgramException;
+import ro.sdi.lab24.exception.ProgramException;
 import ro.sdi.lab24.view.Console;
 
 @Command(description = "Add a client", name = "add")
@@ -20,6 +20,7 @@ public class AddClientCommand implements Runnable
         try
         {
             Console.clientController.addClient(id, name);
+            System.out.println("Client added!");
         }
         catch (ProgramException e)
         {

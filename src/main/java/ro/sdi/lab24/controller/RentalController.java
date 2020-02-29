@@ -44,17 +44,14 @@ public class RentalController
         Rental rental = new Rental(movieId, clientId, LocalDateTime.parse(time, formatter));
         rentalRepository.save(rental).ifPresent(opt ->
         {
-            throw new AlreadyExistingElementException("Rental of movie " +
-                    Integer.toString(movieId) +
-                    " and client " + Integer.toString(clientId) +
-                    " already exists");
+            throw new AlreadyExistingElementException(String.format("Rental of movie %d and client %d already exists", movieId, clientId));
         });
     }
 
     private void checkRentalID(int movieId, int clientId)
     {
-        movieRepository.findOne(movieId).orElseThrow(() -> new ElementNotFoundException(String.format("Movie %d does not exists", movieId)));
-        clientRepository.findOne(clientId).orElseThrow(() -> new ElementNotFoundException(String.format("Client %d does not exists", clientId)));
+        movieRepository.findOne(movieId).orElseThrow(() -> new ElementNotFoundException(String.format("Movie %d does not exist", movieId)));
+        clientRepository.findOne(clientId).orElseThrow(() -> new ElementNotFoundException(String.format("Client %d does not exist", clientId)));
     }
 
     /**

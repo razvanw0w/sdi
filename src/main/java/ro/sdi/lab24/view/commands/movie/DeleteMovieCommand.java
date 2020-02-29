@@ -2,7 +2,7 @@ package ro.sdi.lab24.view.commands.movie;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
-import ro.sdi.lab24.validation.ProgramException;
+import ro.sdi.lab24.exception.ProgramException;
 import ro.sdi.lab24.view.Console;
 
 @Command(description = "Delete a movie", name = "delete")
