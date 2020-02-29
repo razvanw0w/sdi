@@ -15,6 +15,7 @@ build
 out
 generated
 MANIFEST.MF
+javadoc/
 
 #gradle
 .gradle
