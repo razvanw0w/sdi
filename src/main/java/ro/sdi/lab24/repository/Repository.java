@@ -33,7 +33,7 @@ public interface Repository<ID, T extends Entity<ID>> {
      *
      * @param entity
      *            must not be null.
-     * @return an {@code Optional} - null if the entity was saved otherwise (e.g. id already exists) returns the entity.
+     * @return an {@code Optional} - null if the entity was saved, otherwise (e.g. id already exists) returns the entity.
      * @throws IllegalArgumentException
      *             if the given entity is null.
      * @throws ValidatorException
@@ -57,8 +57,7 @@ public interface Repository<ID, T extends Entity<ID>> {
      * 
      * @param entity
      *            must not be null.
-     * @return an {@code Optional} - null if the entity was updated otherwise (e.g. id does not exist) returns the
-     *         entity.
+     * @return an {@code Optional} - the new entity if it was updated, otherwise (e.g. id does not exist) returns null.
      * @throws IllegalArgumentException
      *             if the given entity is null.
      * @throws ValidatorException
