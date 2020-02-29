@@ -19,7 +19,7 @@ public class MovieValidator implements Validator<Movie>
         if (entity.getId() < 0) {
             errorMessages.append("Movie ").append(entity.toString()).append(" has an invalid ID\n");
         }
-        if (!entity.getName().matches("^[a-zA-Z]+$")) {
+        if (!entity.getName().matches("^[a-zA-Z0-9]+$")) {
             errorMessages.append("Movie ").append(entity.toString()).append(" has an invalid name\n");
         }
         if (errorMessages.length() > 0) {

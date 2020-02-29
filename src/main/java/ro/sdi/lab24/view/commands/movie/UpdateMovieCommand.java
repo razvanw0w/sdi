@@ -20,6 +20,7 @@ public class UpdateMovieCommand implements Runnable
         try
         {
             Console.movieController.updateMovie(id, name);
+            System.out.println("Movie updated!");
         }
         catch (ProgramException e)
         {

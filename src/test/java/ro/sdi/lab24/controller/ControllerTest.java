@@ -17,6 +17,4 @@ class ControllerTest
     void tearDown()
     {
     }
-
-    //TODO Razvan
 }

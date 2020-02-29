@@ -7,12 +7,12 @@ import picocli.CommandLine.Command;
         ListMoviesCommand.class,
         UpdateMovieCommand.class,
         DeleteMovieCommand.class,
-})
+},mixinStandardHelpOptions = true)
 public class MovieCommand implements Runnable
 {
     @Override
     public void run()
     {
-        System.out.println("Use a subcommand!");
+        System.out.println("Use a subcommand! Type 'movie --help'");
     }
 }

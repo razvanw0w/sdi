@@ -26,7 +26,7 @@ class ClientControllerTest {
     @BeforeEach
     void setUp() {
         validator = new ClientValidator();
-        repo = new InMemoryRepository<Integer, Client>(validator);
+        repo = new MemoryRepository<Integer, Client>(validator);
         controller = new ClientController(repo);
     }
 

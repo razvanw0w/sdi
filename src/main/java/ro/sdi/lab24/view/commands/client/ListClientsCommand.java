@@ -16,10 +16,10 @@ public class ListClientsCommand implements Runnable
             Iterable<Client> clients = Console.clientController.getClients();
             if (!clients.iterator().hasNext())
             {
-                System.out.println("No clients!");
+                System.out.println("No clients found!");
             }
             clients.forEach(
-                    client -> System.out.printf("%d %s", client.getId(), client.getName())
+                    client -> System.out.printf("%d %s\n", client.getId(), client.getName())
             );
         }
         catch (ProgramException e)

@@ -9,12 +9,12 @@ import ro.sdi.lab24.view.Console;
         ListRentalsCommand.class,
         UpdateRentalCommand.class,
         DeleteRentalCommand.class,
-})
+},mixinStandardHelpOptions = true)
 public class RentalCommand implements Runnable
 {
     @Override
     public void run()
     {
-            System.out.println("Use a subcommand!");
+            System.out.println("Use a subcommand!  Type 'rental --help'");
     }
 }

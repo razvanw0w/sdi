@@ -14,7 +14,7 @@ public class UpdateRentalCommand implements Runnable
     @Parameters(index = "1", description = "Client id")
     int clientId;
 
-    @Parameters(index = "2", description = "Rental time")
+    @Parameters(index = "2", description = "Rental time: \"dd-MM-yyyy HH:mm\"")
     String time;
 
     @Override
@@ -23,6 +23,7 @@ public class UpdateRentalCommand implements Runnable
         try
         {
             Console.rentalController.updateRental(movieId, clientId, time);
+            System.out.println("Rental updated!");
         }
         catch (ProgramException e)
         {

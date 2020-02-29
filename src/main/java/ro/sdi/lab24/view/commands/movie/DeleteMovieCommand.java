@@ -17,6 +17,7 @@ public class DeleteMovieCommand implements Runnable
         try
         {
             Console.movieController.deleteMovie(id);
+            System.out.println("Movie deleted!");
         }
         catch (ProgramException e)
         {

@@ -17,10 +17,10 @@ public class ListMoviesCommand implements Runnable
             Iterable<Movie> movies = Console.movieController.getMovies();
             if (!movies.iterator().hasNext())
             {
-                System.out.println("No clients!");
+                System.out.println("No movies found!");
             }
             movies.forEach(
-                    movie -> System.out.printf("%d %s", movie.getId(), movie.getName())
+                    movie -> System.out.printf("%d %s\n", movie.getId(), movie.getName())
             );
         }
         catch (ProgramException e)

@@ -16,14 +16,14 @@ public class ListRentalsCommand implements Runnable
             Iterable<Rental> rentals = Console.rentalController.getRentals();
             if (!rentals.iterator().hasNext())
             {
-                System.out.println("No clients!");
+                System.out.println("No rentals found!");
             }
             rentals.forEach(
                     rental -> System.out.printf(
-                            "%d %d %s",
+                            "%d %d %s\n",
                             rental.getId().getMovieId(),
                             rental.getId().getClientId(),
-                            rental.getTime()
+                            rental.getTime().format(Console.rentalController.formatter)
                     )
             );
         }

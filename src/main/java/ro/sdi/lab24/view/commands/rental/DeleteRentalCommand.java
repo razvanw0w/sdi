@@ -20,6 +20,7 @@ public class DeleteRentalCommand implements Runnable
         try
         {
             Console.rentalController.deleteRental(movieId, clientId);
+            System.out.println("Rental deleted!");
         }
         catch (ProgramException e)
         {

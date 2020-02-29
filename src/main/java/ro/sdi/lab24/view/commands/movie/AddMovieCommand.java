@@ -20,6 +20,7 @@ public class AddMovieCommand implements Runnable
         try
         {
             Console.movieController.addMovie(id, name);
+            System.out.println("Movie added!");
         }
         catch (ProgramException e)
         {

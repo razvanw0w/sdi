@@ -4,8 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
-import ro.sdi.lab24.repository.InMemoryRepository;
-import ro.sdi.lab24.model.*;
+import ro.sdi.lab24.model.Client;
+import ro.sdi.lab24.model.Movie;
+import ro.sdi.lab24.model.Rental;
+import ro.sdi.lab24.repository.MemoryRepository;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.validation.ClientValidator;
 import ro.sdi.lab24.validation.MovieValidator;
@@ -16,7 +18,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.stream.StreamSupport;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RentalControllerTest {
     private RentalController controller;
@@ -30,8 +33,8 @@ class RentalControllerTest {
 
     @BeforeEach
     void setUp() {
-        clientRepository = new InMemoryRepository<Integer, Client>(new ClientValidator());
-        movieRepository = new InMemoryRepository<Integer, Movie>(new MovieValidator());
+        clientRepository = new MemoryRepository<Integer, Client>(new ClientValidator());
+        movieRepository = new MemoryRepository<Integer, Movie>(new MovieValidator());
         clientRepository.save(new Client(1, "a"));
         clientRepository.save(new Client(2, "b"));
         clientRepository.save(new Client(3, "c"));
@@ -41,7 +44,7 @@ class RentalControllerTest {
         formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         controller = new RentalController(clientRepository,
                                           movieRepository,
-                                          new InMemoryRepository<Rental.RentalID, Rental>(new RentalValidator()));
+                                          new MemoryRepository<Rental.RentalID, Rental>(new RentalValidator()));
     }
 
     @Test

@@ -20,6 +20,7 @@ public class UpdateClientCommand implements Runnable
         try
         {
             Console.clientController.updateClient(id, name);
+            System.out.println("Client updated!");
         }
         catch (ProgramException e)
         {

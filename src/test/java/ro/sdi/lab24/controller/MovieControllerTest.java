@@ -4,16 +4,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
-import ro.sdi.lab24.exception.ValidatorException;
 import ro.sdi.lab24.model.Movie;
-import ro.sdi.lab24.repository.InMemoryRepository;
+import ro.sdi.lab24.repository.MemoryRepository;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.validation.MovieValidator;
 
 import java.util.Iterator;
 import java.util.stream.StreamSupport;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MovieControllerTest {
     private Repository<Integer, Movie> repo;
@@ -27,7 +27,7 @@ class MovieControllerTest {
     @BeforeEach
     void setUp() {
         validator = new MovieValidator();
-        repo = new InMemoryRepository<Integer, Movie>(validator);
+        repo = new MemoryRepository<Integer, Movie>(validator);
         controller = new MovieController(repo);
     }
 
