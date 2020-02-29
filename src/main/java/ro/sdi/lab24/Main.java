@@ -7,7 +7,7 @@ import ro.sdi.lab24.controller.RentalController;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
-import ro.sdi.lab24.repository.InMemoryRepository;
+import ro.sdi.lab24.repository.MemoryRepository;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.validation.ClientValidator;
 import ro.sdi.lab24.validation.MovieValidator;
@@ -18,9 +18,9 @@ public class Main
 {
     public static void main(String[] args)
     {
-        Repository<Integer, Client> clientRepository = new InMemoryRepository<>(new ClientValidator());
-        Repository<Integer, Movie> movieRepository= new InMemoryRepository<>(new MovieValidator());
-        Repository<Rental.RentalID, Rental> rentalRepository= new InMemoryRepository<>(new RentalValidator());
+        Repository<Integer, Client> clientRepository = new MemoryRepository<>(new ClientValidator());
+        Repository<Integer, Movie> movieRepository= new MemoryRepository<>(new MovieValidator());
+        Repository<Rental.RentalID, Rental> rentalRepository= new MemoryRepository<>(new RentalValidator());
 
         Controller controller = new Controller(clientRepository, movieRepository, rentalRepository);
         ClientController clientController = new ClientController(clientRepository);
