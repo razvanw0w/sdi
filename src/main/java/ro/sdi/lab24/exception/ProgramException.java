@@ -1,4 +1,4 @@
-package ro.sdi.lab24.validation;
+package ro.sdi.lab24.exception;
 
 public class ProgramException extends RuntimeException
 {
