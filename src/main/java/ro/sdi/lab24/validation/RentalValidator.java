@@ -4,6 +4,7 @@ import ro.sdi.lab24.exception.ValidatorException;
 import ro.sdi.lab24.model.Rental;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class RentalValidator implements Validator<Rental>
 {
@@ -17,19 +18,8 @@ public class RentalValidator implements Validator<Rental>
     @Override
     public void validate(Rental entity) throws ValidatorException
     {
-        StringBuilder errorMessages = new StringBuilder();
-        Rental.RentalID rentalID = entity.getId();
-        if (rentalID.getClientId() < 0) {
-            errorMessages.append("Rental ").append(entity.toString()).append(" has an invalid client ID\n");
-        }
-        if (rentalID.getMovieId() < 0) {
-            errorMessages.append("Rental ").append(entity.toString()).append(" has an invalid movie ID\n");
-        }
-        if (entity.getTime().compareTo(LocalDateTime.now()) > 0) {
-            errorMessages.append("Rental ").append(entity.toString()).append(" has an invalid date\n");
-        }
-        if (errorMessages.length() > 0) {
-            throw new ValidatorException(errorMessages.toString());
-        }
+        Optional.of(entity).filter(rental -> rental.getId().getClientId() >= 0).orElseThrow(() -> new ValidatorException(String.format("Rental %s has an invalid client ID", entity.toString())));
+        Optional.of(entity).filter(rental -> rental.getId().getMovieId() >= 0).orElseThrow(() -> new ValidatorException(String.format("Rental %s has an invalid movie ID", entity.toString())));
+        Optional.of(entity).filter(rental -> rental.getTime().compareTo(LocalDateTime.now()) <= 0).orElseThrow(() -> new ValidatorException(String.format("Rental %s has an invalid movie ID", entity.toString())));
     }
 }
