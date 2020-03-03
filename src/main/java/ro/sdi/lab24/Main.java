@@ -9,24 +9,30 @@ import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
 import ro.sdi.lab24.repository.MemoryRepository;
 import ro.sdi.lab24.repository.Repository;
-import ro.sdi.lab24.validation.ClientValidator;
-import ro.sdi.lab24.validation.MovieValidator;
-import ro.sdi.lab24.validation.RentalValidator;
 import ro.sdi.lab24.view.Console;
 
 public class Main
 {
     public static void main(String[] args)
     {
-        Repository<Integer, Client> clientRepository = new MemoryRepository<>(new ClientValidator());
-        Repository<Integer, Movie> movieRepository= new MemoryRepository<>(new MovieValidator());
-        Repository<Rental.RentalID, Rental> rentalRepository= new MemoryRepository<>(new RentalValidator());
+        Repository<Integer, Client> clientRepository = new MemoryRepository<>();
+        Repository<Integer, Movie> movieRepository = new MemoryRepository<>();
+        Repository<Rental.RentalID, Rental> rentalRepository = new MemoryRepository<>();
 
         Controller controller = new Controller(clientRepository, movieRepository, rentalRepository);
         ClientController clientController = new ClientController(clientRepository);
         MovieController movieController = new MovieController(movieRepository);
-        RentalController rentalController = new RentalController(clientRepository, movieRepository, rentalRepository);
-        Console console = new Console(controller, clientController, movieController, rentalController);
+        RentalController rentalController = new RentalController(
+                clientRepository,
+                movieRepository,
+                rentalRepository
+        );
+        Console console = new Console(
+                controller,
+                clientController,
+                movieController,
+                rentalController
+        );
 
         console.run(args);
     }

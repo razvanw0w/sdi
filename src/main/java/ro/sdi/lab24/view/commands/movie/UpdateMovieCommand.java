@@ -15,10 +15,10 @@ public class UpdateMovieCommand implements Runnable
     @Parameters(index = "1", description = "Movie name")
     String name;
 
-    @Parameters(index = "3", description = "Movie genre")
+    @Parameters(index = "2", description = "Movie genre")
     String genre;
 
-    @Parameters(index = "4", description = "Movie rating")
+    @Parameters(index = "3", description = "Movie rating")
     int rating;
 
     @Override

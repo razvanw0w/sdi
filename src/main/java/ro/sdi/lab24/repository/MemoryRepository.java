@@ -1,20 +1,21 @@
 package ro.sdi.lab24.repository;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
-import ro.sdi.lab24.model.Entity;
-import ro.sdi.lab24.validation.Validator;
 import ro.sdi.lab24.exception.ValidatorException;
+import ro.sdi.lab24.model.Entity;
 
 public class MemoryRepository<ID, T extends Entity<ID>> implements Repository<ID, T>
 {
 
     private Map<ID, T> entities;
-    private Validator<T> validator;
 
-    public MemoryRepository(Validator<T> validator)
+    public MemoryRepository()
     {
-        this.validator = validator;
         entities = new HashMap<>();
     }
 
@@ -35,7 +36,6 @@ public class MemoryRepository<ID, T extends Entity<ID>> implements Repository<ID
     public Optional<T> save(T entity) throws ValidatorException
     {
         Objects.requireNonNull(entity, "entity must not be null");
-        validator.validate(entity);
         return Optional.ofNullable(entities.putIfAbsent(entity.getId(), entity));
     }
 
@@ -50,7 +50,6 @@ public class MemoryRepository<ID, T extends Entity<ID>> implements Repository<ID
     public Optional<T> update(T entity) throws ValidatorException
     {
         Objects.requireNonNull(entity, "entity must not be null");
-        validator.validate(entity);
         return Optional.ofNullable(entities.computeIfPresent(entity.getId(), (k, v) -> entity));
     }
 }
