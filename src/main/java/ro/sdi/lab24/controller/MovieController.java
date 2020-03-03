@@ -21,13 +21,16 @@ public class MovieController
      * @param name: the name of the movie
      * @throws AlreadyExistingElementException if the movie (the ID) is already there
      */
-    public void addMovie(int id, String name)
+    public void addMovie(int id, String name, String genre, int rating)
     {
-        Movie movie = new Movie(id, name);
+        Movie movie = new Movie(id, name, genre, rating);
         movieRepository.save(movie).ifPresent(opt ->
-        {
-            throw new AlreadyExistingElementException(String.format("Movie %d already exists", id));
-        });
+                                              {
+                                                  throw new AlreadyExistingElementException(String.format(
+                                                          "Movie %d already exists",
+                                                          id
+                                                  ));
+                                              });
     }
 
     /**
@@ -58,9 +61,13 @@ public class MovieController
      * @param name: the new name of the movie
      * @throws ElementNotFoundException if the movie isn't found in the repository based on their ID
      */
-    public void updateMovie(int id, String name)
+    public void updateMovie(int id, String name, String genre, int rating)
     {
-        Movie movie = new Movie(id, name);
-        movieRepository.update(movie).orElseThrow(() -> new ElementNotFoundException(String.format("Movie %d does not exist", id)));
+        Movie movie = new Movie(id, name, genre, rating);
+        movieRepository.update(movie)
+                       .orElseThrow(() -> new ElementNotFoundException(String.format(
+                               "Movie %d does not exist",
+                               id
+                       )));
     }
 }

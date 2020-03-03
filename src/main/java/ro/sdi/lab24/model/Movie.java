@@ -6,10 +6,12 @@ public class Movie extends Entity<Integer>
     private String genre;
     private int rating;
 
-    public Movie(int id, String name)
+    public Movie(int id, String name, String genre, int rating)
     {
         super(id);
         this.name = name;
+        this.genre = genre;
+        this.rating = rating;
     }
 
     public String getName()

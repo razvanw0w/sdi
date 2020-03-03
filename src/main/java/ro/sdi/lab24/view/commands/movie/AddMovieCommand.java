@@ -14,12 +14,18 @@ public class AddMovieCommand implements Runnable
     @Parameters(index = "1", description = "Movie name")
     String name;
 
+    @Parameters(index = "3", description = "Movie genre")
+    String genre;
+
+    @Parameters(index = "4", description = "Movie rating")
+    int rating;
+
     @Override
     public void run()
     {
         try
         {
-            Console.movieController.addMovie(id, name);
+            Console.movieController.addMovie(id, name, genre, rating);
             System.out.println("Movie added!");
         }
         catch (ProgramException e)

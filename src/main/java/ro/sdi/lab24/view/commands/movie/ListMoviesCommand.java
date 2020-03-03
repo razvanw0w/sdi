@@ -20,7 +20,13 @@ public class ListMoviesCommand implements Runnable
                 System.out.println("No movies found!");
             }
             movies.forEach(
-                    movie -> System.out.printf("%d %s\n", movie.getId(), movie.getName())
+                    movie -> System.out.printf(
+                            "%d %s %s %d\n",
+                            movie.getId(),
+                            movie.getName(),
+                            movie.getGenre(),
+                            movie.getRating()
+                    )
             );
         }
         catch (ProgramException e)
