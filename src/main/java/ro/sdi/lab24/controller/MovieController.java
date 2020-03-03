@@ -1,5 +1,7 @@
 package ro.sdi.lab24.controller;
 
+import java.util.Optional;
+
 import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
 import ro.sdi.lab24.model.Movie;
@@ -57,13 +59,20 @@ public class MovieController
     /**
      * This function updated a movie based on their ID with a new name
      *
-     * @param id:   the movie's ID
-     * @param name: the new name of the movie
+     * @param id     :   the movie's ID
+     * @param name   : the new name of the movie
+     * @param genre
+     * @param rating
      * @throws ElementNotFoundException if the movie isn't found in the repository based on their ID
      */
-    public void updateMovie(int id, String name, String genre, int rating)
+    public void updateMovie(
+            int id,
+            Optional<String> name,
+            Optional<String> genre,
+            Optional<Integer> rating
+    )
     {
-        Movie movie = new Movie(id, name, genre, rating);
+        Movie movie = new Movie(id, name.get(), genre.get(), rating.get());
         movieRepository.update(movie)
                        .orElseThrow(() -> new ElementNotFoundException(String.format(
                                "Movie %d does not exist",

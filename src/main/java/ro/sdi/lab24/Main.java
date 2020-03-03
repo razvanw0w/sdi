@@ -27,13 +27,13 @@ public class Main
                 movieRepository,
                 rentalRepository
         );
-        Console console = new Console(
+        Console.initialize(
                 controller,
                 clientController,
                 movieController,
                 rentalController
         );
 
-        console.run(args);
+        Console.run(args);
     }
 }
