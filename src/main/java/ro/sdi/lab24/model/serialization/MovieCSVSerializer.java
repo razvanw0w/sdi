@@ -1,18 +1,43 @@
 package ro.sdi.lab24.model.serialization;
 
+import java.util.Optional;
+
+import ro.sdi.lab24.exception.ParsingException;
 import ro.sdi.lab24.model.Movie;
 
 public class MovieCSVSerializer implements CSVSerializer<Movie>
 {
     @Override
-    public String serialize(Movie entity)
+    public String serialize(Movie movie)
     {
-        return null;//TODO Horatiu
+        return String.format(
+                "%d,%s,%s,%d",
+                movie.getId(),
+                movie.getName(),
+                movie.getGenre(),
+                movie.getRating()
+        );
     }
 
     @Override
     public Movie deserialize(String string)
     {
-        return null;//TODO Horatiu
+        String[] line = string.split(",");
+        Optional.of(line)
+                .filter(strings -> strings.length == 4)
+                .orElseThrow(() -> new ParsingException("Movie csv string cannot be parsed"));
+        try
+        {
+            return new Movie(
+                    Integer.parseInt(line[0]),
+                    line[1],
+                    line[2],
+                    Integer.parseInt(line[3])
+            );
+        }
+        catch (NumberFormatException e)
+        {
+            throw new ParsingException("Movie csv string cannot be parsed");
+        }
     }
 }
