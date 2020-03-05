@@ -7,7 +7,10 @@ import ro.sdi.lab24.controller.RentalController;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
-import ro.sdi.lab24.repository.MemoryRepository;
+import ro.sdi.lab24.model.serialization.ClientCSVSerializer;
+import ro.sdi.lab24.model.serialization.MovieCSVSerializer;
+import ro.sdi.lab24.model.serialization.RentalCSVSerializer;
+import ro.sdi.lab24.repository.FileRepository;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.validation.ClientValidator;
 import ro.sdi.lab24.validation.MovieValidator;
@@ -16,17 +19,29 @@ import ro.sdi.lab24.view.Console;
 
 public class Main
 {
-    public static void main(String[] args) {
-        Repository<Integer, Client> clientRepository = new MemoryRepository<>();
+    public static void main(String[] args)
+    {
+        /*Repository<Integer, Client> clientRepository = new MemoryRepository<>();
         Repository<Integer, Movie> movieRepository = new MemoryRepository<>();
-        Repository<Rental.RentalID, Rental> rentalRepository = new MemoryRepository<>();
+        Repository<Rental.RentalID, Rental> rentalRepository = new MemoryRepository<>();*/
+
+        Repository<Integer, Client> clientRepository = new FileRepository<>(new ClientCSVSerializer());
+        Repository<Integer, Movie> movieRepository = new FileRepository<>(new MovieCSVSerializer());
+        Repository<Rental.RentalID, Rental> rentalRepository = new FileRepository<>(new RentalCSVSerializer());
 
         Controller controller = new Controller(clientRepository, movieRepository, rentalRepository,
-                new ClientValidator(),
-                new MovieValidator(),
-                new RentalValidator());
-        ClientController clientController = new ClientController(clientRepository, new ClientValidator());
-        MovieController movieController = new MovieController(movieRepository, new MovieValidator());
+                                               new ClientValidator(),
+                                               new MovieValidator(),
+                                               new RentalValidator()
+        );
+        ClientController clientController = new ClientController(
+                clientRepository,
+                new ClientValidator()
+        );
+        MovieController movieController = new MovieController(
+                movieRepository,
+                new MovieValidator()
+        );
         RentalController rentalController = new RentalController(
                 clientRepository,
                 movieRepository,
