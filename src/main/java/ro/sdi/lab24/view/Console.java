@@ -44,6 +44,7 @@ public class Console
     {
         System.out.println("Movie rental software");
         CommandLine commandLine = new CommandLine(MovieRentalCommand.class);
+        commandLine.setUnmatchedOptionsArePositionalParams(true);
         commandLine.setErr(new PrintWriter(System.out));
         if (args.length == 0)
         {
