@@ -2,16 +2,15 @@ package ro.sdi.lab24.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Iterator;
-import java.util.stream.StreamSupport;
-
 import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.repository.MemoryRepository;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.validation.ClientValidator;
+
+import java.util.Iterator;
+import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -29,7 +28,7 @@ class ClientControllerTest {
     void setUp() {
         validator = new ClientValidator();
         repo = new MemoryRepository<Integer, Client>();
-        controller = new ClientController(repo);
+        controller = new ClientController(repo, validator);
     }
 
     @Test

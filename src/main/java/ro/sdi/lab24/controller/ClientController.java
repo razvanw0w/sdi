@@ -4,14 +4,16 @@ import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.repository.Repository;
+import ro.sdi.lab24.validation.Validator;
 
 public class ClientController
 {
     Repository<Integer, Client> clientRepository;
+    Validator<Client> clientValidator;
 
-    public ClientController(Repository<Integer, Client> clientRepository)
-    {
+    public ClientController(Repository<Integer, Client> clientRepository, Validator<Client> clientValidator) {
         this.clientRepository = clientRepository;
+        this.clientValidator = clientValidator;
     }
 
     /**
@@ -24,6 +26,7 @@ public class ClientController
     public void addClient(int id, String name)
     {
         Client client = new Client(id, name);
+        clientValidator.validate(client);
         clientRepository.save(client).ifPresent(opt ->
         {
             throw new AlreadyExistingElementException(String.format("Client %d already exists", id));
@@ -61,6 +64,7 @@ public class ClientController
     public void updateClient(int id, String name)
     {
         Client client = new Client(id, name);
+        clientValidator.validate(client);
         clientRepository.update(client).orElseThrow(() -> new ElementNotFoundException(String.format("Client %d does not exist", id)));
     }
 }

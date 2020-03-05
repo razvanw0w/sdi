@@ -2,16 +2,16 @@ package ro.sdi.lab24.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Iterator;
-import java.util.stream.StreamSupport;
-
 import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.repository.MemoryRepository;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.validation.MovieValidator;
+
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -29,7 +29,7 @@ class MovieControllerTest {
     void setUp() {
         validator = new MovieValidator();
         repo = new MemoryRepository<Integer, Movie>();
-        controller = new MovieController(repo);
+        controller = new MovieController(repo, validator);
     }
 
     @Test
@@ -39,16 +39,16 @@ class MovieControllerTest {
         Iterable<Movie> list = controller.getMovies();
         assertEquals(0, length(list));
 
-        controller.addMovie(1, "a");
-        movieA = new Movie(1, "a");
+        controller.addMovie(1, "a", "g1", 100);
+        movieA = new Movie(1, "a", "g1", 100);
         list = controller.getMovies();
         assertEquals(1, length(list));
 
         movie = list.iterator().next();
         assertEquals(movieA, movie);
 
-        controller.addMovie(2, "b");
-        movieB = new Movie(2, "b");
+        controller.addMovie(2, "b", "g2", 75);
+        movieB = new Movie(2, "b", "g2", 75);
         list = controller.getMovies();
         assertEquals(2, length(list));
 
@@ -58,14 +58,14 @@ class MovieControllerTest {
         assertEquals(movie, movieA);
         assertEquals(movie2, movieB);
 
-        assertThrows(AlreadyExistingElementException.class, () -> controller.addMovie(1, "c"));
+        assertThrows(AlreadyExistingElementException.class, () -> controller.addMovie(1, "c", "g3", 2));
     }
 
     @Test
     void deleteMovie() {
-        Movie movie = new Movie(2, "b");
-        controller.addMovie(1, "a");
-        controller.addMovie(2, "b");
+        Movie movie = new Movie(2, "b", "g1", 100);
+        controller.addMovie(1, "a", "g1", 75);
+        controller.addMovie(2, "b", "g1", 100);
         assertEquals(length(controller.getMovies()), 2);
 
         controller.deleteMovie(1);
@@ -78,8 +78,8 @@ class MovieControllerTest {
 
     @Test
     void getMovies() {
-        controller.addMovie(1, "a");
-        controller.addMovie(2, "b");
+        controller.addMovie(1, "a", "g1", 75);
+        controller.addMovie(2, "b", "g1", 100);
         assertEquals(length(controller.getMovies()), 2);
 
         controller.deleteMovie(1);
@@ -91,12 +91,18 @@ class MovieControllerTest {
 
     @Test
     void updateMovie() {
-        controller.addMovie(1, "a");
-        controller.addMovie(2, "b");
+        controller.addMovie(1, "a", "g1", 75);
+        controller.addMovie(2, "b", "g1", 100);
 
-        Movie movie = new Movie(1, "c");
+        Movie movie = new Movie(1, "c", "g1", 75);
+        Movie movie2 = new Movie(1, "d", "g2", 75);
+        Movie movie3 = new Movie(1, "e", "g3", 100);
 
-        controller.updateMovie(1, "c");
+        controller.updateMovie(1, Optional.of("c"), Optional.empty(), Optional.empty());
         assertEquals(controller.getMovies().iterator().next(), movie);
+        controller.updateMovie(1, Optional.of("d"), Optional.of("g2"), Optional.empty());
+        assertEquals(controller.getMovies().iterator().next(), movie2);
+        controller.updateMovie(1, Optional.of("e"), Optional.of("g3"), Optional.of(100));
+        assertEquals(controller.getMovies().iterator().next(), movie3);
     }
 }

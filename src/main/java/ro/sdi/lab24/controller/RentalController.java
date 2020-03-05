@@ -3,13 +3,12 @@ package ro.sdi.lab24.controller;
 import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.DateTimeInvalid;
 import ro.sdi.lab24.exception.ElementNotFoundException;
-import ro.sdi.lab24.exception.ProgramException;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
 import ro.sdi.lab24.repository.Repository;
+import ro.sdi.lab24.validation.Validator;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -19,17 +18,20 @@ public class RentalController
     Repository<Integer, Client> clientRepository;
     Repository<Integer, Movie> movieRepository;
     Repository<Rental.RentalID, Rental> rentalRepository;
+    Validator<Rental> rentalValidator;
     public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     public RentalController(
             Repository<Integer, Client> clientRepository,
             Repository<Integer, Movie> movieRepository,
-            Repository<Rental.RentalID, Rental> rentalRepository
+            Repository<Rental.RentalID, Rental> rentalRepository,
+            Validator<Rental> rentalValidator
     )
     {
         this.clientRepository = clientRepository;
         this.movieRepository = movieRepository;
         this.rentalRepository = rentalRepository;
+        this.rentalValidator = rentalValidator;
     }
 
     /**
@@ -54,6 +56,7 @@ public class RentalController
         {
             throw new DateTimeInvalid("Date and time invalid");
         }
+        rentalValidator.validate(rental);
         rentalRepository.save(rental).ifPresent(opt ->
         {
             throw new AlreadyExistingElementException(String.format("Rental of movie %d and client %d already exists", movieId, clientId));
@@ -110,6 +113,7 @@ public class RentalController
         {
             throw new DateTimeInvalid("Date and time invalid");
         }
+        rentalValidator.validate(rental);
         rentalRepository.update(rental).orElseThrow(() -> new ElementNotFoundException(String.format("Rental of movie %d and client %d does not exist", movieId, clientId)));
     }
 }

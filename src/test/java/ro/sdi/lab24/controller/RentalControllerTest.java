@@ -9,8 +9,6 @@ import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
 import ro.sdi.lab24.repository.MemoryRepository;
 import ro.sdi.lab24.repository.Repository;
-import ro.sdi.lab24.validation.ClientValidator;
-import ro.sdi.lab24.validation.MovieValidator;
 import ro.sdi.lab24.validation.RentalValidator;
 
 import java.time.LocalDateTime;
@@ -33,18 +31,19 @@ class RentalControllerTest {
 
     @BeforeEach
     void setUp() {
-        clientRepository = new MemoryRepository<Integer, Client>(new ClientValidator());
-        movieRepository = new MemoryRepository<Integer, Movie>(new MovieValidator());
+        clientRepository = new MemoryRepository<Integer, Client>();
+        movieRepository = new MemoryRepository<Integer, Movie>();
         clientRepository.save(new Client(1, "a"));
         clientRepository.save(new Client(2, "b"));
         clientRepository.save(new Client(3, "c"));
-        movieRepository.save(new Movie(1, "x"));
-        movieRepository.save(new Movie(2, "y"));
-        movieRepository.save(new Movie(3, "z"));
+        movieRepository.save(new Movie(1, "x", "g1", 100));
+        movieRepository.save(new Movie(2, "y", "g2", 75));
+        movieRepository.save(new Movie(3, "z", "g1", 30));
         formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         controller = new RentalController(clientRepository,
-                                          movieRepository,
-                                          new MemoryRepository<Rental.RentalID, Rental>(new RentalValidator()));
+                movieRepository,
+                new MemoryRepository<Rental.RentalID, Rental>(),
+                new RentalValidator());
     }
 
     @Test
