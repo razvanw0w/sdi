@@ -29,14 +29,14 @@ public class FileRepository<ID, T extends Entity<ID>> implements Repository<ID, 
     }
 
     private void checkFileExistence() {
-        Path path = Paths.get(fileName);
-        Optional<Boolean> result = Optional.of(Files.exists(path)).filter(t -> t);
+        Path fileToCreatePath = Paths.get(fileName);
+        Optional<Boolean> result = Optional.of(Files.exists(fileToCreatePath)).filter(t -> t);
         result.ifPresentOrElse(t -> {
         }, new Runnable() {
             @Override
             public void run() {
                 try {
-                    Files.createFile(path);
+                    Files.createFile(fileToCreatePath);
                 } catch (IOException e) {
                     throw new ProgramIOException("Couldn't create file " + fileName);
                 }
