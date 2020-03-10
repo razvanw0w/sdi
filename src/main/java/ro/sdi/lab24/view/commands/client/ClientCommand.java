@@ -1,14 +1,13 @@
 package ro.sdi.lab24.view.commands.client;
 
 import picocli.CommandLine.Command;
-import ro.sdi.lab24.exception.ProgramException;
-import ro.sdi.lab24.view.Console;
 
 @Command(name = "client", description = "Manage clients", subcommands = {
         AddClientCommand.class,
         ListClientsCommand.class,
         UpdateClientCommand.class,
         DeleteClientCommand.class,
+        FilterClientCommand.class
 },mixinStandardHelpOptions = true)
 public class ClientCommand implements Runnable
 {
