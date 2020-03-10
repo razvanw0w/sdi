@@ -98,4 +98,33 @@ class ClientControllerTest {
         controller.updateClient(1, "c");
         assertEquals(controller.getClients().iterator().next(), client);
     }
+
+    @Test
+    void filterClientsByName() {
+        controller.addClient(1, "a");
+        controller.addClient(2, "b");
+        controller.addClient(3, "c");
+        controller.addClient(4, "aa");
+        controller.addClient(5, "bb");
+
+        Client c1 = new Client(1, "a");
+        Client c2 = new Client(2, "b");
+        Client c3 = new Client(3, "c");
+        Client c4 = new Client(4, "aa");
+        Client c5 = new Client(5, "bb");
+
+        Iterable<Client> iterable = controller.filterClientsByName("a");
+        Iterator<Client> iterator = iterable.iterator();
+        assertEquals(length(iterable), 2);
+        assertEquals(iterator.next(), c1);
+        assertEquals(iterator.next(), c4);
+
+        iterable = controller.filterClientsByName("z");
+        assertEquals(length(iterable), 0);
+
+        iterable = controller.filterClientsByName("c");
+        iterator = iterable.iterator();
+        assertEquals(length(iterable), 1);
+        assertEquals(iterator.next(), c3);
+    }
 }
