@@ -1,22 +1,24 @@
 package ro.sdi.lab24.controller;
 
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.validation.Validator;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 public class ClientController
 {
     Repository<Integer, Client> clientRepository;
     Validator<Client> clientValidator;
 
-    public ClientController(Repository<Integer, Client> clientRepository, Validator<Client> clientValidator) {
+    public ClientController(
+            Repository<Integer, Client> clientRepository,
+            Validator<Client> clientValidator
+    )
+    {
         this.clientRepository = clientRepository;
         this.clientValidator = clientValidator;
     }
@@ -33,9 +35,12 @@ public class ClientController
         Client client = new Client(id, name);
         clientValidator.validate(client);
         clientRepository.save(client).ifPresent(opt ->
-        {
-            throw new AlreadyExistingElementException(String.format("Client %d already exists", id));
-        });
+                                                {
+                                                    throw new AlreadyExistingElementException(String.format(
+                                                            "Client %d already exists",
+                                                            id
+                                                    ));
+                                                });
     }
 
     /**
@@ -46,7 +51,11 @@ public class ClientController
      */
     public void deleteClient(int id)
     {
-        clientRepository.delete(id).orElseThrow(() -> new ElementNotFoundException(String.format("Client %d does not exist", id)));
+        clientRepository.delete(id)
+                        .orElseThrow(() -> new ElementNotFoundException(String.format(
+                                "Client %d does not exist",
+                                id
+                        )));
     }
 
     /**
@@ -66,18 +75,22 @@ public class ClientController
      * @param name: the new name of the client
      * @throws ElementNotFoundException if the client isn't found in the repository based on their ID
      */
-    public void updateClient(int id, String name) {
+    public void updateClient(int id, String name)
+    {
         Client client = new Client(id, name);
         clientValidator.validate(client);
-        clientRepository.update(client).orElseThrow(() -> new ElementNotFoundException(String.format("Client %d does not exist", id)));
+        clientRepository.update(client)
+                        .orElseThrow(() -> new ElementNotFoundException(String.format(
+                                "Client %d does not exist",
+                                id
+                        )));
     }
 
-    public Iterable<Client> filterClientsByName(String name) {
+    public Iterable<Client> filterClientsByName(String name)
+    {
         String regex = ".*" + name + ".*";
-        List<Client> list = StreamSupport.stream(clientRepository.findAll().spliterator(), false)
-                .filter(client -> client.getName().matches(regex))
-                .collect(Collectors.toList());
-
-        return Collections.unmodifiableCollection(list);
+        return StreamSupport.stream(clientRepository.findAll().spliterator(), false)
+                            .filter(client -> client.getName().matches(regex))
+                            .collect(Collectors.toUnmodifiableList());
     }
 }
