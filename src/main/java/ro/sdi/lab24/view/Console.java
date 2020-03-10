@@ -22,7 +22,7 @@ public class Console
     public static MovieController movieController;
     public static RentalController rentalController;
 
-    public Console(
+    public static void initialize(
             Controller controller,
             ClientController clientController,
             MovieController movieController,
@@ -40,10 +40,11 @@ public class Console
         System.out.println(e.getMessage());
     }
 
-    public void run(String[] args)
+    public static void run(String[] args)
     {
         System.out.println("Movie rental software");
         CommandLine commandLine = new CommandLine(MovieRentalCommand.class);
+        commandLine.setUnmatchedOptionsArePositionalParams(true);
         commandLine.setErr(new PrintWriter(System.out));
         if (args.length == 0)
         {

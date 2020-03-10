@@ -1,25 +1,29 @@
 package ro.sdi.lab24.view.commands.movie;
 
-import picocli.CommandLine.Command;
 import ro.sdi.lab24.exception.ProgramException;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.view.Console;
 
-@Command(description = "List all movies", name = "list")
-public class ListMoviesCommand implements Runnable
+import static picocli.CommandLine.Command;
+import static picocli.CommandLine.Parameters;
+
+@Command(description = "Filter movie by genre", name = "filter")
+public class FilterMoviesCommand implements Runnable
 {
+    @Parameters(index = "0", description = "Movie genre")
+    String genre;
+
     @Override
     public void run()
     {
         try
         {
-
-            Iterable<Movie> movies = Console.movieController.getMovies();
-            if (!movies.iterator().hasNext())
+            Iterable<Movie> filteredMovies = Console.movieController.filterMoviesByGenre(genre);
+            if (!filteredMovies.iterator().hasNext())
             {
                 System.out.println("No movies found!");
             }
-            movies.forEach(
+            filteredMovies.forEach(
                     movie -> System.out.printf(
                             "%d %s %s %d\n",
                             movie.getId(),

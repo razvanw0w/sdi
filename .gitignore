@@ -3,6 +3,7 @@ classes
 bin
 *.log
 dist
+files
 
 # Eclipse
 .classpath

@@ -1,17 +1,27 @@
 package ro.sdi.lab24.controller;
 
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.repository.Repository;
+import ro.sdi.lab24.validation.Validator;
 
 public class MovieController
 {
     Repository<Integer, Movie> movieRepository;
+    Validator<Movie> movieValidator;
 
-    public MovieController(Repository<Integer, Movie> movieRepository)
+    public MovieController(
+            Repository<Integer, Movie> movieRepository,
+            Validator<Movie> movieValidator
+    )
     {
         this.movieRepository = movieRepository;
+        this.movieValidator = movieValidator;
     }
 
     /**
@@ -21,13 +31,17 @@ public class MovieController
      * @param name: the name of the movie
      * @throws AlreadyExistingElementException if the movie (the ID) is already there
      */
-    public void addMovie(int id, String name)
+    public void addMovie(int id, String name, String genre, int rating)
     {
-        Movie movie = new Movie(id, name);
+        Movie movie = new Movie(id, name, genre, rating);
+        movieValidator.validate(movie);
         movieRepository.save(movie).ifPresent(opt ->
-        {
-            throw new AlreadyExistingElementException(String.format("Movie %d already exists", id));
-        });
+                                              {
+                                                  throw new AlreadyExistingElementException(String.format(
+                                                          "Movie %d already exists",
+                                                          id
+                                                  ));
+                                              });
     }
 
     /**
@@ -38,7 +52,11 @@ public class MovieController
      */
     public void deleteMovie(int id)
     {
-        movieRepository.delete(id).orElseThrow(() -> new ElementNotFoundException(String.format("Movie %d does not exist", id)));
+        movieRepository.delete(id)
+                       .orElseThrow(() -> new ElementNotFoundException(String.format(
+                               "Movie %d does not exist",
+                               id
+                       )));
     }
 
     /**
@@ -54,13 +72,41 @@ public class MovieController
     /**
      * This function updated a movie based on their ID with a new name
      *
-     * @param id:   the movie's ID
-     * @param name: the new name of the movie
+     * @param id     : the movie's ID
+     * @param name   : the new name of the movie
+     * @param genre  : the genre of the movie
+     * @param rating : the rating of the movie
      * @throws ElementNotFoundException if the movie isn't found in the repository based on their ID
      */
-    public void updateMovie(int id, String name)
+    public void updateMovie(
+            int id,
+            String name,
+            String genre,
+            Integer rating
+    )
     {
-        Movie movie = new Movie(id, name);
-        movieRepository.update(movie).orElseThrow(() -> new ElementNotFoundException(String.format("Movie %d does not exist", id)));
+        Movie storedMovie = movieRepository.findOne(id)
+                                           .orElseThrow(() -> new ElementNotFoundException(String.format(
+                                                   "Movie %d does not exist",
+                                                   id
+                                           )));
+        Movie movie = new Movie(id, Optional.ofNullable(name).orElseGet(storedMovie::getName),
+                                Optional.ofNullable(genre).orElseGet(storedMovie::getGenre),
+                                Optional.ofNullable(rating).orElseGet(storedMovie::getRating)
+        );
+        movieValidator.validate(movie);
+        movieRepository.update(movie)
+                       .orElseThrow(() -> new ElementNotFoundException(String.format(
+                               "Movie %d does not exist",
+                               id
+                       )));
+    }
+
+    public Iterable<Movie> filterMoviesByGenre(String genre)
+    {
+        String regex = ".*" + genre + ".*";
+        return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
+                            .filter(client -> client.getName().matches(regex))
+                            .collect(Collectors.toUnmodifiableList());
     }
 }
