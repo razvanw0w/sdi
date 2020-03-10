@@ -1,14 +1,14 @@
 package ro.sdi.lab24.controller;
 
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.validation.Validator;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class MovieController
 {
@@ -106,7 +106,7 @@ public class MovieController
     {
         String regex = ".*" + genre + ".*";
         return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
-                            .filter(client -> client.getName().matches(regex))
+                .filter(movie -> movie.getGenre().matches(regex))
                             .collect(Collectors.toUnmodifiableList());
     }
 }

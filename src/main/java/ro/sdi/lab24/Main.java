@@ -7,10 +7,10 @@ import ro.sdi.lab24.controller.RentalController;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
-import ro.sdi.lab24.model.serialization.ClientCSVSerializer;
-import ro.sdi.lab24.model.serialization.MovieCSVSerializer;
-import ro.sdi.lab24.model.serialization.RentalCSVSerializer;
-import ro.sdi.lab24.repository.FileRepository;
+import ro.sdi.lab24.model.serialization.csv.ClientCSVSerializer;
+import ro.sdi.lab24.model.serialization.csv.MovieCSVSerializer;
+import ro.sdi.lab24.model.serialization.csv.RentalCSVSerializer;
+import ro.sdi.lab24.repository.CSVRepository;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.validation.ClientValidator;
 import ro.sdi.lab24.validation.MovieValidator;
@@ -28,17 +28,17 @@ public class Main
         ClientValidator clientValidator = new ClientValidator();
         MovieValidator movieValidator = new MovieValidator();
         RentalValidator rentalValidator = new RentalValidator();
-        Repository<Integer, Client> clientRepository = new FileRepository<>(
+        Repository<Integer, Client> clientRepository = new CSVRepository<>(
                 "files/clients.txt",
                 new ClientCSVSerializer(),
                 clientValidator
         );
-        Repository<Integer, Movie> movieRepository = new FileRepository<>(
+        Repository<Integer, Movie> movieRepository = new CSVRepository<>(
                 "files/movies.txt",
                 new MovieCSVSerializer(),
                 movieValidator
         );
-        Repository<Rental.RentalID, Rental> rentalRepository = new FileRepository<>(
+        Repository<Rental.RentalID, Rental> rentalRepository = new CSVRepository<>(
                 "files/rentals.txt",
                 new RentalCSVSerializer(),
                 rentalValidator

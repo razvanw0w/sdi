@@ -1,19 +1,19 @@
 package ro.sdi.lab24.controller;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 import ro.sdi.lab24.exception.AlreadyExistingElementException;
-import ro.sdi.lab24.exception.DateTimeInvalid;
+import ro.sdi.lab24.exception.DateTimeInvalidException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.validation.Validator;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class RentalController
 {
@@ -44,7 +44,7 @@ public class RentalController
      * @param time:     date and time of rental
      * @throws ElementNotFoundException        if movie or client doesn't exist in the repository
      * @throws AlreadyExistingElementException if the rental already exists in the repository
-     * @throws DateTimeInvalid                 if the date and time cannot be parsed
+     * @throws DateTimeInvalidException        if the date and time cannot be parsed
      */
     public void addRental(int movieId, int clientId, String time)
     {
@@ -56,31 +56,32 @@ public class RentalController
         }
         catch (DateTimeParseException e)
         {
-            throw new DateTimeInvalid("Date and time invalid");
+            throw new DateTimeInvalidException("Date and time invalid");
         }
         rentalValidator.validate(rental);
-        rentalRepository.save(rental).ifPresent(opt ->
-                                                {
-                                                    throw new AlreadyExistingElementException(String.format(
-                                                            "Rental of movie %d and client %d already exists",
-                                                            movieId,
-                                                            clientId
-                                                    ));
-                                                });
+        rentalRepository.save(rental)
+                .ifPresent(opt ->
+                {
+                    throw new AlreadyExistingElementException(String.format(
+                            "Rental of movie %d and client %d already exists",
+                            movieId,
+                            clientId
+                    ));
+                });
     }
 
     private void checkRentalID(int movieId, int clientId)
     {
         movieRepository.findOne(movieId)
-                       .orElseThrow(() -> new ElementNotFoundException(String.format(
-                               "Movie %d does not exist",
-                               movieId
-                       )));
+                .orElseThrow(() -> new ElementNotFoundException(String.format(
+                        "Movie %d does not exist",
+                        movieId
+                )));
         clientRepository.findOne(clientId)
-                        .orElseThrow(() -> new ElementNotFoundException(String.format(
-                                "Client %d does not exist",
-                                clientId
-                        )));
+                .orElseThrow(() -> new ElementNotFoundException(String.format(
+                        "Client %d does not exist",
+                        clientId
+                )));
     }
 
     /**
@@ -94,11 +95,11 @@ public class RentalController
     {
         checkRentalID(movieId, clientId);
         rentalRepository.delete(new Rental.RentalID(movieId, clientId))
-                        .orElseThrow(() -> new ElementNotFoundException(String.format(
-                                "Rental of movie %d and client %d does not exist",
-                                movieId,
-                                clientId
-                        )));
+                .orElseThrow(() -> new ElementNotFoundException(String.format(
+                        "Rental of movie %d and client %d does not exist",
+                        movieId,
+                        clientId
+                )));
     }
 
     /**
@@ -130,25 +131,25 @@ public class RentalController
         }
         catch (DateTimeParseException e)
         {
-            throw new DateTimeInvalid("Date and time invalid");
+            throw new DateTimeInvalidException("Date and time invalid");
         }
         rentalValidator.validate(rental);
         rentalRepository.update(rental)
-                        .orElseThrow(() -> new ElementNotFoundException(String.format(
-                                "Rental of movie %d and client %d does not exist",
-                                movieId,
-                                clientId
-                        )));
+                .orElseThrow(() -> new ElementNotFoundException(String.format(
+                        "Rental of movie %d and client %d does not exist",
+                        movieId,
+                        clientId
+                )));
     }
 
     public Iterable<Rental> filterRentalsByMovieName(String name)
     {
         String regex = ".*" + name + ".*";
         return StreamSupport.stream(rentalRepository.findAll().spliterator(), false)
-                            .filter(rental -> movieRepository.findOne(rental.getId().getMovieId())
-                                                             .filter(t -> t.getName()
-                                                                           .matches(regex))
-                                                             .isPresent())
-                            .collect(Collectors.toUnmodifiableList());
+                .filter(rental -> movieRepository.findOne(rental.getId().getMovieId())
+                        .filter(t -> t.getName()
+                                .matches(regex))
+                        .isPresent())
+                .collect(Collectors.toUnmodifiableList());
     }
 }

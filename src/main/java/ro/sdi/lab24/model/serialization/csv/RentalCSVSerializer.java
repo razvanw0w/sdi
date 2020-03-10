@@ -1,11 +1,11 @@
-package ro.sdi.lab24.model.serialization;
+package ro.sdi.lab24.model.serialization.csv;
+
+import ro.sdi.lab24.exception.ParsingException;
+import ro.sdi.lab24.model.Rental;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
-
-import ro.sdi.lab24.exception.ParsingException;
-import ro.sdi.lab24.model.Rental;
 
 public class RentalCSVSerializer implements CSVSerializer<Rental>
 {

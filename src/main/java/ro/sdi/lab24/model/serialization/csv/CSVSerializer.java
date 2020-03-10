@@ -1,4 +1,4 @@
-package ro.sdi.lab24.model.serialization;
+package ro.sdi.lab24.model.serialization.csv;
 
 public interface CSVSerializer<T>
 {
