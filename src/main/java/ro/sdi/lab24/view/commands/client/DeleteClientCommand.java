@@ -11,7 +11,6 @@ public class DeleteClientCommand implements Runnable
     @Parameters(index = "0", description = "Client id")
     int id;
 
-
     @Override
     public void run()
     {

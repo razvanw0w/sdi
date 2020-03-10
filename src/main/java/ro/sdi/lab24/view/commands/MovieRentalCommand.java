@@ -10,7 +10,7 @@ import static picocli.CommandLine.Command;
         subcommands = {
                 ClientCommand.class,
                 MovieCommand.class,
-                RentalCommand.class
+                RentalCommand.class,
         },
         mixinStandardHelpOptions = true)
 public class MovieRentalCommand implements Runnable
