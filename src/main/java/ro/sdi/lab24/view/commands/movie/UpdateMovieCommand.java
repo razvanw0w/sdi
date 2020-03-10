@@ -1,7 +1,5 @@
 package ro.sdi.lab24.view.commands.movie;
 
-import java.util.Optional;
-
 import picocli.CommandLine.Command;
 import ro.sdi.lab24.exception.ProgramException;
 import ro.sdi.lab24.view.Console;
@@ -29,12 +27,7 @@ public class UpdateMovieCommand implements Runnable
     {
         try
         {
-            Console.movieController.updateMovie(
-                    id,
-                    Optional.ofNullable(name),
-                    Optional.ofNullable(genre),
-                    Optional.ofNullable(rating)
-            );
+            Console.movieController.updateMovie(id, name, genre, rating);
             System.out.println("Movie updated!");
         }
         catch (ProgramException e)
