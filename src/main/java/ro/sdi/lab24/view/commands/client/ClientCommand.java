@@ -7,7 +7,7 @@ import picocli.CommandLine.Command;
         ListClientsCommand.class,
         UpdateClientCommand.class,
         DeleteClientCommand.class,
-        FilterClientCommand.class
+        FilterClientsCommand.class
 },mixinStandardHelpOptions = true)
 public class ClientCommand implements Runnable
 {

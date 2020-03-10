@@ -8,7 +8,7 @@ import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Parameters;
 
 @Command(description = "Filter movie by genre", name = "filter")
-public class FilterMovieCommand implements Runnable
+public class FilterMoviesCommand implements Runnable
 {
     @Parameters(index = "0", description = "Movie genre")
     String genre;
