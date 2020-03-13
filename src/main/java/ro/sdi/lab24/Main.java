@@ -1,5 +1,11 @@
 package ro.sdi.lab24;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Optional;
+import java.util.Properties;
+
 import ro.sdi.lab24.controller.ClientController;
 import ro.sdi.lab24.controller.Controller;
 import ro.sdi.lab24.controller.MovieController;
@@ -7,10 +13,11 @@ import ro.sdi.lab24.controller.RentalController;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
-import ro.sdi.lab24.model.serialization.csv.ClientCSVSerializer;
-import ro.sdi.lab24.model.serialization.csv.MovieCSVSerializer;
-import ro.sdi.lab24.model.serialization.csv.RentalCSVSerializer;
-import ro.sdi.lab24.repository.CSVRepository;
+import ro.sdi.lab24.model.serialization.ClientCSVSerializer;
+import ro.sdi.lab24.model.serialization.MovieCSVSerializer;
+import ro.sdi.lab24.model.serialization.RentalCSVSerializer;
+import ro.sdi.lab24.repository.FileRepository;
+import ro.sdi.lab24.repository.MemoryRepository;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.validation.ClientValidator;
 import ro.sdi.lab24.validation.MovieValidator;
@@ -21,28 +28,58 @@ public class Main
 {
     public static void main(String[] args)
     {
-        /*Repository<Integer, Client> clientRepository = new MemoryRepository<>();
-        Repository<Integer, Movie> movieRepository = new MemoryRepository<>();
-        Repository<Rental.RentalID, Rental> rentalRepository = new MemoryRepository<>();*/
+        String repositoryType = "memory";
+
+        try (InputStream inputStream = new FileInputStream("repository.properties"))
+        {
+            Properties properties = new Properties();
+            properties.load(inputStream);
+            repositoryType = Optional.ofNullable(properties.getProperty("type")).orElse("memory");
+        }
+        catch (IOException ignored)
+        {
+        }
+
+
+        Repository<Integer, Client> clientRepository = null;
+        Repository<Integer, Movie> movieRepository = null;
+        Repository<Rental.RentalID, Rental> rentalRepository = null;
 
         ClientValidator clientValidator = new ClientValidator();
         MovieValidator movieValidator = new MovieValidator();
         RentalValidator rentalValidator = new RentalValidator();
-        Repository<Integer, Client> clientRepository = new CSVRepository<>(
-                "files/clients.txt",
-                new ClientCSVSerializer(),
-                clientValidator
-        );
-        Repository<Integer, Movie> movieRepository = new CSVRepository<>(
-                "files/movies.txt",
-                new MovieCSVSerializer(),
-                movieValidator
-        );
-        Repository<Rental.RentalID, Rental> rentalRepository = new CSVRepository<>(
-                "files/rentals.txt",
-                new RentalCSVSerializer(),
-                rentalValidator
-        );
+
+        switch (repositoryType)
+        {
+            case "csv":
+                clientRepository = new FileRepository<>(
+                        "files/clients.csv",
+                        new ClientCSVSerializer(),
+                        clientValidator
+                );
+                movieRepository = new FileRepository<>(
+                        "files/movies.csv",
+                        new MovieCSVSerializer(),
+                        movieValidator
+                );
+                rentalRepository = new FileRepository<>(
+                        "files/rentals.csv",
+                        new RentalCSVSerializer(),
+                        rentalValidator
+                );
+                break;
+            case "xml":
+                //TODO
+                break;
+            case "db":
+                //TODO
+                break;
+            default:
+                clientRepository = new MemoryRepository<>();
+                movieRepository = new MemoryRepository<>();
+                rentalRepository = new MemoryRepository<>();
+                break;
+        }
 
         Controller controller = new Controller(clientRepository, movieRepository, rentalRepository,
                                                clientValidator,
