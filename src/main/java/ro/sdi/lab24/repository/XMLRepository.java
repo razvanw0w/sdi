@@ -18,6 +18,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -26,19 +29,29 @@ public class XMLRepository<ID, T extends Entity<ID>> extends AbstractRepository<
     String fileName;
     XMLSerializer<T> serializer;
     private Validator<T> validator;
+    private Path path;
 
-    public XMLRepository(String fileName, XMLSerializer<T> serializer, Validator<T> validator)
-    {
+    public XMLRepository(String fileName, XMLSerializer<T> serializer, Validator<T> validator) {
         this.fileName = fileName;
         this.serializer = serializer;
         this.validator = validator;
+        this.path = Paths.get(fileName);
+    }
+
+    private void checkFileExistence() {
+        if (!Files.exists(path)) {
+            try {
+                Files.createFile(path);
+            } catch (IOException e) {
+                throw new ProgramIOException("Couldn't create file " + fileName);
+            }
+        }
     }
 
     @Override
-    protected void loadPersistence()
-    {
-        try
-        {
+    protected void loadPersistence() {
+        try {
+            checkFileExistence();
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = documentBuilder.parse(fileName);
             Element documentElement = document.getDocumentElement();
@@ -63,13 +76,14 @@ public class XMLRepository<ID, T extends Entity<ID>> extends AbstractRepository<
     {
         try
         {
+            checkFileExistence();
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = documentBuilder.newDocument();
             Element documentElement = document.createElement("entities");
 
             entities.values()
                     .stream()
-                    .map(serializer::serialize)
+                    .map(entity -> serializer.serialize(document, entity))
                     .forEach(documentElement::appendChild);
             TransformerFactory
                     .newInstance()

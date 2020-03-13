@@ -1,11 +1,5 @@
 package ro.sdi.lab24;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Optional;
-import java.util.Properties;
-
 import ro.sdi.lab24.controller.ClientController;
 import ro.sdi.lab24.controller.Controller;
 import ro.sdi.lab24.controller.MovieController;
@@ -13,16 +7,26 @@ import ro.sdi.lab24.controller.RentalController;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
-import ro.sdi.lab24.model.serialization.ClientCSVSerializer;
-import ro.sdi.lab24.model.serialization.MovieCSVSerializer;
-import ro.sdi.lab24.model.serialization.RentalCSVSerializer;
-import ro.sdi.lab24.repository.FileRepository;
+import ro.sdi.lab24.model.serialization.csv.ClientCSVSerializer;
+import ro.sdi.lab24.model.serialization.csv.MovieCSVSerializer;
+import ro.sdi.lab24.model.serialization.csv.RentalCSVSerializer;
+import ro.sdi.lab24.model.serialization.xml.ClientXMLSerializer;
+import ro.sdi.lab24.model.serialization.xml.MovieXMLSerializer;
+import ro.sdi.lab24.model.serialization.xml.RentalXMLSerializer;
+import ro.sdi.lab24.repository.CSVRepository;
 import ro.sdi.lab24.repository.MemoryRepository;
 import ro.sdi.lab24.repository.Repository;
+import ro.sdi.lab24.repository.XMLRepository;
 import ro.sdi.lab24.validation.ClientValidator;
 import ro.sdi.lab24.validation.MovieValidator;
 import ro.sdi.lab24.validation.RentalValidator;
 import ro.sdi.lab24.view.Console;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Optional;
+import java.util.Properties;
 
 public class Main
 {
@@ -52,24 +56,38 @@ public class Main
         switch (repositoryType)
         {
             case "csv":
-                clientRepository = new FileRepository<>(
+                clientRepository = new CSVRepository<>(
                         "files/clients.csv",
                         new ClientCSVSerializer(),
                         clientValidator
                 );
-                movieRepository = new FileRepository<>(
+                movieRepository = new CSVRepository<>(
                         "files/movies.csv",
                         new MovieCSVSerializer(),
                         movieValidator
                 );
-                rentalRepository = new FileRepository<>(
+                rentalRepository = new CSVRepository<>(
                         "files/rentals.csv",
                         new RentalCSVSerializer(),
                         rentalValidator
                 );
                 break;
             case "xml":
-                //TODO
+                clientRepository = new XMLRepository<>(
+                        "files/clients.xml",
+                        new ClientXMLSerializer(),
+                        clientValidator
+                );
+                movieRepository = new XMLRepository<>(
+                        "files/movies.xml",
+                        new MovieXMLSerializer(),
+                        movieValidator
+                );
+                rentalRepository = new XMLRepository<>(
+                        "files/rentals.xml",
+                        new RentalXMLSerializer(),
+                        rentalValidator
+                );
                 break;
             case "db":
                 //TODO
