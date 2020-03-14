@@ -22,6 +22,7 @@ import ro.sdi.lab24.validation.MovieValidator;
 import ro.sdi.lab24.validation.RentalValidator;
 import ro.sdi.lab24.view.Console;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +31,7 @@ import java.util.Properties;
 
 public class Main
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws ParserConfigurationException
     {
         String repositoryType = "memory";
 

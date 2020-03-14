@@ -12,6 +12,8 @@ import ro.sdi.lab24.validation.Validator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -30,29 +32,44 @@ public class XMLRepository<ID, T extends Entity<ID>> extends AbstractRepository<
     XMLSerializer<T> serializer;
     private Validator<T> validator;
     private Path path;
+    private final DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    private final TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
-    public XMLRepository(String fileName, XMLSerializer<T> serializer, Validator<T> validator) {
+    public XMLRepository(String fileName, XMLSerializer<T> serializer, Validator<T> validator) throws ParserConfigurationException
+    {
         this.fileName = fileName;
         this.serializer = serializer;
         this.validator = validator;
         this.path = Paths.get(fileName);
     }
 
-    private void checkFileExistence() {
-        if (!Files.exists(path)) {
-            try {
+    private void checkFileExistence()
+    {
+        if (!Files.exists(path))
+        {
+            try
+            {
                 Files.createFile(path);
-            } catch (IOException e) {
+                Document document = documentBuilder.newDocument();
+                Element documentElement = document.createElement("entities");
+                Transformer transformer = transformerFactory.newTransformer();
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+                transformer.transform(new DOMSource(documentElement), new StreamResult(new FileOutputStream(fileName)));
+            }
+            catch (IOException | TransformerException e)
+            {
                 throw new ProgramIOException("Couldn't create file " + fileName);
             }
         }
     }
 
     @Override
-    protected void loadPersistence() {
-        try {
+    protected void loadPersistence()
+    {
+        try
+        {
             checkFileExistence();
-            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = documentBuilder.parse(fileName);
             Element documentElement = document.getDocumentElement();
             NodeList childNodes = documentElement.getChildNodes();
@@ -65,7 +82,7 @@ public class XMLRepository<ID, T extends Entity<ID>> extends AbstractRepository<
                     .peek(validator::validate)
                     .collect(Collectors.toMap(T::getId, t -> t));
         }
-        catch (SAXException | IOException | ParserConfigurationException e)
+        catch (SAXException | IOException e)
         {
             throw new ProgramIOException("XML document cannot be loaded!");
         }
@@ -85,10 +102,10 @@ public class XMLRepository<ID, T extends Entity<ID>> extends AbstractRepository<
                     .stream()
                     .map(entity -> serializer.serialize(document, entity))
                     .forEach(documentElement::appendChild);
-            TransformerFactory
-                    .newInstance()
-                    .newTransformer()
-                    .transform(new DOMSource(document), new StreamResult(new FileOutputStream(fileName)));
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            transformer.transform(new DOMSource(documentElement), new StreamResult(new FileOutputStream(fileName)));
         }
         catch (TransformerException | IOException | ParserConfigurationException e)
         {
