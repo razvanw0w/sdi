@@ -15,7 +15,8 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Console {
+public class Console
+{
     public static Controller controller;
     public static ClientController clientController;
     public static MovieController movieController;
@@ -52,11 +53,14 @@ public class Console {
             while (scanner.hasNextLine())
             {
                 String line = scanner.nextLine();
-                if (line.equals("exit")) {
+                if (line.equals("exit"))
+                {
                     break;
-                } else if (!line.matches("^(movie|rental|client|report|--help|-h).*")) {
+                } else if (!line.matches("^(movie|rental|client|report|--help|-h).*"))
+                {
                     System.out.println("Invalid command! Type '--help'");
-                } else {
+                } else
+                {
                     commandLine.execute(parseLine(line));
                 }
                 System.out.print("> ");
