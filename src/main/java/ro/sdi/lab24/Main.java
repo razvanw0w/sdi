@@ -10,13 +10,13 @@ import ro.sdi.lab24.model.Rental;
 import ro.sdi.lab24.model.serialization.csv.ClientCSVSerializer;
 import ro.sdi.lab24.model.serialization.csv.MovieCSVSerializer;
 import ro.sdi.lab24.model.serialization.csv.RentalCSVSerializer;
+import ro.sdi.lab24.model.serialization.database.ClientTableAdapter;
+import ro.sdi.lab24.model.serialization.database.MovieTableAdapter;
+import ro.sdi.lab24.model.serialization.database.RentalTableAdapter;
 import ro.sdi.lab24.model.serialization.xml.ClientXMLSerializer;
 import ro.sdi.lab24.model.serialization.xml.MovieXMLSerializer;
 import ro.sdi.lab24.model.serialization.xml.RentalXMLSerializer;
-import ro.sdi.lab24.repository.CSVRepository;
-import ro.sdi.lab24.repository.MemoryRepository;
-import ro.sdi.lab24.repository.Repository;
-import ro.sdi.lab24.repository.XMLRepository;
+import ro.sdi.lab24.repository.*;
 import ro.sdi.lab24.validation.ClientValidator;
 import ro.sdi.lab24.validation.MovieValidator;
 import ro.sdi.lab24.validation.RentalValidator;
@@ -26,8 +26,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.function.Supplier;
 
 public class Main
 {
@@ -91,7 +93,10 @@ public class Main
                 );
                 break;
             case "db":
-                //TODO
+                Supplier<Connection> connectionSupplier = () -> null; //TODO
+                clientRepository = new DatabaseRepository<>(connectionSupplier, new ClientTableAdapter());
+                movieRepository = new DatabaseRepository<>(connectionSupplier, new MovieTableAdapter());
+                rentalRepository = new DatabaseRepository<>(connectionSupplier, new RentalTableAdapter());
                 break;
             default:
                 clientRepository = new MemoryRepository<>();
@@ -101,9 +106,9 @@ public class Main
         }
 
         Controller controller = new Controller(clientRepository, movieRepository, rentalRepository,
-                                               clientValidator,
-                                               movieValidator,
-                                               rentalValidator
+                clientValidator,
+                movieValidator,
+                rentalValidator
         );
         ClientController clientController = new ClientController(
                 clientRepository,
