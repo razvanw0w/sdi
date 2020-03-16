@@ -1,9 +1,9 @@
-package ro.sdi.lab24.model.serialization;
-
-import java.util.Optional;
+package ro.sdi.lab24.model.serialization.csv;
 
 import ro.sdi.lab24.exception.ParsingException;
 import ro.sdi.lab24.model.Client;
+
+import java.util.Optional;
 
 public class ClientCSVSerializer implements CSVSerializer<Client>
 {
