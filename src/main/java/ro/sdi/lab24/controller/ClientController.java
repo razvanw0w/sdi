@@ -1,5 +1,6 @@
 package ro.sdi.lab24.controller;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -13,6 +14,7 @@ public class ClientController
 {
     Repository<Integer, Client> clientRepository;
     Validator<Client> clientValidator;
+    EntityDeletedListener<Client> entityDeletedListener = null;
 
     public ClientController(
             Repository<Integer, Client> clientRepository,
@@ -21,6 +23,11 @@ public class ClientController
     {
         this.clientRepository = clientRepository;
         this.clientValidator = clientValidator;
+    }
+
+    public void setEntityDeletedListener(EntityDeletedListener<Client> entityDeletedListener)
+    {
+        this.entityDeletedListener = entityDeletedListener;
     }
 
     /**
@@ -34,13 +41,15 @@ public class ClientController
     {
         Client client = new Client(id, name);
         clientValidator.validate(client);
-        clientRepository.save(client).ifPresent(opt ->
-                                                {
-                                                    throw new AlreadyExistingElementException(String.format(
-                                                            "Client %d already exists",
-                                                            id
-                                                    ));
-                                                });
+        clientRepository
+                .save(client)
+                .ifPresent(opt ->
+                           {
+                               throw new AlreadyExistingElementException(String.format(
+                                       "Client %d already exists",
+                                       id
+                               ));
+                           });
     }
 
     /**
@@ -51,11 +60,20 @@ public class ClientController
      */
     public void deleteClient(int id)
     {
-        clientRepository.delete(id)
-                        .orElseThrow(() -> new ElementNotFoundException(String.format(
-                                "Client %d does not exist",
-                                id
-                        )));
+        clientRepository
+                .delete(id)
+                .ifPresentOrElse(
+                        entity -> Optional
+                                .ofNullable(entityDeletedListener)
+                                .ifPresent(listener -> listener.onEntityDeleted(entity)),
+                        () ->
+                        {
+                            throw new ElementNotFoundException(String.format(
+                                    "Client %d does not exist",
+                                    id
+                            ));
+                        }
+                );
     }
 
     /**
@@ -79,18 +97,25 @@ public class ClientController
     {
         Client client = new Client(id, name);
         clientValidator.validate(client);
-        clientRepository.update(client)
-                        .orElseThrow(() -> new ElementNotFoundException(String.format(
-                                "Client %d does not exist",
-                                id
-                        )));
+        clientRepository
+                .update(client)
+                .orElseThrow(() -> new ElementNotFoundException(String.format(
+                        "Client %d does not exist",
+                        id
+                )));
     }
 
     public Iterable<Client> filterClientsByName(String name)
     {
         String regex = ".*" + name + ".*";
-        return StreamSupport.stream(clientRepository.findAll().spliterator(), false)
-                            .filter(client -> client.getName().matches(regex))
-                            .collect(Collectors.toUnmodifiableList());
+        return StreamSupport
+                .stream(clientRepository.findAll().spliterator(), false)
+                .filter(client -> client.getName().matches(regex))
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    public Optional<Client> findOne(int clientId)
+    {
+        return clientRepository.findOne(clientId);
     }
 }
