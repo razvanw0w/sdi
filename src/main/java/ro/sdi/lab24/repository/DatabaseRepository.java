@@ -1,14 +1,15 @@
 package ro.sdi.lab24.repository;
 
-import ro.sdi.lab24.exception.ValidatorException;
-import ro.sdi.lab24.model.Entity;
-import ro.sdi.lab24.model.serialization.database.TableAdapter;
-
 import java.sql.Connection;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class DatabaseRepository<ID, T extends Entity<ID>> implements Repository<ID, T>
+import ro.sdi.lab24.exception.ValidatorException;
+import ro.sdi.lab24.model.Entity;
+import ro.sdi.lab24.model.serialization.database.TableAdapter;
+import ro.sdi.lab24.sorting.Sort;
+
+public class DatabaseRepository<ID, T extends Entity<ID>> implements SortingRepository<ID, T>
 {
     private Supplier<Connection> connectionSupplier;
     private TableAdapter<T> tableAdapter;
@@ -47,5 +48,11 @@ public class DatabaseRepository<ID, T extends Entity<ID>> implements Repository<
     public Optional<T> update(T entity) throws ValidatorException
     {
         return Optional.empty();//TODO
+    }
+
+    @Override
+    public Iterable<T> findAll(Sort sort)
+    {
+        return null;
     }
 }
