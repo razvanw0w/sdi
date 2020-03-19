@@ -17,6 +17,7 @@ application {
 dependencies {
     implementation 'info.picocli:picocli:4.2.0'
     testCompile 'org.junit.jupiter:junit-jupiter:5.4.2'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.11'
 }
 
 jar {
