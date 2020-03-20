@@ -1,11 +1,12 @@
 package ro.sdi.lab24.model.serialization.database;
 
-import ro.sdi.lab24.model.Movie;
-
 import java.sql.Connection;
 import java.util.List;
+import java.util.Optional;
 
-public class MovieTableAdapter implements TableAdapter<Movie>
+import ro.sdi.lab24.model.Movie;
+
+public class MovieTableAdapter implements TableAdapter<Integer, Movie>
 {
     @Override
     public void insert(Movie entity, Connection connection)
@@ -14,9 +15,15 @@ public class MovieTableAdapter implements TableAdapter<Movie>
     }
 
     @Override
-    public List<Movie> read(Connection connection)
+    public List<Movie> readAll(Connection connection)
     {
         return null;//TODO
+    }
+
+    @Override
+    public Optional<Movie> read(Integer integer, Connection connection)
+    {
+        return Optional.empty();//TODO
     }
 
     @Override
@@ -26,7 +33,7 @@ public class MovieTableAdapter implements TableAdapter<Movie>
     }
 
     @Override
-    public void delete(Movie entity, Connection connection)
+    public void delete(Integer id, Connection connection)
     {
         //TODO
     }

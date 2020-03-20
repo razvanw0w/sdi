@@ -1,11 +1,12 @@
 package ro.sdi.lab24.model.serialization.database;
 
-import ro.sdi.lab24.model.Rental;
-
 import java.sql.Connection;
 import java.util.List;
+import java.util.Optional;
 
-public class RentalTableAdapter implements TableAdapter<Rental>
+import ro.sdi.lab24.model.Rental;
+
+public class RentalTableAdapter implements TableAdapter<Rental.RentalID, Rental>
 {
     @Override
     public void insert(Rental entity, Connection connection)
@@ -14,9 +15,15 @@ public class RentalTableAdapter implements TableAdapter<Rental>
     }
 
     @Override
-    public List<Rental> read(Connection connection)
+    public List<Rental> readAll(Connection connection)
     {
         return null;//TODO
+    }
+
+    @Override
+    public Optional<Rental> read(Rental.RentalID rentalID, Connection connection)
+    {
+        return Optional.empty();//TODO
     }
 
     @Override
@@ -26,7 +33,7 @@ public class RentalTableAdapter implements TableAdapter<Rental>
     }
 
     @Override
-    public void delete(Rental entity, Connection connection)
+    public void delete(Rental.RentalID id, Connection connection)
     {
         //TODO
     }
