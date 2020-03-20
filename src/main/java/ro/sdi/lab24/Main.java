@@ -52,7 +52,6 @@ public class Main
         catch (IOException ignored)
         {
         }
-        PostgreSQL.newConnection();
 
         Repository<Integer, Client> clientRepository = null;
         Repository<Integer, Movie> movieRepository = null;
