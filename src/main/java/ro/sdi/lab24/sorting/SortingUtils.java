@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import javafx.util.Pair;
 import ro.sdi.lab24.exception.SortingException;
@@ -34,7 +35,7 @@ public class SortingUtils
                     Class<?> entityClass = entities.get(0).getClass();
                     try
                     {
-                        Field field = entityClass.getField(name);
+                        Field field = getField(entityClass, name);
                         field.setAccessible(true);
                         entities.sort(
                                 (entity1, entity2) ->
@@ -85,6 +86,26 @@ public class SortingUtils
                 }
         );
         return entities;
+    }
+
+    /**
+     * Returns the first {@link Field} in the hierarchy for the specified name
+     */
+    private static Field getField(Class<?> clazz, String name) throws NoSuchFieldException
+    {
+        Field field = null;
+        while (clazz != null && field == null)
+        {
+            try
+            {
+                field = clazz.getDeclaredField(name);
+            }
+            catch (Exception ignored)
+            {
+            }
+            clazz = clazz.getSuperclass();
+        }
+        return Optional.ofNullable(field).orElseThrow(NoSuchFieldException::new);
     }
 
     private static <T extends Comparable<? super T>> Comparator<T> getComparator(Sort.Direction direction)
