@@ -1,18 +1,18 @@
 package ro.sdi.lab24.repository;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Supplier;
-
 import ro.sdi.lab24.exception.DatabaseException;
 import ro.sdi.lab24.exception.ValidatorException;
 import ro.sdi.lab24.model.Entity;
 import ro.sdi.lab24.model.serialization.database.TableAdapter;
 import ro.sdi.lab24.sorting.Sort;
 import ro.sdi.lab24.sorting.SortingUtils;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 public class DatabaseRepository<ID, T extends Entity<ID>> implements SortingRepository<ID, T>
 {
@@ -59,7 +59,7 @@ public class DatabaseRepository<ID, T extends Entity<ID>> implements SortingRepo
             {
                 tableAdapter.insert(entity, connection);
             }
-            return Optional.of(entity);
+            return readEntity;
         }
         catch (SQLException e)
         {
@@ -76,7 +76,11 @@ public class DatabaseRepository<ID, T extends Entity<ID>> implements SortingRepo
             return tableAdapter.read(id, connection).map(
                     readEntity ->
                     {
-                        tableAdapter.delete(id, connection);
+                        try {
+                            tableAdapter.delete(id, connection);
+                        } catch (SQLException e) {
+                            throw new DatabaseException("Database connection error");
+                        }
                         return readEntity;
                     }
             );
@@ -96,7 +100,11 @@ public class DatabaseRepository<ID, T extends Entity<ID>> implements SortingRepo
             return tableAdapter.read(entity.getId(), connection).map(
                     readEntity ->
                     {
-                        tableAdapter.update(entity, connection);
+                        try {
+                            tableAdapter.update(entity, connection);
+                        } catch (SQLException e) {
+                            throw new DatabaseException("Database connection error");
+                        }
                         return entity;
                     }
             );
