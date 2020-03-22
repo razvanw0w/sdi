@@ -1,6 +1,7 @@
 package ro.sdi.lab24.sorting;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -33,7 +34,7 @@ public class SortingUtils
                     Class<?> entityClass = entities.get(0).getClass();
                     try
                     {
-                        Field field = entityClass.getDeclaredField(name);
+                        Field field = entityClass.getField(name);
                         field.setAccessible(true);
                         entities.sort(
                                 (entity1, entity2) ->
@@ -51,6 +52,15 @@ public class SortingUtils
                                         {
                                             return SortingUtils.<String>getComparator(direction)
                                                     .compare((String) value1, (String) value2);
+                                        }
+                                        else if (value1 instanceof LocalDateTime)
+                                        {
+                                            return SortingUtils.<LocalDateTime>getComparator(
+                                                    direction)
+                                                    .compare(
+                                                            (LocalDateTime) value1,
+                                                            (LocalDateTime) value2
+                                                    );
                                         }
                                         throw new SortingException(
                                                 "Sorting not implemented for type "

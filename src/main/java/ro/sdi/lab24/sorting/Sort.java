@@ -21,9 +21,12 @@ public class Sort
         addSorting(direction, fields);
     }
 
-    public Sort and(Direction direction, String... fields)
+    public Sort and(Sort sort)
     {
-        addSorting(direction, fields);
+        sort.sortingFields.forEach(pair ->
+                                   {
+                                       addSorting(pair.getKey(), pair.getValue());
+                                   });
         return this;
     }
 
