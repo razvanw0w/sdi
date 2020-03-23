@@ -1,9 +1,20 @@
 package ro.sdi.lab24;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.function.Supplier;
+
+import javax.xml.parsers.ParserConfigurationException;
+
 import ro.sdi.lab24.controller.ClientController;
 import ro.sdi.lab24.controller.Controller;
 import ro.sdi.lab24.controller.MovieController;
 import ro.sdi.lab24.controller.RentalController;
+import ro.sdi.lab24.database.PostgreSQL;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
@@ -16,20 +27,15 @@ import ro.sdi.lab24.model.serialization.database.RentalTableAdapter;
 import ro.sdi.lab24.model.serialization.xml.ClientXMLSerializer;
 import ro.sdi.lab24.model.serialization.xml.MovieXMLSerializer;
 import ro.sdi.lab24.model.serialization.xml.RentalXMLSerializer;
-import ro.sdi.lab24.repository.*;
+import ro.sdi.lab24.repository.CSVRepository;
+import ro.sdi.lab24.repository.DatabaseRepository;
+import ro.sdi.lab24.repository.MemoryRepository;
+import ro.sdi.lab24.repository.Repository;
+import ro.sdi.lab24.repository.XMLRepository;
 import ro.sdi.lab24.validation.ClientValidator;
 import ro.sdi.lab24.validation.MovieValidator;
 import ro.sdi.lab24.validation.RentalValidator;
 import ro.sdi.lab24.view.Console;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.function.Supplier;
 
 public class Main
 {
@@ -46,7 +52,6 @@ public class Main
         catch (IOException ignored)
         {
         }
-
 
         Repository<Integer, Client> clientRepository = null;
         Repository<Integer, Movie> movieRepository = null;
@@ -93,7 +98,7 @@ public class Main
                 );
                 break;
             case "db":
-                Supplier<Connection> connectionSupplier = () -> null; //TODO
+                Supplier<Connection> connectionSupplier = PostgreSQL::newConnection;
                 clientRepository = new DatabaseRepository<>(connectionSupplier, new ClientTableAdapter());
                 movieRepository = new DatabaseRepository<>(connectionSupplier, new MovieTableAdapter());
                 rentalRepository = new DatabaseRepository<>(connectionSupplier, new RentalTableAdapter());
