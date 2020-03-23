@@ -3,8 +3,10 @@ package ro.sdi.lab24;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.function.Supplier;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -12,16 +14,21 @@ import ro.sdi.lab24.controller.ClientController;
 import ro.sdi.lab24.controller.Controller;
 import ro.sdi.lab24.controller.MovieController;
 import ro.sdi.lab24.controller.RentalController;
+import ro.sdi.lab24.database.PostgreSQL;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
 import ro.sdi.lab24.model.serialization.csv.ClientCSVSerializer;
 import ro.sdi.lab24.model.serialization.csv.MovieCSVSerializer;
 import ro.sdi.lab24.model.serialization.csv.RentalCSVSerializer;
+import ro.sdi.lab24.model.serialization.database.ClientTableAdapter;
+import ro.sdi.lab24.model.serialization.database.MovieTableAdapter;
+import ro.sdi.lab24.model.serialization.database.RentalTableAdapter;
 import ro.sdi.lab24.model.serialization.xml.ClientXMLSerializer;
 import ro.sdi.lab24.model.serialization.xml.MovieXMLSerializer;
 import ro.sdi.lab24.model.serialization.xml.RentalXMLSerializer;
 import ro.sdi.lab24.repository.CSVRepository;
+import ro.sdi.lab24.repository.DatabaseRepository;
 import ro.sdi.lab24.repository.MemoryRepository;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.repository.XMLRepository;
@@ -46,10 +53,9 @@ public class Main
         {
         }
 
-
-        Repository<Integer, Client> clientRepository = null;
-        Repository<Integer, Movie> movieRepository = null;
-        Repository<Rental.RentalID, Rental> rentalRepository = null;
+        Repository<Integer, Client> clientRepository;
+        Repository<Integer, Movie> movieRepository;
+        Repository<Rental.RentalID, Rental> rentalRepository;
 
         ClientValidator clientValidator = new ClientValidator();
         MovieValidator movieValidator = new MovieValidator();
@@ -92,7 +98,10 @@ public class Main
                 );
                 break;
             case "db":
-                //TODO
+                Supplier<Connection> connectionSupplier = PostgreSQL::newConnection;
+                clientRepository = new DatabaseRepository<>(connectionSupplier, new ClientTableAdapter());
+                movieRepository = new DatabaseRepository<>(connectionSupplier, new MovieTableAdapter());
+                rentalRepository = new DatabaseRepository<>(connectionSupplier, new RentalTableAdapter());
                 break;
             default:
                 clientRepository = new MemoryRepository<>();
@@ -102,9 +111,9 @@ public class Main
         }
 
         Controller controller = new Controller(clientRepository, movieRepository, rentalRepository,
-                                               clientValidator,
-                                               movieValidator,
-                                               rentalValidator
+                clientValidator,
+                movieValidator,
+                rentalValidator
         );
         ClientController clientController = new ClientController(
                 clientRepository,
