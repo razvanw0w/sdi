@@ -1,7 +1,6 @@
 package ro.sdi.lab24.sorting;
 
 import java.lang.reflect.Field;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -44,28 +43,20 @@ public class SortingUtils
                                     {
                                         Object value1 = field.get(entity1);
                                         Object value2 = field.get(entity2);
-                                        if (value1 instanceof Integer)
+                                        if (value1 instanceof Comparable)
                                         {
-                                            return SortingUtils.<Integer>getComparator(direction)
-                                                    .compare((Integer) value1, (Integer) value2);
-                                        }
-                                        else if (value1 instanceof String)
-                                        {
-                                            return SortingUtils.<String>getComparator(direction)
-                                                    .compare((String) value1, (String) value2);
-                                        }
-                                        else if (value1 instanceof LocalDateTime)
-                                        {
-                                            return SortingUtils.<LocalDateTime>getComparator(
-                                                    direction)
-                                                    .compare(
-                                                            (LocalDateTime) value1,
-                                                            (LocalDateTime) value2
-                                                    );
+                                            return ((Comparable) value1).compareTo(value2);
                                         }
                                         throw new SortingException(
                                                 "Sorting not implemented for type "
-                                                        + value1.getClass().getSimpleName()
+                                                        + field.getType().getSimpleName()
+                                        );
+                                    }
+                                    catch (ClassCastException e)
+                                    {
+                                        throw new SortingException(
+                                                "Sorting not implemented for type "
+                                                        + field.getType().getSimpleName()
                                         );
                                     }
                                     catch (IllegalAccessException e)
