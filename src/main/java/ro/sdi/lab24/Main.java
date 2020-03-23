@@ -1,5 +1,15 @@
 package ro.sdi.lab24;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.function.Supplier;
+
+import javax.xml.parsers.ParserConfigurationException;
+
 import ro.sdi.lab24.controller.ClientController;
 import ro.sdi.lab24.controller.Controller;
 import ro.sdi.lab24.controller.MovieController;
@@ -26,15 +36,6 @@ import ro.sdi.lab24.validation.ClientValidator;
 import ro.sdi.lab24.validation.MovieValidator;
 import ro.sdi.lab24.validation.RentalValidator;
 import ro.sdi.lab24.view.Console;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.function.Supplier;
 
 public class Main
 {
@@ -123,8 +124,8 @@ public class Main
                 movieValidator
         );
         RentalController rentalController = new RentalController(
-                clientRepository,
-                movieRepository,
+                clientController,
+                movieController,
                 rentalRepository,
                 rentalValidator
         );
