@@ -1,12 +1,5 @@
 package ro.sdi.lab24.view;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import picocli.CommandLine;
 import ro.sdi.lab24.controller.ClientController;
 import ro.sdi.lab24.controller.Controller;
@@ -14,6 +7,13 @@ import ro.sdi.lab24.controller.MovieController;
 import ro.sdi.lab24.controller.RentalController;
 import ro.sdi.lab24.exception.ProgramException;
 import ro.sdi.lab24.view.commands.MovieRentalCommand;
+
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Console
 {
@@ -56,12 +56,10 @@ public class Console
                 if (line.equals("exit"))
                 {
                     break;
-                }
-                else if (!line.matches("^(movie|rental|client|--help|-h).*"))
+                } else if (!line.matches("^(movie|rental|client|report|--help|-h).*"))
                 {
                     System.out.println("Invalid command! Type '--help'");
-                }
-                else
+                } else
                 {
                     commandLine.execute(parseLine(line));
                 }
