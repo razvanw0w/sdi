@@ -1,39 +1,55 @@
 package ro.sdi.lab24.controller;
 
-import ro.sdi.lab24.exception.AlreadyExistingElementException;
-import ro.sdi.lab24.exception.DateTimeInvalidException;
-import ro.sdi.lab24.exception.ElementNotFoundException;
-import ro.sdi.lab24.model.Client;
-import ro.sdi.lab24.model.Movie;
-import ro.sdi.lab24.model.Rental;
-import ro.sdi.lab24.repository.Repository;
-import ro.sdi.lab24.validation.Validator;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import ro.sdi.lab24.exception.AlreadyExistingElementException;
+import ro.sdi.lab24.exception.DateTimeInvalidException;
+import ro.sdi.lab24.exception.ElementNotFoundException;
+import ro.sdi.lab24.model.Rental;
+import ro.sdi.lab24.repository.Repository;
+import ro.sdi.lab24.validation.Validator;
+
 public class RentalController
 {
-    Repository<Integer, Client> clientRepository;
-    Repository<Integer, Movie> movieRepository;
+    private final ClientController clientController;
+    private final MovieController movieController;
     Repository<Rental.RentalID, Rental> rentalRepository;
     Validator<Rental> rentalValidator;
     public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     public RentalController(
-            Repository<Integer, Client> clientRepository,
-            Repository<Integer, Movie> movieRepository,
+            ClientController clientController,
+            MovieController movieController,
             Repository<Rental.RentalID, Rental> rentalRepository,
             Validator<Rental> rentalValidator
     )
     {
-        this.clientRepository = clientRepository;
-        this.movieRepository = movieRepository;
+        this.clientController = clientController;
+        this.movieController = movieController;
         this.rentalRepository = rentalRepository;
         this.rentalValidator = rentalValidator;
+        setupCascadeDeletion();
+    }
+
+    private void setupCascadeDeletion()
+    {
+        clientController.setEntityDeletedListener(
+                client -> StreamSupport
+                        .stream(rentalRepository.findAll().spliterator(), false)
+                        .filter(rental -> rental.getId().getClientId() == client.getId())
+                        .forEach(rental -> rentalRepository.delete(rental.getId()))
+        );
+
+        movieController.setEntityDeletedListener(
+                movie -> StreamSupport
+                        .stream(rentalRepository.findAll().spliterator(), false)
+                        .filter(rental -> rental.getId().getMovieId() == movie.getId())
+                        .forEach(rental -> rentalRepository.delete(rental.getId()))
+        );
     }
 
     /**
@@ -60,28 +76,28 @@ public class RentalController
         }
         rentalValidator.validate(rental);
         rentalRepository.save(rental)
-                .ifPresent(opt ->
-                {
-                    throw new AlreadyExistingElementException(String.format(
-                            "Rental of movie %d and client %d already exists",
-                            movieId,
-                            clientId
-                    ));
-                });
+                        .ifPresent(opt ->
+                                   {
+                                       throw new AlreadyExistingElementException(String.format(
+                                               "Rental of movie %d and client %d already exists",
+                                               movieId,
+                                               clientId
+                                       ));
+                                   });
     }
 
     private void checkRentalID(int movieId, int clientId)
     {
-        movieRepository.findOne(movieId)
-                .orElseThrow(() -> new ElementNotFoundException(String.format(
-                        "Movie %d does not exist",
-                        movieId
-                )));
-        clientRepository.findOne(clientId)
-                .orElseThrow(() -> new ElementNotFoundException(String.format(
-                        "Client %d does not exist",
-                        clientId
-                )));
+        movieController.findOne(movieId)
+                       .orElseThrow(() -> new ElementNotFoundException(String.format(
+                               "Movie %d does not exist",
+                               movieId
+                       )));
+        clientController.findOne(clientId)
+                        .orElseThrow(() -> new ElementNotFoundException(String.format(
+                                "Client %d does not exist",
+                                clientId
+                        )));
     }
 
     /**
@@ -95,11 +111,11 @@ public class RentalController
     {
         checkRentalID(movieId, clientId);
         rentalRepository.delete(new Rental.RentalID(movieId, clientId))
-                .orElseThrow(() -> new ElementNotFoundException(String.format(
-                        "Rental of movie %d and client %d does not exist",
-                        movieId,
-                        clientId
-                )));
+                        .orElseThrow(() -> new ElementNotFoundException(String.format(
+                                "Rental of movie %d and client %d does not exist",
+                                movieId,
+                                clientId
+                        )));
     }
 
     /**
@@ -135,21 +151,21 @@ public class RentalController
         }
         rentalValidator.validate(rental);
         rentalRepository.update(rental)
-                .orElseThrow(() -> new ElementNotFoundException(String.format(
-                        "Rental of movie %d and client %d does not exist",
-                        movieId,
-                        clientId
-                )));
+                        .orElseThrow(() -> new ElementNotFoundException(String.format(
+                                "Rental of movie %d and client %d does not exist",
+                                movieId,
+                                clientId
+                        )));
     }
 
     public Iterable<Rental> filterRentalsByMovieName(String name)
     {
         String regex = ".*" + name + ".*";
         return StreamSupport.stream(rentalRepository.findAll().spliterator(), false)
-                .filter(rental -> movieRepository.findOne(rental.getId().getMovieId())
-                        .filter(t -> t.getName()
-                                .matches(regex))
-                        .isPresent())
-                .collect(Collectors.toUnmodifiableList());
+                            .filter(rental -> movieController.findOne(rental.getId().getMovieId())
+                                                             .filter(t -> t.getName()
+                                                                           .matches(regex))
+                                                             .isPresent())
+                            .collect(Collectors.toUnmodifiableList());
     }
 }
