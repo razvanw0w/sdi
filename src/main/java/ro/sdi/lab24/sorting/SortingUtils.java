@@ -2,7 +2,6 @@ package ro.sdi.lab24.sorting;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +44,10 @@ public class SortingUtils
                                         Object value2 = field.get(entity2);
                                         if (value1 instanceof Comparable)
                                         {
-                                            return ((Comparable) value1).compareTo(value2);
+                                            int result = ((Comparable) value1).compareTo(value2);
+                                            if (direction == Sort.Direction.DESC)
+                                                return -result;
+                                            return result;
                                         }
                                         throw new SortingException(
                                                 "Sorting not implemented for type "
@@ -97,12 +99,5 @@ public class SortingUtils
             clazz = clazz.getSuperclass();
         }
         return Optional.ofNullable(field).orElseThrow(NoSuchFieldException::new);
-    }
-
-    private static <T extends Comparable<? super T>> Comparator<T> getComparator(Sort.Direction direction)
-    {
-        if (direction == Sort.Direction.ASC)
-            return Comparator.naturalOrder();
-        return Comparator.reverseOrder();
     }
 }
