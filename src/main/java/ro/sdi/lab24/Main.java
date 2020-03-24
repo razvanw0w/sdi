@@ -53,9 +53,9 @@ public class Main
         {
         }
 
-        Repository<Integer, Client> clientRepository = null;
-        Repository<Integer, Movie> movieRepository = null;
-        Repository<Rental.RentalID, Rental> rentalRepository = null;
+        Repository<Integer, Client> clientRepository;
+        Repository<Integer, Movie> movieRepository;
+        Repository<Rental.RentalID, Rental> rentalRepository;
 
         ClientValidator clientValidator = new ClientValidator();
         MovieValidator movieValidator = new MovieValidator();
@@ -124,8 +124,8 @@ public class Main
                 movieValidator
         );
         RentalController rentalController = new RentalController(
-                clientRepository,
-                movieRepository,
+                clientController,
+                movieController,
                 rentalRepository,
                 rentalValidator
         );

@@ -1,5 +1,9 @@
 package ro.sdi.lab24.controller;
 
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
 import ro.sdi.lab24.exception.SortingException;
@@ -10,6 +14,8 @@ import ro.sdi.lab24.sorting.Sort;
 import ro.sdi.lab24.validation.Validator;
 import ro.sdi.lab24.view.commands.movie.utils.SortingCriteria;
 
+public class MovieController
+{
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,6 +24,7 @@ import java.util.stream.StreamSupport;
 public class MovieController {
     Repository<Integer, Movie> movieRepository;
     Validator<Movie> movieValidator;
+    EntityDeletedListener<Movie> entityDeletedListener = null;
 
     public MovieController(
             Repository<Integer, Movie> movieRepository,
@@ -25,6 +32,11 @@ public class MovieController {
     ) {
         this.movieRepository = movieRepository;
         this.movieValidator = movieValidator;
+    }
+
+    public void setEntityDeletedListener(EntityDeletedListener<Movie> entityDeletedListener)
+    {
+        this.entityDeletedListener = entityDeletedListener;
     }
 
     /**
@@ -106,6 +118,11 @@ public class MovieController {
         return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
                 .filter(movie -> movie.getGenre().matches(regex))
                 .collect(Collectors.toUnmodifiableList());
+    }
+
+    public Optional<Movie> findOne(int movieId)
+    {
+        return movieRepository.findOne(movieId);
     }
 
     public Iterable<Movie> sortMovies(SortingCriteria[] criteria) {
