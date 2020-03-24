@@ -1,5 +1,6 @@
 package ro.sdi.lab24.controller;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -13,13 +14,6 @@ import ro.sdi.lab24.repository.SortingRepository;
 import ro.sdi.lab24.sorting.Sort;
 import ro.sdi.lab24.validation.Validator;
 import ro.sdi.lab24.view.commands.movie.utils.SortingCriteria;
-
-public class MovieController
-{
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class MovieController {
     Repository<Integer, Movie> movieRepository;
