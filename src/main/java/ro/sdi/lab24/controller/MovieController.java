@@ -2,10 +2,15 @@ package ro.sdi.lab24.controller;
 
 import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
+import ro.sdi.lab24.exception.SortingException;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.repository.Repository;
+import ro.sdi.lab24.repository.SortingRepository;
+import ro.sdi.lab24.sorting.Sort;
 import ro.sdi.lab24.validation.Validator;
+import ro.sdi.lab24.view.commands.movie.utils.SortingCriteria;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -101,5 +106,17 @@ public class MovieController {
         return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
                 .filter(movie -> movie.getGenre().matches(regex))
                 .collect(Collectors.toUnmodifiableList());
+    }
+
+    public Iterable<Movie> sortMovies(SortingCriteria[] criteria) {
+        Sort reducedSort = Arrays.stream(criteria, 0, criteria.length)
+                .map(sort -> new Sort(sort.getDirection(), sort.getField()))
+                .reduce(Sort::and)
+                .orElseThrow(() -> new SortingException("no sorting criteria provided"));
+        SortingRepository<Integer, Movie> sortingRepo = Optional.of(movieRepository)
+                .filter(repo -> repo instanceof SortingRepository)
+                .map(repo -> (SortingRepository<Integer, Movie>) repo)
+                .orElseThrow(() -> new SortingException("repository doesn't support sorting"));
+        return sortingRepo.findAll(reducedSort);
     }
 }
