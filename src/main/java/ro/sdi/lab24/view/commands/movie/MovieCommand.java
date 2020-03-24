@@ -7,7 +7,8 @@ import picocli.CommandLine.Command;
         ListMoviesCommand.class,
         UpdateMovieCommand.class,
         DeleteMovieCommand.class,
-        FilterMoviesCommand.class
+        FilterMoviesCommand.class,
+        SortMoviesCommand.class
 },mixinStandardHelpOptions = true)
 public class MovieCommand implements Runnable
 {
