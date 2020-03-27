@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import ro.sdi.lab24.exception.ProgramIOException;
 import ro.sdi.lab24.model.Entity;
-import ro.sdi.lab24.model.serialization.csv.CSVSerializer;
+import ro.sdi.lab24.serialization.CSVSerializer;
 import ro.sdi.lab24.validation.Validator;
 
 public class CSVRepository<ID, T extends Entity<ID>> extends AbstractRepository<ID, T>

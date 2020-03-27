@@ -119,7 +119,6 @@ public class ClientControllerImpl implements ClientController
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    @Override
     public Optional<Client> findOne(int clientId)
     {
         return clientRepository.findOne(clientId);

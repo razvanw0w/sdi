@@ -15,7 +15,6 @@ import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
 import ro.sdi.lab24.repository.MemoryRepository;
 import ro.sdi.lab24.repository.Repository;
-import ro.sdi.lab24.validation.RentalValidator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -41,10 +40,10 @@ class RentalControllerTest {
         movieRepository.save(new Movie(2, "y", "g2", 75));
         movieRepository.save(new Movie(3, "z", "g1", 30));
         formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        controller = new RentalControllerImpl(clientRepository,
+        /*controller = new RentalControllerImpl(clientRepository,
                                               movieRepository,
                                               new MemoryRepository<Rental.RentalID, Rental>(),
-                                              new RentalValidator());
+                                              new RentalValidator());*/
     }
 
     @Test

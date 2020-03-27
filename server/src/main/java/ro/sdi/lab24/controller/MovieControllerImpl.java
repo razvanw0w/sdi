@@ -118,7 +118,6 @@ public class MovieControllerImpl implements MovieController
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    @Override
     public Optional<Movie> findOne(int movieId)
     {
         return movieRepository.findOne(movieId);

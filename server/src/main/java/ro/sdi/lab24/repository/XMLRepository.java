@@ -25,7 +25,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import ro.sdi.lab24.exception.ProgramIOException;
 import ro.sdi.lab24.model.Entity;
-import ro.sdi.lab24.model.serialization.xml.XMLSerializer;
+import ro.sdi.lab24.serialization.XMLSerializer;
 import ro.sdi.lab24.validation.Validator;
 
 public class XMLRepository<ID, T extends Entity<ID>> extends AbstractRepository<ID, T>

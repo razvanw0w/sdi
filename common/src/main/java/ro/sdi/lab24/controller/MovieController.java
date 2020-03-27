@@ -1,7 +1,5 @@
 package ro.sdi.lab24.controller;
 
-import java.util.Optional;
-
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Sort;
 
@@ -21,8 +19,6 @@ public interface MovieController
     );
 
     Iterable<Movie> filterMoviesByGenre(String genre);
-
-    Optional<Movie> findOne(int movieId);
 
     Iterable<Movie> sortMovies(Sort criteria);
 }

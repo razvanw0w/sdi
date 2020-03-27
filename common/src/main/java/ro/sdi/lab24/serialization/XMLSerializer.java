@@ -1,4 +1,4 @@
-package ro.sdi.lab24.model.serialization.xml;
+package ro.sdi.lab24.serialization;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

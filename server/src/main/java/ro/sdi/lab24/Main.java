@@ -6,12 +6,13 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import ro.sdi.lab24.controller.ClientControllerImpl;
-import ro.sdi.lab24.controller.Controller;
 import ro.sdi.lab24.controller.ControllerImpl;
 import ro.sdi.lab24.controller.MovieControllerImpl;
 import ro.sdi.lab24.controller.RentalController;
@@ -101,9 +102,18 @@ public class Main
                 break;
             case "db":
                 Supplier<Connection> connectionSupplier = PostgreSQL::newConnection;
-                clientRepository = new DatabaseRepository<>(connectionSupplier, new ClientTableAdapter());
-                movieRepository = new DatabaseRepository<>(connectionSupplier, new MovieTableAdapter());
-                rentalRepository = new DatabaseRepository<>(connectionSupplier, new RentalTableAdapter());
+                clientRepository = new DatabaseRepository<>(
+                        connectionSupplier,
+                        new ClientTableAdapter()
+                );
+                movieRepository = new DatabaseRepository<>(
+                        connectionSupplier,
+                        new MovieTableAdapter()
+                );
+                rentalRepository = new DatabaseRepository<>(
+                        connectionSupplier,
+                        new RentalTableAdapter()
+                );
                 break;
             default:
                 clientRepository = new MemoryRepository<>();
@@ -112,10 +122,13 @@ public class Main
                 break;
         }
 
-        Controller controller = new ControllerImpl(clientRepository, movieRepository, rentalRepository,
-                                                   clientValidator,
-                                                   movieValidator,
-                                                   rentalValidator
+        ControllerImpl controller = new ControllerImpl(
+                clientRepository,
+                movieRepository,
+                rentalRepository,
+                clientValidator,
+                movieValidator,
+                rentalValidator
         );
         ClientControllerImpl clientController = new ClientControllerImpl(
                 clientRepository,
@@ -131,7 +144,24 @@ public class Main
                 rentalRepository,
                 rentalValidator
         );
-        Server server = new Server();
-        server.run();
+
+        ExecutorService executorService = Executors.newFixedThreadPool(
+                Runtime.getRuntime().availableProcessors()
+        );
+        Server server = new Server(
+                controller,
+                clientController,
+                movieController,
+                rentalController,
+                executorService
+        );
+        try
+        {
+            server.run();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }

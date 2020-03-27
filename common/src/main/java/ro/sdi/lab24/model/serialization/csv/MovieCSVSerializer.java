@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import ro.sdi.lab24.exception.ParsingException;
 import ro.sdi.lab24.model.Movie;
+import ro.sdi.lab24.serialization.CSVSerializer;
 
 public class MovieCSVSerializer implements CSVSerializer<Movie>
 {

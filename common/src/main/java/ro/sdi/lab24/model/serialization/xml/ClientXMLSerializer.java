@@ -4,6 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import ro.sdi.lab24.model.Client;
+import ro.sdi.lab24.serialization.XMLSerializer;
 
 import static ro.sdi.lab24.model.serialization.xml.XMLUtils.appendChildWithTextNode;
 import static ro.sdi.lab24.model.serialization.xml.XMLUtils.getTextFromTagName;

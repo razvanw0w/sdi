@@ -23,7 +23,7 @@ public class ListRentalsCommand implements Runnable
                             "%d %d %s\n",
                             rental.getId().getMovieId(),
                             rental.getId().getClientId(),
-                            rental.getTime().format(Console.rentalController.formatter)
+                            rental.getTime().format(Console.dateformatter)
                     )
             );
         }

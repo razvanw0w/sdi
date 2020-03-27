@@ -1,6 +1,7 @@
 package ro.sdi.lab24.view;
 
 import java.io.PrintWriter;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -21,6 +22,7 @@ public class Console
     public static ClientController clientController;
     public static MovieController movieController;
     public static RentalController rentalController;
+    public static DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     public static void initialize(
             Controller controller,
