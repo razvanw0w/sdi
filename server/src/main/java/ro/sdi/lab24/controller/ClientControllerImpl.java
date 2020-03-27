@@ -10,13 +10,13 @@ import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.validation.Validator;
 
-public class ClientController
+public class ClientControllerImpl implements ClientController
 {
     Repository<Integer, Client> clientRepository;
     Validator<Client> clientValidator;
     EntityDeletedListener<Client> entityDeletedListener = null;
 
-    public ClientController(
+    public ClientControllerImpl(
             Repository<Integer, Client> clientRepository,
             Validator<Client> clientValidator
     )
@@ -37,6 +37,7 @@ public class ClientController
      * @param name: the name of the client
      * @throws AlreadyExistingElementException if the client (the ID) is already there
      */
+    @Override
     public void addClient(int id, String name)
     {
         Client client = new Client(id, name);
@@ -58,6 +59,7 @@ public class ClientController
      * @param id: the ID of the client
      * @throws ElementNotFoundException if the client isn't found in the repository based on their ID
      */
+    @Override
     public void deleteClient(int id)
     {
         clientRepository
@@ -81,6 +83,7 @@ public class ClientController
      *
      * @return all: an iterable collection of clients
      */
+    @Override
     public Iterable<Client> getClients()
     {
         return clientRepository.findAll();
@@ -93,6 +96,7 @@ public class ClientController
      * @param name: the new name of the client
      * @throws ElementNotFoundException if the client isn't found in the repository based on their ID
      */
+    @Override
     public void updateClient(int id, String name)
     {
         Client client = new Client(id, name);
@@ -105,6 +109,7 @@ public class ClientController
                 )));
     }
 
+    @Override
     public Iterable<Client> filterClientsByName(String name)
     {
         String regex = ".*" + name + ".*";
@@ -114,6 +119,7 @@ public class ClientController
                 .collect(Collectors.toUnmodifiableList());
     }
 
+    @Override
     public Optional<Client> findOne(int clientId)
     {
         return clientRepository.findOne(clientId);

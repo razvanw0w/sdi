@@ -1,6 +1,5 @@
 package ro.sdi.lab24.controller;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -9,18 +8,18 @@ import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
 import ro.sdi.lab24.exception.SortingException;
 import ro.sdi.lab24.model.Movie;
+import ro.sdi.lab24.model.Sort;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.repository.SortingRepository;
-import ro.sdi.lab24.sorting.Sort;
 import ro.sdi.lab24.validation.Validator;
-import ro.sdi.lab24.view.commands.movie.utils.SortingCriteria;
 
-public class MovieController {
+public class MovieControllerImpl implements MovieController
+{
     Repository<Integer, Movie> movieRepository;
     Validator<Movie> movieValidator;
     EntityDeletedListener<Movie> entityDeletedListener = null;
 
-    public MovieController(
+    public MovieControllerImpl(
             Repository<Integer, Movie> movieRepository,
             Validator<Movie> movieValidator
     ) {
@@ -40,6 +39,7 @@ public class MovieController {
      * @param name: the name of the movie
      * @throws AlreadyExistingElementException if the movie (the ID) is already there
      */
+    @Override
     public void addMovie(int id, String name, String genre, int rating) {
         Movie movie = new Movie(id, name, genre, rating);
         movieValidator.validate(movie);
@@ -58,6 +58,7 @@ public class MovieController {
      * @param id: the ID of the movie
      * @throws ElementNotFoundException if the movie isn't found in the repository based on their ID
      */
+    @Override
     public void deleteMovie(int id) {
         movieRepository.delete(id)
                 .orElseThrow(() -> new ElementNotFoundException(String.format(
@@ -71,6 +72,7 @@ public class MovieController {
      *
      * @return all: an iterable collection of movies
      */
+    @Override
     public Iterable<Movie> getMovies() {
         return movieRepository.findAll();
     }
@@ -84,6 +86,7 @@ public class MovieController {
      * @param rating : the rating of the movie
      * @throws ElementNotFoundException if the movie isn't found in the repository based on their ID
      */
+    @Override
     public void updateMovie(
             int id,
             String name,
@@ -107,6 +110,7 @@ public class MovieController {
                 )));
     }
 
+    @Override
     public Iterable<Movie> filterMoviesByGenre(String genre) {
         String regex = ".*" + genre + ".*";
         return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
@@ -114,20 +118,18 @@ public class MovieController {
                 .collect(Collectors.toUnmodifiableList());
     }
 
+    @Override
     public Optional<Movie> findOne(int movieId)
     {
         return movieRepository.findOne(movieId);
     }
 
-    public Iterable<Movie> sortMovies(SortingCriteria[] criteria) {
-        Sort reducedSort = Arrays.stream(criteria, 0, criteria.length)
-                .map(sort -> new Sort(sort.getDirection(), sort.getField()))
-                .reduce(Sort::and)
-                .orElseThrow(() -> new SortingException("no sorting criteria provided"));
+    @Override
+    public Iterable<Movie> sortMovies(Sort criteria) {
         SortingRepository<Integer, Movie> sortingRepo = Optional.of(movieRepository)
                 .filter(repo -> repo instanceof SortingRepository)
                 .map(repo -> (SortingRepository<Integer, Movie>) repo)
                 .orElseThrow(() -> new SortingException("repository doesn't support sorting"));
-        return sortingRepo.findAll(reducedSort);
+        return sortingRepo.findAll(criteria);
     }
 }

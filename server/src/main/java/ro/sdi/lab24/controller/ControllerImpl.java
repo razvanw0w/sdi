@@ -7,15 +7,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import ro.sdi.lab24.controller.dto.ClientGenre;
-import ro.sdi.lab24.controller.dto.RentedMovieStatistic;
+import ro.sdi.lab24.model.dto.ClientGenre;
+import ro.sdi.lab24.model.dto.RentedMovieStatistic;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.validation.Validator;
 
-public class Controller
+public class ControllerImpl implements Controller
 {
     Repository<Integer, Client> clientRepository;
     Repository<Integer, Movie> movieRepository;
@@ -24,7 +24,7 @@ public class Controller
     Validator<Movie> movieValidator;
     Validator<Rental> rentalValidator;
 
-    public Controller(
+    public ControllerImpl(
             Repository<Integer, Client> clientRepository,
             Repository<Integer, Movie> movieRepository,
             Repository<Rental.RentalID, Rental> rentalRepository,
@@ -41,6 +41,7 @@ public class Controller
         this.rentalValidator = rentalValidator;
     }
 
+    @Override
     public Iterable<RentedMovieStatistic> getTop10RentedMovies()
     {
         Stream<Rental> rentalStream = StreamSupport.stream(rentalRepository.findAll().spliterator(), false);
@@ -61,6 +62,7 @@ public class Controller
     /**
      * Retrieves the most rented genre for each client, or the empty string if the client did not rent any movies
      */
+    @Override
     public Iterable<ClientGenre> getClientGenres()
     {
         return StreamSupport.stream(clientRepository.findAll().spliterator(), false)

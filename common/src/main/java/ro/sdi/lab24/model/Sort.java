@@ -1,4 +1,4 @@
-package ro.sdi.lab24.sorting;
+package ro.sdi.lab24.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,7 +9,7 @@ import javafx.util.Pair;
 
 public class Sort
 {
-    List<Pair<Direction, String>> sortingFields = new ArrayList<>();
+    public List<Pair<Direction, String>> sortingFields = new ArrayList<>();
 
     public Sort(String field)
     {

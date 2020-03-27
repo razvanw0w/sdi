@@ -32,7 +32,7 @@ class MovieControllerTest
     {
         validator = new MovieValidator();
         repo = new MemoryRepository<Integer, Movie>();
-        controller = new MovieController(repo, validator);
+        controller = new MovieControllerImpl(repo, validator);
     }
 
     @Test

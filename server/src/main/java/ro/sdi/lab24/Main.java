@@ -10,10 +10,12 @@ import java.util.function.Supplier;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import ro.sdi.lab24.controller.ClientController;
+import ro.sdi.lab24.controller.ClientControllerImpl;
 import ro.sdi.lab24.controller.Controller;
-import ro.sdi.lab24.controller.MovieController;
+import ro.sdi.lab24.controller.ControllerImpl;
+import ro.sdi.lab24.controller.MovieControllerImpl;
 import ro.sdi.lab24.controller.RentalController;
+import ro.sdi.lab24.controller.RentalControllerImpl;
 import ro.sdi.lab24.database.PostgreSQL;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.model.Movie;
@@ -32,10 +34,10 @@ import ro.sdi.lab24.repository.DatabaseRepository;
 import ro.sdi.lab24.repository.MemoryRepository;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.repository.XMLRepository;
+import ro.sdi.lab24.server.Server;
 import ro.sdi.lab24.validation.ClientValidator;
 import ro.sdi.lab24.validation.MovieValidator;
 import ro.sdi.lab24.validation.RentalValidator;
-import ro.sdi.lab24.view.Console;
 
 public class Main
 {
@@ -110,32 +112,26 @@ public class Main
                 break;
         }
 
-        Controller controller = new Controller(clientRepository, movieRepository, rentalRepository,
-                clientValidator,
-                movieValidator,
-                rentalValidator
+        Controller controller = new ControllerImpl(clientRepository, movieRepository, rentalRepository,
+                                                   clientValidator,
+                                                   movieValidator,
+                                                   rentalValidator
         );
-        ClientController clientController = new ClientController(
+        ClientControllerImpl clientController = new ClientControllerImpl(
                 clientRepository,
                 clientValidator
         );
-        MovieController movieController = new MovieController(
+        MovieControllerImpl movieController = new MovieControllerImpl(
                 movieRepository,
                 movieValidator
         );
-        RentalController rentalController = new RentalController(
+        RentalController rentalController = new RentalControllerImpl(
                 clientController,
                 movieController,
                 rentalRepository,
                 rentalValidator
         );
-        Console.initialize(
-                controller,
-                clientController,
-                movieController,
-                rentalController
-        );
-
-        Console.run(args);
+        Server server = new Server();
+        server.run();
     }
 }

@@ -11,7 +11,7 @@ import ro.sdi.lab24.exception.DatabaseException;
 import ro.sdi.lab24.exception.ValidatorException;
 import ro.sdi.lab24.model.Entity;
 import ro.sdi.lab24.model.serialization.database.TableAdapter;
-import ro.sdi.lab24.sorting.Sort;
+import ro.sdi.lab24.model.Sort;
 import ro.sdi.lab24.sorting.SortingUtils;
 
 public class DatabaseRepository<ID, T extends Entity<ID>> implements SortingRepository<ID, T>

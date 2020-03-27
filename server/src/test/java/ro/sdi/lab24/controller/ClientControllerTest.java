@@ -29,7 +29,7 @@ class ClientControllerTest {
     void setUp() {
         validator = new ClientValidator();
         repo = new MemoryRepository<Integer, Client>();
-        controller = new ClientController(repo, validator);
+        controller = new ClientControllerImpl(repo, validator);
     }
 
     @Test

@@ -9,6 +9,7 @@ import java.util.List;
 
 import ro.sdi.lab24.database.PostgreSQL;
 import ro.sdi.lab24.model.Movie;
+import ro.sdi.lab24.model.Sort;
 import ro.sdi.lab24.model.serialization.database.MovieTableAdapter;
 import ro.sdi.lab24.repository.DatabaseRepository;
 import ro.sdi.lab24.repository.SortingRepository;

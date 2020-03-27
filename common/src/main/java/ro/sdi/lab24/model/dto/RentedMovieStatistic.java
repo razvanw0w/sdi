@@ -1,4 +1,4 @@
-package ro.sdi.lab24.controller.dto;
+package ro.sdi.lab24.model.dto;
 
 public class RentedMovieStatistic implements Comparable<RentedMovieStatistic> {
     private String movieName;

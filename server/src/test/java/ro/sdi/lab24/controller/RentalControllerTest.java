@@ -41,10 +41,10 @@ class RentalControllerTest {
         movieRepository.save(new Movie(2, "y", "g2", 75));
         movieRepository.save(new Movie(3, "z", "g1", 30));
         formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        controller = new RentalController(clientRepository,
-                movieRepository,
-                new MemoryRepository<Rental.RentalID, Rental>(),
-                new RentalValidator());
+        controller = new RentalControllerImpl(clientRepository,
+                                              movieRepository,
+                                              new MemoryRepository<Rental.RentalID, Rental>(),
+                                              new RentalValidator());
     }
 
     @Test

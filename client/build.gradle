@@ -4,6 +4,7 @@ application {
 
 dependencies {
     implementation 'info.picocli:picocli:4.2.0'
+    implementation project(":common")
 }
 
 jar {

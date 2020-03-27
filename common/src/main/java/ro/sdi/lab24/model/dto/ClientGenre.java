@@ -1,4 +1,4 @@
-package ro.sdi.lab24.controller.dto;
+package ro.sdi.lab24.model.dto;
 
 import ro.sdi.lab24.model.Client;
 

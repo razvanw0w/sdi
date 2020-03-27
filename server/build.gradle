@@ -4,7 +4,8 @@ application {
 
 dependencies {
     // https://mvnrepository.com/artifact/org.postgresql/postgresql
-    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.11'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.11'
+    implementation project(":common")
 }
 
 jar {

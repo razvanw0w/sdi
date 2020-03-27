@@ -13,17 +13,17 @@ import ro.sdi.lab24.model.Rental;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.validation.Validator;
 
-public class RentalController
+public class RentalControllerImpl implements RentalController
 {
-    private final ClientController clientController;
-    private final MovieController movieController;
+    private final ClientControllerImpl clientController;
+    private final MovieControllerImpl movieController;
     Repository<Rental.RentalID, Rental> rentalRepository;
     Validator<Rental> rentalValidator;
     public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
-    public RentalController(
-            ClientController clientController,
-            MovieController movieController,
+    public RentalControllerImpl(
+            ClientControllerImpl clientController,
+            MovieControllerImpl movieController,
             Repository<Rental.RentalID, Rental> rentalRepository,
             Validator<Rental> rentalValidator
     )
@@ -62,6 +62,7 @@ public class RentalController
      * @throws AlreadyExistingElementException if the rental already exists in the repository
      * @throws DateTimeInvalidException        if the date and time cannot be parsed
      */
+    @Override
     public void addRental(int movieId, int clientId, String time)
     {
         checkRentalID(movieId, clientId);
@@ -107,6 +108,7 @@ public class RentalController
      * @param clientId: the ID of the client
      * @throws ElementNotFoundException if the movie, client don't exist of if the rental itself doesn't exist in the repository
      */
+    @Override
     public void deleteRental(int movieId, int clientId)
     {
         checkRentalID(movieId, clientId);
@@ -123,6 +125,7 @@ public class RentalController
      *
      * @return all: an iterable collection of rentals
      */
+    @Override
     public Iterable<Rental> getRentals()
     {
         return rentalRepository.findAll();
@@ -137,6 +140,7 @@ public class RentalController
      * @throws ElementNotFoundException if the movie or client does not exist in the repository or
      *                                  if the rental is nowhere to be found
      */
+    @Override
     public void updateRental(int movieId, int clientId, String time)
     {
         checkRentalID(movieId, clientId);
@@ -158,6 +162,7 @@ public class RentalController
                         )));
     }
 
+    @Override
     public Iterable<Rental> filterRentalsByMovieName(String name)
     {
         String regex = ".*" + name + ".*";
