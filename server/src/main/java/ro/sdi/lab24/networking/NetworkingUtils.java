@@ -53,6 +53,7 @@ public class NetworkingUtils
 
     public static Object deserializeByType(String string, Class<?> clazz)
     {
+        if (clazz.equals(int.class)) return Integer.parseInt(string);
         if (clazz.equals(Integer.class)) return Integer.parseInt(string);
         if (clazz.equals(String.class)) return string;
         CSVSerializer<?> csvSerializer = typeSerializers.get(clazz);
@@ -63,6 +64,7 @@ public class NetworkingUtils
     public static String serialize(Object entity)
     {
         Class<?> clazz = entity.getClass();
+        if (clazz.equals(int.class)) return String.valueOf(entity);
         if (clazz.equals(Integer.class)) return entity.toString();
         if (clazz.equals(String.class)) return entity.toString();
         CSVSerializer csvSerializer = typeSerializers.get(clazz);

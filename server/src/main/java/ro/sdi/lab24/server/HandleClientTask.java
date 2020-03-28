@@ -11,7 +11,6 @@ import ro.sdi.lab24.controller.Controller;
 import ro.sdi.lab24.controller.MovieController;
 import ro.sdi.lab24.controller.RentalController;
 import ro.sdi.lab24.networking.Message;
-import ro.sdi.lab24.networking.NetworkingUtils;
 
 class HandleClientTask implements Runnable
 {
@@ -46,26 +45,13 @@ class HandleClientTask implements Runnable
             InputStream inputStream = client.getInputStream();
             OutputStream outputStream = client.getOutputStream();
             Message message = Message.read(inputStream);
-            String[] splitHeader = message.getHeader().split(":");
-            Message response;
-            switch (splitHeader[0])
-            {
-                case "Controller":
-                    response = ControllerAdapter.handle(message, controller);
-                    break;
-                case "ClientController":
-                    response = ClientControllerAdapter.handle(message, clientController);
-                    break;
-                case "MovieController":
-                    response = MovieControllerAdapter.handle(message, movieController);
-                    break;
-                case "RentalController":
-                    response = RentalControllerAdapter.handle(message, rentalController);
-                    break;
-                default:
-                    response = NetworkingUtils.exception("Invalid controller name");
-                    break;
-            }
+            Message response = ControllerAdapter.handleMessage(
+                    message,
+                    controller,
+                    clientController,
+                    movieController,
+                    rentalController
+            );
             Objects.requireNonNull(response, "Error computing the response");
             Message.write(response, outputStream);
         }

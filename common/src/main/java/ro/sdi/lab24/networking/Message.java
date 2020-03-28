@@ -76,4 +76,13 @@ public class Message
     {
         this.body = body;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Message{" +
+                "header='" + header + '\'' +
+                ", body=" + body +
+                '}';
+    }
 }

@@ -40,6 +40,7 @@ public class Server
     public void run() throws IOException
     {
         ServerSocket serverSocket = new ServerSocket(NetworkingUtils.PORT);
+        System.out.println("Server started...");
         while (running)
         {
             Socket socket = serverSocket.accept();
