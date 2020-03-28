@@ -47,7 +47,7 @@ class HandleClientTask implements Runnable
             OutputStream outputStream = client.getOutputStream();
             Message message = Message.read(inputStream);
             String[] splitHeader = message.getHeader().split(":");
-            Message response = null;
+            Message response;
             switch (splitHeader[0])
             {
                 case "Controller":
