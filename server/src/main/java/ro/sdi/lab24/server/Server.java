@@ -9,7 +9,7 @@ import ro.sdi.lab24.controller.ClientControllerImpl;
 import ro.sdi.lab24.controller.ControllerImpl;
 import ro.sdi.lab24.controller.MovieControllerImpl;
 import ro.sdi.lab24.controller.RentalController;
-import ro.sdi.lab24.networking.NetworkingUtils;
+import ro.sdi.lab24.networking.ServerInformation;
 
 public class Server
 {
@@ -39,7 +39,7 @@ public class Server
 
     public void run() throws IOException
     {
-        ServerSocket serverSocket = new ServerSocket(NetworkingUtils.PORT);
+        ServerSocket serverSocket = new ServerSocket(ServerInformation.PORT);
         System.out.println("Server started...");
         while (running)
         {

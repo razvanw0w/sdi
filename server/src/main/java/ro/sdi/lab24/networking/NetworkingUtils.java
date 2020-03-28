@@ -21,7 +21,6 @@ import ro.sdi.lab24.serialization.NetworkTranslator;
 
 public class NetworkingUtils
 {
-    public static final int PORT = 1234;
     private static Map<Class<?>, CSVSerializer<?>> typeSerializers = new HashMap<>();
 
     static
