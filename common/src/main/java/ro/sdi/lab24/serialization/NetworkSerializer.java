@@ -1,10 +1,10 @@
 package ro.sdi.lab24.serialization;
 
-public interface NetworkTranslator<T>
+public interface NetworkSerializer<T>
 {
-    static <T> NetworkTranslator<T> from(CSVSerializer<T> serializer)
+    static <T> NetworkSerializer<T> from(CSVSerializer<T> serializer)
     {
-        return new NetworkTranslator<T>()
+        return new NetworkSerializer<T>()
         {
             @Override
             public String encode(T entity)

@@ -16,21 +16,29 @@ import ro.sdi.lab24.model.serialization.csv.MovieCSVSerializer;
 import ro.sdi.lab24.model.serialization.csv.RentalCSVSerializer;
 import ro.sdi.lab24.model.serialization.csv.RentedMovieStatisticCSVSerializer;
 import ro.sdi.lab24.model.serialization.csv.SortCSVSerializer;
-import ro.sdi.lab24.serialization.CSVSerializer;
-import ro.sdi.lab24.serialization.NetworkTranslator;
+import ro.sdi.lab24.serialization.NetworkSerializer;
 
 public class NetworkingUtils
 {
-    private static Map<Class<?>, CSVSerializer<?>> typeSerializers = new HashMap<>();
+    private static Map<Class<?>, NetworkSerializer<?>> typeSerializers = new HashMap<>();
 
     static
     {
-        typeSerializers.put(Client.class, new ClientCSVSerializer());
-        typeSerializers.put(Movie.class, new MovieCSVSerializer());
-        typeSerializers.put(Rental.class, new RentalCSVSerializer());
-        typeSerializers.put(Sort.class, new SortCSVSerializer());
-        typeSerializers.put(ClientGenre.class, new ClientGenreCSVSerializer());
-        typeSerializers.put(RentedMovieStatistic.class, new RentedMovieStatisticCSVSerializer());
+        typeSerializers.put(int.class, new IntegerSerializer());
+        typeSerializers.put(Integer.class, new IntegerSerializer());
+        typeSerializers.put(String.class, new StringSerializer());
+        typeSerializers.put(Client.class, NetworkSerializer.from(new ClientCSVSerializer()));
+        typeSerializers.put(Movie.class, NetworkSerializer.from(new MovieCSVSerializer()));
+        typeSerializers.put(Rental.class, NetworkSerializer.from(new RentalCSVSerializer()));
+        typeSerializers.put(Sort.class, NetworkSerializer.from(new SortCSVSerializer()));
+        typeSerializers.put(
+                ClientGenre.class,
+                NetworkSerializer.from(new ClientGenreCSVSerializer())
+        );
+        typeSerializers.put(
+                RentedMovieStatistic.class,
+                NetworkSerializer.from(new RentedMovieStatisticCSVSerializer())
+        );
     }
 
     private NetworkingUtils()
@@ -52,23 +60,17 @@ public class NetworkingUtils
 
     public static Object deserializeByType(String string, Class<?> clazz)
     {
-        if (clazz.equals(int.class)) return Integer.parseInt(string);
-        if (clazz.equals(Integer.class)) return Integer.parseInt(string);
-        if (clazz.equals(String.class)) return string;
-        CSVSerializer<?> csvSerializer = typeSerializers.get(clazz);
-        if (csvSerializer == null) return null;
-        return NetworkTranslator.from(csvSerializer).decode(string);
+        NetworkSerializer<?> serializer = typeSerializers.get(clazz);
+        if (serializer == null) return null;
+        return serializer.decode(string);
     }
 
     public static String serialize(Object entity)
     {
         Class<?> clazz = entity.getClass();
-        if (clazz.equals(int.class)) return String.valueOf(entity);
-        if (clazz.equals(Integer.class)) return entity.toString();
-        if (clazz.equals(String.class)) return entity.toString();
-        CSVSerializer csvSerializer = typeSerializers.get(clazz);
-        if (csvSerializer == null) return null;
-        return NetworkTranslator.from(csvSerializer).encode(entity);
+        NetworkSerializer serializer = typeSerializers.get(clazz);
+        if (serializer == null) return null;
+        return serializer.encode(entity);
     }
 
 }
