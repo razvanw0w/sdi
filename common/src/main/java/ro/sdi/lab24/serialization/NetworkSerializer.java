@@ -21,6 +21,5 @@ public interface NetworkSerializer<T>
     }
 
     String encode(T entity);
-
     T decode(String string);
 }

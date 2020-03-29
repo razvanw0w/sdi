@@ -1,10 +1,6 @@
 package ro.sdi.lab24.networking;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,7 +13,7 @@ public class Message
      * body = method parameters serialized as csv
      * <p>
      * For the response
-     * header = either "succes" or "exception"
+     * header = either "success" or "exception"
      * body = either the csv serialized entities or the exception message
      */
     private String header;
