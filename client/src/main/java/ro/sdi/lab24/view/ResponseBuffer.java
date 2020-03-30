@@ -10,11 +10,16 @@ public class ResponseBuffer
 
     public List<String> getResponses()
     {
-        return responseList.stream()
-                           .filter(FutureResponse::available)
-                           .peek(responseList::remove)
-                           .map(FutureResponse::get)
-                           .collect(Collectors.toList());
+        List<FutureResponse<?>> completedFutures =
+                responseList.stream()
+                            .filter(FutureResponse::available)
+                            .collect(Collectors.toList());
+        List<String> result =
+                completedFutures.stream()
+                                .map(FutureResponse::get)
+                                .collect(Collectors.toUnmodifiableList());
+        responseList.removeAll(completedFutures);
+        return result;
     }
 
     public void add(FutureResponse<?> futureResponse)

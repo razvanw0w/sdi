@@ -1,11 +1,11 @@
 package ro.sdi.lab24.networking;
 
-import ro.sdi.lab24.exception.ConnectionException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+
+import ro.sdi.lab24.exception.ConnectionException;
 
 public class TCPClient {
     public static Message sendAndReceive(Message request) {
@@ -14,10 +14,9 @@ public class TCPClient {
              OutputStream outputStream = socket.getOutputStream()
         ) {
             Message.write(request, outputStream);
-            Message response = Message.read(inputStream);
-            return response;
+            return Message.read(inputStream);
         } catch (IOException e) {
-            throw new ConnectionException("connection to server failed");
+            throw new ConnectionException("Connection to server failed");
         }
     }
 }

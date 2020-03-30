@@ -1,6 +1,10 @@
 package ro.sdi.lab24.networking;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,11 +37,11 @@ public class Message
     public static void write(Message message, OutputStream outputStream) throws IOException
     {
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-        dataOutputStream.writeUTF(message.header + System.lineSeparator());
+        dataOutputStream.writeUTF(message.header);
         dataOutputStream.writeInt(message.body.size());
         for (String string : message.body)
         {
-            dataOutputStream.writeUTF(string + System.lineSeparator());
+            dataOutputStream.writeUTF(string);
         }
     }
 
@@ -46,7 +50,8 @@ public class Message
         DataInputStream dataInputStream = new DataInputStream(inputStream);
         String header = dataInputStream.readUTF();
         Message message = new Message(header);
-        for (int i = 0; i < dataInputStream.readInt(); i++)
+        int bodySize = dataInputStream.readInt();
+        for (int i = 0; i < bodySize; i++)
         {
             message.addString(dataInputStream.readUTF());
         }

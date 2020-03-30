@@ -39,19 +39,25 @@ public class Server
 
     public void run() throws IOException
     {
-        ServerSocket serverSocket = new ServerSocket(ServerInformation.PORT);
-        System.out.println("Server started...");
-        while (running)
+        try (ServerSocket serverSocket = new ServerSocket(ServerInformation.PORT))
         {
-            Socket socket = serverSocket.accept();
-            executorService.submit(new HandleClientTask(
-                    socket,
-                    controller,
-                    clientController,
-                    movieController,
-                    rentalController
-            ));
+            System.out.println("Server started...");
+            while (running)
+            {
+                Socket socket = serverSocket.accept();
+                executorService.submit(new HandleClientTask(
+                        socket,
+                        controller,
+                        clientController,
+                        movieController,
+                        rentalController
+                ));
+            }
+            executorService.shutdown();
         }
-        executorService.shutdown();
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }

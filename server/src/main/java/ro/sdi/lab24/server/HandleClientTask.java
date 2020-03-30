@@ -40,10 +40,9 @@ class HandleClientTask implements Runnable
     @Override
     public void run()
     {
-        try
+        try (InputStream inputStream = client.getInputStream();
+             OutputStream outputStream = client.getOutputStream())
         {
-            InputStream inputStream = client.getInputStream();
-            OutputStream outputStream = client.getOutputStream();
             Message message = Message.read(inputStream);
             Message response = ControllerAdapter.handleMessage(
                     message,
@@ -54,6 +53,7 @@ class HandleClientTask implements Runnable
             );
             Objects.requireNonNull(response, "Error computing the response");
             Message.write(response, outputStream);
+            client.close();
         }
         catch (IOException e)
         {
