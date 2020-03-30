@@ -77,13 +77,15 @@ public class NetworkingUtils
         return message;
     }
 
-    public static Object deserializeByType(String string, Class<?> clazz)
+    @SuppressWarnings("unchecked")
+    public static <T> T deserializeByType(String string, Class<T> clazz)
     {
         NetworkSerializer<?> serializer = typeSerializers.get(clazz);
         if (serializer == null) return null;
-        return serializer.decode(string);
+        return (T) serializer.decode(string);
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static String serialize(Object entity)
     {
         Class<?> clazz = entity.getClass();
