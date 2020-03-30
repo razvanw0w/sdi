@@ -23,6 +23,7 @@ public class Console
     public static MovieController movieController;
     public static RentalController rentalController;
     public static DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    public static ResponseBuffer responseBuffer = new ResponseBuffer();//TODO call the add method to add a future, call getResponses() in a new command
 
     public static void initialize(
             Controller controller,
@@ -37,9 +38,9 @@ public class Console
         Console.rentalController = rentalController;
     }
 
-    public static void handleException(ProgramException e)
+    public static String handleException(ProgramException e)
     {
-        System.out.println(e.getMessage());
+        return e.getMessage();
     }
 
     public static void run(String[] args)

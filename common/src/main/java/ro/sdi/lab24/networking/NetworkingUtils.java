@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ro.sdi.lab24.exception.ProgramException;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
@@ -48,6 +49,24 @@ public class NetworkingUtils
     public static Message exception(String exceptionMessage)
     {
         return new Message("exception", exceptionMessage);
+    }
+
+    public static void checkException(Message message) throws ProgramException
+    {
+        if (message.getHeader().equals("exception"))
+        {
+            List<String> messageBody = message.getBody();
+            if (messageBody.size() != 1)
+            {
+                throw new RuntimeException("Received response was invalid");
+            }
+            throw new ProgramException(messageBody.get(0));
+        }
+    }
+
+    public static boolean isSuccess(Message message)
+    {
+        return message.getHeader().equals("success");
     }
 
     public static Message success(List<String> value)
