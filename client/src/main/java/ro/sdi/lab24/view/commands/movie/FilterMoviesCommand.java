@@ -1,8 +1,11 @@
 package ro.sdi.lab24.view.commands.movie;
 
-import ro.sdi.lab24.exception.ProgramException;
-import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.view.Console;
+import ro.sdi.lab24.view.FutureResponse;
+import ro.sdi.lab24.view.ResponseMapper;
+
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Parameters;
@@ -14,28 +17,19 @@ public class FilterMoviesCommand implements Runnable
     String genre;
 
     @Override
-    public void run()
-    {
-        try
-        {
-            Iterable<Movie> filteredMovies = Console.movieController.filterMoviesByGenre(genre);
-            if (!filteredMovies.iterator().hasNext())
-            {
-                System.out.println("No movies found!");
-            }
-            filteredMovies.forEach(
-                    movie -> System.out.printf(
-                            "%d %s %s %d\n",
-                            movie.getId(),
-                            movie.getName(),
-                            movie.getGenre(),
-                            movie.getRating()
-                    )
-            );
-        }
-        catch (ProgramException e)
-        {
-            Console.handleException(e);
-        }
+    public void run() {
+        Console.responseBuffer.add(
+                new FutureResponse<>(
+                        Console.movieController.filterMoviesByGenre(genre),
+                        new ResponseMapper<>(response -> {
+                            if (!response.iterator().hasNext()) {
+                                return "No movies found!";
+                            }
+                            return StreamSupport.stream(response.spliterator(), false)
+                                    .map(movie -> String.format("%d %s %s %d", movie.getId(), movie.getName(), movie.getGenre(), movie.getRating()))
+                                    .collect(Collectors.joining("\n", "", "\n"));
+                        })
+                )
+        );
     }
 }

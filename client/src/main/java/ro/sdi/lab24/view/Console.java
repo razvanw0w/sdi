@@ -1,13 +1,5 @@
 package ro.sdi.lab24.view;
 
-import java.io.PrintWriter;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import picocli.CommandLine;
 import ro.sdi.lab24.controller.ClientController;
 import ro.sdi.lab24.controller.Controller;
@@ -16,14 +8,21 @@ import ro.sdi.lab24.controller.RentalController;
 import ro.sdi.lab24.exception.ProgramException;
 import ro.sdi.lab24.view.commands.MovieRentalCommand;
 
-public class Console
-{
+import java.io.PrintWriter;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Console {
     public static Controller controller;
     public static ClientController clientController;
     public static MovieController movieController;
     public static RentalController rentalController;
     public static DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-    public static ResponseBuffer responseBuffer = new ResponseBuffer();//TODO call the add method to add a future, call getResponses() in a new command
+    public static ResponseBuffer responseBuffer = new ResponseBuffer();
 
     public static void initialize(
             Controller controller,

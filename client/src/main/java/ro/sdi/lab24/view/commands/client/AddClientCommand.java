@@ -18,13 +18,11 @@ public class AddClientCommand implements Runnable
     @Override
     public void run()
     {
-        //TODO here are the classes in action (does not compile because of the wrong interface)
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.clientController.addClient(id, name),
                         new ResponseMapper<>(response -> "Client added!")
                 )
         );
-
     }
 }

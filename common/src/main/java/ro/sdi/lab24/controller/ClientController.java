@@ -13,5 +13,4 @@ public interface ClientController
     void updateClient(int id, String name);
 
     Iterable<Client> filterClientsByName(String name);
-
 }

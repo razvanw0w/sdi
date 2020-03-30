@@ -1,8 +1,11 @@
 package ro.sdi.lab24.view.commands.rental;
 
-import ro.sdi.lab24.exception.ProgramException;
-import ro.sdi.lab24.model.Rental;
 import ro.sdi.lab24.view.Console;
+import ro.sdi.lab24.view.FutureResponse;
+import ro.sdi.lab24.view.ResponseMapper;
+
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Parameters;
@@ -14,28 +17,19 @@ public class FilterRentalsCommand implements Runnable
     String name;
 
     @Override
-    public void run()
-    {
-        try
-        {
-            Iterable<Rental> filteredRentals = Console.rentalController.filterRentalsByMovieName(
-                    name);
-            if (!filteredRentals.iterator().hasNext())
-            {
-                System.out.println("No rentals found!");
-            }
-            filteredRentals.forEach(
-                    rental -> System.out.printf(
-                            "%d %d %s\n",
-                            rental.getId().getMovieId(),
-                            rental.getId().getClientId(),
-                            rental.getTime().format(Console.dateformatter)
-                    )
-            );
-        }
-        catch (ProgramException e)
-        {
-            Console.handleException(e);
-        }
+    public void run() {
+        Console.responseBuffer.add(
+                new FutureResponse<>(
+                        Console.rentalController.filterRentalsByMovieName(name),
+                        new ResponseMapper<>(response -> {
+                            if (!response.iterator().hasNext()) {
+                                return "No rentals found!";
+                            }
+                            return StreamSupport.stream(response.spliterator(), false)
+                                    .map(movie -> String.format("%d %d %s", movie.getId().getMovieId(), movie.getId().getClientId(), movie.getTime().format(Console.dateformatter)))
+                                    .collect(Collectors.joining("\n", "", "\n"));
+                        })
+                )
+        );
     }
 }

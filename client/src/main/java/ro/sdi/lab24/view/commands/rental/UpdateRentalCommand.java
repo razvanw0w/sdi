@@ -2,8 +2,9 @@ package ro.sdi.lab24.view.commands.rental;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
-import ro.sdi.lab24.exception.ProgramException;
 import ro.sdi.lab24.view.Console;
+import ro.sdi.lab24.view.FutureResponse;
+import ro.sdi.lab24.view.ResponseMapper;
 
 @Command(description = "Update rental", name = "update")
 public class UpdateRentalCommand implements Runnable
@@ -18,16 +19,12 @@ public class UpdateRentalCommand implements Runnable
     String time;
 
     @Override
-    public void run()
-    {
-        try
-        {
-            Console.rentalController.updateRental(movieId, clientId, time);
-            System.out.println("Rental updated!");
-        }
-        catch (ProgramException e)
-        {
-            Console.handleException(e);
-        }
+    public void run() {
+        Console.responseBuffer.add(
+                new FutureResponse<>(
+                        Console.rentalController.addRental(movieId, clientId, time),
+                        new ResponseMapper<>(response -> "Rental updated!")
+                )
+        );
     }
 }

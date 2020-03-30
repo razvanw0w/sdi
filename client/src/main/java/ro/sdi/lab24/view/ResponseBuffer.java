@@ -21,5 +21,4 @@ public class ResponseBuffer
     {
         responseList.add(futureResponse);
     }
-
 }
