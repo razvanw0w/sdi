@@ -1,11 +1,19 @@
 package ro.sdi.lab24;
 
-import ro.sdi.lab24.controller.*;
-import ro.sdi.lab24.view.Console;
-
-import javax.xml.parsers.ParserConfigurationException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import ro.sdi.lab24.controller.ClientController;
+import ro.sdi.lab24.controller.ClientControllerImpl;
+import ro.sdi.lab24.controller.Controller;
+import ro.sdi.lab24.controller.ControllerImpl;
+import ro.sdi.lab24.controller.MovieController;
+import ro.sdi.lab24.controller.MovieControllerImpl;
+import ro.sdi.lab24.controller.RentalController;
+import ro.sdi.lab24.controller.RentalControllerImpl;
+import ro.sdi.lab24.view.Console;
 
 public class Main {
     public static void main(String[] args) throws ParserConfigurationException {
@@ -22,6 +30,7 @@ public class Main {
                 rentalController
         );
 
+        executorService.submit(new ResponseDaemon(Console.responseBuffer));
         Console.run(args);
         executorService.shutdown();
     }
