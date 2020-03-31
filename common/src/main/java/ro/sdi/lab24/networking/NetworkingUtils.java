@@ -81,7 +81,7 @@ public class NetworkingUtils
     public static <T> T deserializeByType(String string, Class<T> clazz)
     {
         NetworkSerializer<?> serializer = typeSerializers.get(clazz);
-        if (serializer == null) return null;
+        if (serializer == null) throw new UnsupportedOperationException();
         return (T) serializer.decode(string);
     }
 
@@ -90,7 +90,7 @@ public class NetworkingUtils
     {
         Class<?> clazz = entity.getClass();
         NetworkSerializer serializer = typeSerializers.get(clazz);
-        if (serializer == null) return null;
+        if (serializer == null) throw new UnsupportedOperationException();
         return serializer.encode(entity);
     }
 

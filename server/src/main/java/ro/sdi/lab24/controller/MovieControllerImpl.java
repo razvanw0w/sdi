@@ -22,7 +22,8 @@ public class MovieControllerImpl implements MovieController
     public MovieControllerImpl(
             Repository<Integer, Movie> movieRepository,
             Validator<Movie> movieValidator
-    ) {
+    )
+    {
         this.movieRepository = movieRepository;
         this.movieValidator = movieValidator;
     }
@@ -40,16 +41,17 @@ public class MovieControllerImpl implements MovieController
      * @throws AlreadyExistingElementException if the movie (the ID) is already there
      */
     @Override
-    public void addMovie(int id, String name, String genre, int rating) {
+    public void addMovie(int id, String name, String genre, int rating)
+    {
         Movie movie = new Movie(id, name, genre, rating);
         movieValidator.validate(movie);
         movieRepository.save(movie).ifPresent(opt ->
-        {
-            throw new AlreadyExistingElementException(String.format(
-                    "Movie %d already exists",
-                    id
-            ));
-        });
+                                              {
+                                                  throw new AlreadyExistingElementException(String.format(
+                                                          "Movie %d already exists",
+                                                          id
+                                                  ));
+                                              });
     }
 
     /**
@@ -59,12 +61,22 @@ public class MovieControllerImpl implements MovieController
      * @throws ElementNotFoundException if the movie isn't found in the repository based on their ID
      */
     @Override
-    public void deleteMovie(int id) {
-        movieRepository.delete(id)
-                .orElseThrow(() -> new ElementNotFoundException(String.format(
-                        "Movie %d does not exist",
-                        id
-                )));
+    public void deleteMovie(int id)
+    {
+        movieRepository
+                .delete(id)
+                .ifPresentOrElse(
+                        entity -> Optional
+                                .ofNullable(entityDeletedListener)
+                                .ifPresent(listener -> listener.onEntityDeleted(entity)),
+                        () ->
+                        {
+                            throw new ElementNotFoundException(String.format(
+                                    "Movie %d does not exist",
+                                    id
+                            ));
+                        }
+                );
     }
 
     /**
@@ -73,7 +85,8 @@ public class MovieControllerImpl implements MovieController
      * @return all: an iterable collection of movies
      */
     @Override
-    public Iterable<Movie> getMovies() {
+    public Iterable<Movie> getMovies()
+    {
         return movieRepository.findAll();
     }
 
@@ -92,30 +105,32 @@ public class MovieControllerImpl implements MovieController
             String name,
             String genre,
             Integer rating
-    ) {
+    )
+    {
         Movie storedMovie = movieRepository.findOne(id)
-                .orElseThrow(() -> new ElementNotFoundException(String.format(
-                        "Movie %d does not exist",
-                        id
-                )));
+                                           .orElseThrow(() -> new ElementNotFoundException(String.format(
+                                                   "Movie %d does not exist",
+                                                   id
+                                           )));
         Movie movie = new Movie(id, Optional.ofNullable(name).orElseGet(storedMovie::getName),
-                Optional.ofNullable(genre).orElseGet(storedMovie::getGenre),
-                Optional.ofNullable(rating).orElseGet(storedMovie::getRating)
+                                Optional.ofNullable(genre).orElseGet(storedMovie::getGenre),
+                                Optional.ofNullable(rating).orElseGet(storedMovie::getRating)
         );
         movieValidator.validate(movie);
         movieRepository.update(movie)
-                .orElseThrow(() -> new ElementNotFoundException(String.format(
-                        "Movie %d does not exist",
-                        id
-                )));
+                       .orElseThrow(() -> new ElementNotFoundException(String.format(
+                               "Movie %d does not exist",
+                               id
+                       )));
     }
 
     @Override
-    public Iterable<Movie> filterMoviesByGenre(String genre) {
+    public Iterable<Movie> filterMoviesByGenre(String genre)
+    {
         String regex = ".*" + genre + ".*";
         return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
-                .filter(movie -> movie.getGenre().matches(regex))
-                .collect(Collectors.toUnmodifiableList());
+                            .filter(movie -> movie.getGenre().matches(regex))
+                            .collect(Collectors.toUnmodifiableList());
     }
 
     public Optional<Movie> findOne(int movieId)
@@ -124,11 +139,13 @@ public class MovieControllerImpl implements MovieController
     }
 
     @Override
-    public Iterable<Movie> sortMovies(Sort criteria) {
+    public Iterable<Movie> sortMovies(Sort criteria)
+    {
         SortingRepository<Integer, Movie> sortingRepo = Optional.of(movieRepository)
-                .filter(repo -> repo instanceof SortingRepository)
-                .map(repo -> (SortingRepository<Integer, Movie>) repo)
-                .orElseThrow(() -> new SortingException("repository doesn't support sorting"));
+                                                                .filter(repo -> repo instanceof SortingRepository)
+                                                                .map(repo -> (SortingRepository<Integer, Movie>) repo)
+                                                                .orElseThrow(() -> new SortingException(
+                                                                        "repository doesn't support sorting"));
         return sortingRepo.findAll(criteria);
     }
 }

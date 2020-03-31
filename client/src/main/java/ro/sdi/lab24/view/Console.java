@@ -59,7 +59,7 @@ public class Console {
                 {
                     break;
                 }
-                else if (!line.matches("^(movie|rental|client|report|dump|--help|-h).*"))
+                else if (!line.matches("^(movie|rental|client|report|results|--help|-h).*"))
                 {
                     System.out.println("Invalid command! Type '--help'");
                 }

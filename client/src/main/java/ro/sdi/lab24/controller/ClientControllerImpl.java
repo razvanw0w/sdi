@@ -1,24 +1,27 @@
 package ro.sdi.lab24.controller;
 
-import ro.sdi.lab24.model.Client;
-import ro.sdi.lab24.networking.Message;
-import ro.sdi.lab24.networking.NetworkingUtils;
-import ro.sdi.lab24.networking.TCPClient;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
-public class ClientControllerImpl implements ClientController {
+import ro.sdi.lab24.model.Client;
+import ro.sdi.lab24.networking.Message;
+import ro.sdi.lab24.networking.NetworkingUtils;
+import ro.sdi.lab24.networking.TCPClient;
+
+public class ClientControllerImpl implements ClientController
+{
     private ExecutorService executorService;
 
-    public ClientControllerImpl(ExecutorService executorService) {
+    public ClientControllerImpl(ExecutorService executorService)
+    {
         this.executorService = executorService;
     }
 
     @Override
-    public Future<Void> addClient(int id, String name) {
+    public Future<Void> addClient(int id, String name)
+    {
         Callable<Void> callable = () ->
         {
             Message message = new Message("ClientController:addClient");
@@ -27,7 +30,8 @@ public class ClientControllerImpl implements ClientController {
             message.addString(NetworkingUtils.serialize(name));
 
             Message response = TCPClient.sendAndReceive(message);
-            if (NetworkingUtils.isSuccess(response)) {
+            if (NetworkingUtils.isSuccess(response))
+            {
                 return null;
             }
             NetworkingUtils.checkException(response);
@@ -37,12 +41,15 @@ public class ClientControllerImpl implements ClientController {
     }
 
     @Override
-    public Future<Void> deleteClient(int id) {
-        Callable<Void> callable = () -> {
+    public Future<Void> deleteClient(int id)
+    {
+        Callable<Void> callable = () ->
+        {
             Message message = new Message("ClientController:deleteClient");
             message.addString(NetworkingUtils.serialize(id));
             Message response = TCPClient.sendAndReceive(message);
-            if (NetworkingUtils.isSuccess(response)) {
+            if (NetworkingUtils.isSuccess(response))
+            {
                 return null;
             }
             NetworkingUtils.checkException(response);
@@ -52,14 +59,20 @@ public class ClientControllerImpl implements ClientController {
     }
 
     @Override
-    public Future<Iterable<Client>> getClients() {
-        Callable<Iterable<Client>> callable = () -> {
+    public Future<Iterable<Client>> getClients()
+    {
+        Callable<Iterable<Client>> callable = () ->
+        {
             Message message = new Message("ClientController:getClients");
             Message response = TCPClient.sendAndReceive(message);
-            if (NetworkingUtils.isSuccess(response)) {
+            if (NetworkingUtils.isSuccess(response))
+            {
                 return response.getBody().stream()
-                        .map(string -> NetworkingUtils.deserializeByType(string, Client.class))
-                        .collect(Collectors.toUnmodifiableList());
+                               .map(string -> NetworkingUtils.deserializeByType(
+                                       string,
+                                       Client.class
+                               ))
+                               .collect(Collectors.toUnmodifiableList());
             }
             NetworkingUtils.checkException(response);
             throw new RuntimeException("Received response was invalid");
@@ -68,13 +81,16 @@ public class ClientControllerImpl implements ClientController {
     }
 
     @Override
-    public Future<Void> updateClient(int id, String name) {
-        Callable<Void> callable = () -> {
+    public Future<Void> updateClient(int id, String name)
+    {
+        Callable<Void> callable = () ->
+        {
             Message message = new Message("ClientController:updateClient");
             message.addString(NetworkingUtils.serialize(id));
             message.addString(NetworkingUtils.serialize(name));
             Message response = TCPClient.sendAndReceive(message);
-            if (NetworkingUtils.isSuccess(response)) {
+            if (NetworkingUtils.isSuccess(response))
+            {
                 return null;
             }
             NetworkingUtils.checkException(response);
@@ -84,15 +100,21 @@ public class ClientControllerImpl implements ClientController {
     }
 
     @Override
-    public Future<Iterable<Client>> filterClientsByName(String name) {
-        Callable<Iterable<Client>> callable = () -> {
+    public Future<Iterable<Client>> filterClientsByName(String name)
+    {
+        Callable<Iterable<Client>> callable = () ->
+        {
             Message message = new Message("ClientController:filterClientsByName");
             message.addString(NetworkingUtils.serialize(name));
             Message response = TCPClient.sendAndReceive(message);
-            if (NetworkingUtils.isSuccess(response)) {
+            if (NetworkingUtils.isSuccess(response))
+            {
                 return response.getBody().stream()
-                        .map(string -> NetworkingUtils.deserializeByType(string, Client.class))
-                        .collect(Collectors.toUnmodifiableList());
+                               .map(string -> NetworkingUtils.deserializeByType(
+                                       string,
+                                       Client.class
+                               ))
+                               .collect(Collectors.toUnmodifiableList());
             }
             NetworkingUtils.checkException(response);
             throw new RuntimeException("Received response was invalid");
