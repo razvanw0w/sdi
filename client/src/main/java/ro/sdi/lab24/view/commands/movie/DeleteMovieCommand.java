@@ -17,7 +17,7 @@ public class DeleteMovieCommand implements Runnable
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.movieController.deleteMovie(id),
-                        new ResponseMapper<>(response -> "Movie deleted!")
+                        new ResponseMapper<>(response -> String.format("Movie %d deleted!", id))
                 )
         );
     }

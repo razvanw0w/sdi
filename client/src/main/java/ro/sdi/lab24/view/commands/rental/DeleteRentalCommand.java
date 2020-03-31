@@ -20,7 +20,7 @@ public class DeleteRentalCommand implements Runnable
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.rentalController.deleteRental(movieId, clientId),
-                        new ResponseMapper<>(response -> "Rental deleted!")
+                        new ResponseMapper<>(response -> String.format("Rental %d,%d deleted!", movieId, clientId))
                 )
         );
     }

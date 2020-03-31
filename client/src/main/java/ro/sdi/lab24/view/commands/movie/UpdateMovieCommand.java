@@ -28,7 +28,7 @@ public class UpdateMovieCommand implements Runnable
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.movieController.updateMovie(id, name, genre, rating),
-                        new ResponseMapper<>(response -> "Movie updated!")
+                        new ResponseMapper<>(response -> String.format("Movie %d updated!", id))
                 )
         );
     }

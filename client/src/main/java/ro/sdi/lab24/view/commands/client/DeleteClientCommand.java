@@ -17,7 +17,7 @@ public class DeleteClientCommand implements Runnable
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.clientController.deleteClient(id),
-                        new ResponseMapper<>(response -> "Client deleted!")
+                        new ResponseMapper<>(response -> String.format("Client %d deleted!", id))
                 )
         );
     }

@@ -20,7 +20,7 @@ public class UpdateClientCommand implements Runnable
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.clientController.updateClient(id, name),
-                        new ResponseMapper<>(response -> "Client updated!")
+                        new ResponseMapper<>(response -> String.format("Client %d updated (new name: %s)!", id, name))
                 )
         );
     }

@@ -21,7 +21,7 @@ public class AddClientCommand implements Runnable
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.clientController.addClient(id, name),
-                        new ResponseMapper<>(response -> "Client added!")
+                        new ResponseMapper<>(response -> String.format("Client %d,%s added!", id, name))
                 )
         );
     }

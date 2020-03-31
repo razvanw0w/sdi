@@ -26,7 +26,7 @@ public class AddMovieCommand implements Runnable
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.movieController.addMovie(id, name, genre, rating),
-                        new ResponseMapper<>(response -> "Movie added!")
+                        new ResponseMapper<>(response -> String.format("Movie %d,%s,%s,%d added!", id, name, genre, rating))
                 )
         );
     }

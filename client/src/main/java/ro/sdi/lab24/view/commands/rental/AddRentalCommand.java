@@ -23,7 +23,7 @@ public class AddRentalCommand implements Runnable
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.rentalController.addRental(movieId, clientId, time),
-                        new ResponseMapper<>(response -> "Rental added!")
+                        new ResponseMapper<>(response -> String.format("Rental %d,%d,%s added!", movieId, clientId, time))
                 )
         );
     }
