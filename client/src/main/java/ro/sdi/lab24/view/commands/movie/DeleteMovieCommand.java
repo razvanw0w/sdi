@@ -14,6 +14,7 @@ public class DeleteMovieCommand implements Runnable
 
     @Override
     public void run() {
+        int id = this.id;
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.movieController.deleteMovie(id),

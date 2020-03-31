@@ -20,9 +20,10 @@ public class ListMoviesCommand implements Runnable
                             if (!response.iterator().hasNext()) {
                                 return "No movies found!";
                             }
-                            return StreamSupport.stream(response.spliterator(), false)
-                                    .map(movie -> String.format("%d %s %s %d", movie.getId(), movie.getName(), movie.getGenre(), movie.getRating()))
-                                    .collect(Collectors.joining("\n", "", "\n"));
+                            return "List of movies\n" +
+                                    StreamSupport.stream(response.spliterator(), false)
+                                            .map(movie -> String.format("%d %s %s %d", movie.getId(), movie.getName(), movie.getGenre(), movie.getRating()))
+                                            .collect(Collectors.joining("\n", "", "\n"));
                         })
                 )
         );

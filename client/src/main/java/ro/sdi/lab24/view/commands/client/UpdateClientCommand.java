@@ -17,6 +17,8 @@ public class UpdateClientCommand implements Runnable
 
     @Override
     public void run() {
+        int id = this.id;
+        String name = this.name;
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.clientController.updateClient(id, name),

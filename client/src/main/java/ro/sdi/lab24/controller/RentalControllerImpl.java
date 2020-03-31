@@ -21,8 +21,8 @@ public class RentalControllerImpl implements RentalController {
     public Future<Void> addRental(int movieId, int clientId, String time) {
         Callable<Void> callable = () -> {
             Message message = new Message("RentalController:addRental");
-            message.addString(NetworkingUtils.serialize(clientId));
             message.addString(NetworkingUtils.serialize(movieId));
+            message.addString(NetworkingUtils.serialize(clientId));
             message.addString(NetworkingUtils.serialize(time));
             Message response = TCPClient.sendAndReceive(message);
             if (NetworkingUtils.isSuccess(response)) {

@@ -14,6 +14,7 @@ public class DeleteClientCommand implements Runnable
 
     @Override
     public void run() {
+        int id = this.id;
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.clientController.deleteClient(id),

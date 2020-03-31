@@ -11,7 +11,13 @@ public class ClientGenreCSVSerializer implements CSVSerializer<ClientGenre> {
     @Override
     public String serialize(ClientGenre entity) {
         ClientCSVSerializer clientCSVSerializer = new ClientCSVSerializer();
-        return clientCSVSerializer.serialize(entity.getClient()) + String.format(",%s", entity.getGenre());
+        String genre = "";
+        if (entity.getGenre() == "")
+            genre = ", ";
+        else
+            genre = String.format(",%s", entity.getGenre());
+
+        return clientCSVSerializer.serialize(entity.getClient()) + genre;
     }
 
     @Override

@@ -23,6 +23,10 @@ public class AddMovieCommand implements Runnable
 
     @Override
     public void run() {
+        int id = this.id;
+        String name = this.name;
+        String genre = this.genre;
+        int rating = this.rating;
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.movieController.addMovie(id, name, genre, rating),

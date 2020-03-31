@@ -20,6 +20,9 @@ public class AddRentalCommand implements Runnable
 
     @Override
     public void run() {
+        int movieId = this.movieId;
+        int clientId = this.clientId;
+        String time = this.time;
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.rentalController.addRental(movieId, clientId, time),

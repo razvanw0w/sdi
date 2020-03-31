@@ -16,6 +16,7 @@ public class FilterClientsCommand implements Runnable
 
     @Override
     public void run() {
+        String name = this.name;
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.clientController.filterClientsByName(name),
@@ -23,9 +24,10 @@ public class FilterClientsCommand implements Runnable
                             if (!response.iterator().hasNext()) {
                                 return "No clients found!";
                             }
-                            return StreamSupport.stream(response.spliterator(), false)
-                                    .map(client -> String.format("%d %s", client.getId(), client.getName()))
-                                    .collect(Collectors.joining("\n", "", "\n"));
+                            return String.format("Filtered clients by name = %s\n", name) +
+                                    StreamSupport.stream(response.spliterator(), false)
+                                            .map(client -> String.format("%d %s", client.getId(), client.getName()))
+                                            .collect(Collectors.joining("\n", "", "\n"));
                         })
                 )
         );

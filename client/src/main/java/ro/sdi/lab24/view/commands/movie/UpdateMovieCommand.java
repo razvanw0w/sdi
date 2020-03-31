@@ -25,6 +25,7 @@ public class UpdateMovieCommand implements Runnable
 
     @Override
     public void run() {
+        int id = this.id;
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.movieController.updateMovie(id, name, genre, rating),

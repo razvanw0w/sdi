@@ -20,9 +20,10 @@ public class ReportClientGenresCommand implements Runnable
                             if (!response.iterator().hasNext()) {
                                 return "No client - favourite genre data found!";
                             }
-                            return StreamSupport.stream(response.spliterator(), false)
-                                    .map(clientGenre -> String.format("%s - %s", clientGenre.getClient(), clientGenre.getGenre()))
-                                    .collect(Collectors.joining("\n", "", "\n"));
+                            return "Most watched genre for each client\n" +
+                                    StreamSupport.stream(response.spliterator(), false)
+                                            .map(clientGenre -> String.format("%s - %s", clientGenre.getClient(), clientGenre.getGenre()))
+                                            .collect(Collectors.joining("\n", "", "\n"));
                         })
                 )
         );

@@ -34,6 +34,7 @@ public class SortMoviesCommand implements Runnable {
                 .map(sort -> new Sort(sort.getDirection(), sort.getField()))
                 .reduce(Sort::and)
                 .orElseThrow(() -> new SortingException("no sorting criteria provided"));
+        String header = getSortingHeader();
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.movieController.sortMovies(reducedSort),
@@ -41,11 +42,22 @@ public class SortMoviesCommand implements Runnable {
                             if (!response.iterator().hasNext()) {
                                 return "No movies found!";
                             }
-                            return StreamSupport.stream(response.spliterator(), false)
-                                    .map(movie -> String.format("%d %s %s %d", movie.getId(), movie.getName(), movie.getGenre(), movie.getRating()))
-                                    .collect(Collectors.joining("\n", "", "\n"));
+                            return header + "\n" +
+                                    StreamSupport.stream(response.spliterator(), false)
+                                            .map(movie -> String.format("%d %s %s %d", movie.getId(), movie.getName(), movie.getGenre(), movie.getRating()))
+                                            .collect(Collectors.joining("\n", "", "\n"));
                         })
                 )
         );
+    }
+
+    private String getSortingHeader() {
+        StringBuilder header = new StringBuilder("Movies sorted by ");
+        for (int i = 0; i < criteriaStrings.length; i += 2) {
+            if (i > 0)
+                header.append(" ");
+            header.append(criteriaStrings[i]).append(" ").append(criteriaStrings[i + 1]);
+        }
+        return header.toString();
     }
 }

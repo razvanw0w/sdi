@@ -18,6 +18,7 @@ public class FilterMoviesCommand implements Runnable
 
     @Override
     public void run() {
+        String genre = this.genre;
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.movieController.filterMoviesByGenre(genre),
@@ -25,9 +26,10 @@ public class FilterMoviesCommand implements Runnable
                             if (!response.iterator().hasNext()) {
                                 return "No movies found!";
                             }
-                            return StreamSupport.stream(response.spliterator(), false)
-                                    .map(movie -> String.format("%d %s %s %d", movie.getId(), movie.getName(), movie.getGenre(), movie.getRating()))
-                                    .collect(Collectors.joining("\n", "", "\n"));
+                            return String.format("Movies filtered by genre = %s\n", genre) +
+                                    StreamSupport.stream(response.spliterator(), false)
+                                            .map(movie -> String.format("%d %s %s %d", movie.getId(), movie.getName(), movie.getGenre(), movie.getRating()))
+                                            .collect(Collectors.joining("\n", "", "\n"));
                         })
                 )
         );

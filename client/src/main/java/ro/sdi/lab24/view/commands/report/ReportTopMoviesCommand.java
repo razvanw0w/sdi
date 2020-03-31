@@ -19,9 +19,10 @@ public class ReportTopMoviesCommand implements Runnable {
                             if (!response.iterator().hasNext()) {
                                 return "No rentals for top movies data found!";
                             }
-                            return StreamSupport.stream(response.spliterator(), false)
-                                    .map(rentedMovieStatistic -> String.format("%s - rented %d times", rentedMovieStatistic.getMovieName(), rentedMovieStatistic.getNumberOfRentals()))
-                                    .collect(Collectors.joining("\n", "", "\n"));
+                            return "Top 10 rented movies\n" +
+                                    StreamSupport.stream(response.spliterator(), false)
+                                            .map(rentedMovieStatistic -> String.format("%s - rented %d times", rentedMovieStatistic.getMovieName(), rentedMovieStatistic.getNumberOfRentals()))
+                                            .collect(Collectors.joining("\n", "", "\n"));
                         })
                 )
         );

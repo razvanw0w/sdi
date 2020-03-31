@@ -17,6 +17,8 @@ public class DeleteRentalCommand implements Runnable
 
     @Override
     public void run() {
+        int movieId = this.movieId;
+        int clientId = this.clientId;
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.rentalController.deleteRental(movieId, clientId),

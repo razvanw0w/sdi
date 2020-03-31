@@ -20,9 +20,10 @@ public class ListClientsCommand implements Runnable
                             if (!response.iterator().hasNext()) {
                                 return "No clients found!";
                             }
-                            return StreamSupport.stream(response.spliterator(), false)
-                                    .map(client -> String.format("%d %s", client.getId(), client.getName()))
-                                    .collect(Collectors.joining("\n", "", "\n"));
+                            return "List of clients\n" +
+                                    StreamSupport.stream(response.spliterator(), false)
+                                            .map(client -> String.format("%d %s", client.getId(), client.getName()))
+                                            .collect(Collectors.joining("\n", "", "\n"));
                         })
                 )
         );

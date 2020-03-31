@@ -18,6 +18,8 @@ public class AddClientCommand implements Runnable
     @Override
     public void run()
     {
+        int id = this.id;
+        String name = this.name;
         Console.responseBuffer.add(
                 new FutureResponse<>(
                         Console.clientController.addClient(id, name),
