@@ -1,0 +1,17 @@
+application {
+    mainClassName = "ro.sdi.lab24.Main"
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.11'
+    implementation project(":common")
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'ro.sdi.lab24.Main'
+        )
+    }
+}

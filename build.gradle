@@ -1,41 +1,29 @@
-plugins {
-    id 'java'
-    id 'application'
-}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'application'
 
-group 'ro.sdi.lab2-4'
-version '1.0'
+    group 'ro.sdi.lab2-4'
+    version '1.0'
 
-repositories {
-    mavenCentral()
-}
-
-application {
-    mainClassName = "ro.sdi.lab24.Main"
-}
-
-dependencies {
-    implementation 'info.picocli:picocli:4.2.0'
-    testCompile 'org.junit.jupiter:junit-jupiter:5.4.2'
-    // https://mvnrepository.com/artifact/org.postgresql/postgresql
-    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.11'
-}
-
-jar {
-    manifest {
-        attributes(
-                'Main-Class': 'ro.sdi.lab24.Main'
-        )
+    repositories {
+        mavenCentral()
     }
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+
+    dependencies {
+        testCompile 'org.junit.jupiter:junit-jupiter:5.4.2'
     }
-}
 
-run {
-    standardInput = System.in
-}
+    jar {
+        from {
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+    }
 
-test {
-    useJUnitPlatform()
+    run {
+        standardInput = System.in
+    }
+
+    test {
+        useJUnitPlatform()
+    }
 }
