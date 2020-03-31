@@ -30,7 +30,6 @@ public class Main {
                 rentalController
         );
 
-        executorService.submit(new ResponseDaemon(Console.responseBuffer));
         Console.run(args);
         executorService.shutdown();
     }
