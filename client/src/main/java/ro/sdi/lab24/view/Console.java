@@ -1,20 +1,22 @@
 package ro.sdi.lab24.view;
 
-import java.io.PrintWriter;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import picocli.CommandLine;
+import ro.sdi.lab24.ResponseDaemon;
 import ro.sdi.lab24.controller.ClientController;
 import ro.sdi.lab24.controller.Controller;
 import ro.sdi.lab24.controller.MovieController;
 import ro.sdi.lab24.controller.RentalController;
 import ro.sdi.lab24.exception.ProgramException;
 import ro.sdi.lab24.view.commands.MovieRentalCommand;
+
+import java.io.PrintWriter;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Console {
     public static Controller controller;
@@ -23,6 +25,7 @@ public class Console {
     public static RentalController rentalController;
     public static DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     public static ResponseBuffer responseBuffer = new ResponseBuffer();
+    public static Timer timer = new Timer();
 
     public static void initialize(
             Controller controller,
@@ -35,6 +38,7 @@ public class Console {
         Console.clientController = clientController;
         Console.movieController = movieController;
         Console.rentalController = rentalController;
+        timer.scheduleAtFixedRate(new ResponseDaemon(responseBuffer), 10 * 1000, 10 * 1000);
     }
 
     public static String handleException(ProgramException e)

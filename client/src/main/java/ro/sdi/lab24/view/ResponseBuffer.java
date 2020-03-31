@@ -8,16 +8,15 @@ public class ResponseBuffer
 {
     private List<FutureResponse<?>> responseList = new LinkedList<>();
 
-    public List<String> getResponses()
-    {
+    public synchronized List<String> getResponses() {
         List<FutureResponse<?>> completedFutures =
                 responseList.stream()
-                            .filter(FutureResponse::available)
-                            .collect(Collectors.toList());
+                        .filter(FutureResponse::available)
+                        .collect(Collectors.toList());
         List<String> result =
                 completedFutures.stream()
-                                .map(FutureResponse::get)
-                                .collect(Collectors.toUnmodifiableList());
+                        .map(FutureResponse::get)
+                        .collect(Collectors.toUnmodifiableList());
         responseList.removeAll(completedFutures);
         return result;
     }
