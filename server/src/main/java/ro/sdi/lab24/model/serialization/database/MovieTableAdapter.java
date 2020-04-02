@@ -1,10 +1,10 @@
 package ro.sdi.lab24.model.serialization.database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.RowMapper;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -13,83 +13,80 @@ import ro.sdi.lab24.model.Movie;
 
 public class MovieTableAdapter implements TableAdapter<Integer, Movie>
 {
-    @Override
-    public void insert(Movie entity, Connection connection) throws SQLException
-    {
-        String query = "insert into movies values(?,?,?,?)";
-        PreparedStatement insertStatement = connection.prepareStatement(query);
-        insertStatement.setInt(1, entity.getId());
-        insertStatement.setString(2, entity.getName());
-        insertStatement.setString(3, entity.getGenre());
-        insertStatement.setInt(4, entity.getRating());
-        insertStatement.executeUpdate();
-    }
+    @Autowired
+    private JdbcOperations jdbcOperations;
+    private RowMapper<Movie> movieRowMapper = (resultSet, rowNumber) ->
+            new Movie(
+                    resultSet.getInt("id"),
+                    resultSet.getString("name"),
+                    resultSet.getString("genre"),
+                    resultSet.getInt("rating")
+            );
 
     @Override
-    public List<Movie> readAll(Connection connection) throws SQLException
+    public void insert(Movie entity) throws DatabaseException
     {
-        List<Movie> result = new ArrayList<>();
-        String query = "select * from movies";
-        PreparedStatement selectStatement = connection.prepareStatement(query);
-        ResultSet resultSet = selectStatement.executeQuery();
-        while (resultSet.next())
+        handleConnectionException(DataAccessException.class, () ->
         {
-            int id = resultSet.getInt("id");
-            String name = resultSet.getString("name");
-            String genre = resultSet.getString("genre");
-            int rating = resultSet.getInt("rating");
-            result.add(new Movie(id, name, genre, rating));
-        }
-        return result;
+            String query = "INSERT INTO movies VALUES(?,?,?,?)";
+            jdbcOperations.update(
+                    query,
+                    entity.getId(),
+                    entity.getName(),
+                    entity.getGenre(),
+                    entity.getRating()
+            );
+            return null;
+        });
     }
 
     @Override
-    public Optional<Movie> read(Integer id, Connection connection) throws SQLException
+    public List<Movie> readAll() throws DatabaseException
     {
-        String query = "select * from movies where id = ?";
-        PreparedStatement selectStatement = connection.prepareStatement(query);
-        selectStatement.setInt(1, id);
-        ResultSet resultSet = selectStatement.executeQuery();
-        return Optional.of(resultSet.next())
-                       .filter(boolValue -> boolValue)
-                       .map(boolValue ->
-                            {
-                                try
-                                {
-                                    return new Movie(
-                                            resultSet.getInt("id"),
-                                            resultSet.getString("name"),
-                                            resultSet.getString("genre"),
-                                            resultSet.getInt("rating")
-                                    );
-                                }
-                                catch (SQLException e)
-                                {
-                                    throw new DatabaseException(
-                                            "Can't retrieve data on movie read");
-                                }
-                            }
-                       );
+        return handleConnectionException(DataAccessException.class, () ->
+        {
+            String query = "SELECT * FROM movies";
+            return jdbcOperations.query(query, movieRowMapper);
+        });
     }
 
     @Override
-    public void update(Movie entity, Connection connection) throws SQLException
+    public Optional<Movie> read(Integer id) throws DatabaseException
     {
-        String query = "update movies set name = ?, genre = ?, rating = ? where id = ?";
+        return handleConnectionException(DataAccessException.class, () ->
+        {
+            String query = "SELECT * FROM movies WHERE id = ?";
+            List<Movie> movieList = jdbcOperations.query(
+                    query,
+                    new Object[]{id},
+                    movieRowMapper
+            );
+
+            if (movieList.size() != 1) return Optional.empty();
+            return Optional.of(movieList.get(0));
+        });
+    }
+
+    @Override
+    public void update(Movie entity) throws DatabaseException
+    {
+        /*String query = "update movies set name = ?, genre = ?, rating = ? where id = ?";
         PreparedStatement updateStatement = connection.prepareStatement(query);
         updateStatement.setString(1, entity.getName());
         updateStatement.setString(2, entity.getGenre());
         updateStatement.setInt(3, entity.getRating());
         updateStatement.setInt(4, entity.getId());
-        updateStatement.executeUpdate();
+        updateStatement.executeUpdate();*/
+        //TODO
     }
 
     @Override
-    public void delete(Integer id, Connection connection) throws SQLException
+    public void delete(Integer id) throws DatabaseException
     {
-        String query = "delete from movies where id = ?";
+        /*String query = "delete from movies where id = ?";
         PreparedStatement deleteStatement = connection.prepareStatement(query);
         deleteStatement.setInt(1, id);
-        deleteStatement.executeUpdate();
+        deleteStatement.executeUpdate();*/
+        //TODO
     }
 }

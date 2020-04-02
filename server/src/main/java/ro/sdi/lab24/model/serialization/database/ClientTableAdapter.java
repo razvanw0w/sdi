@@ -1,9 +1,10 @@
 package ro.sdi.lab24.model.serialization.database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.RowMapper;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,75 +14,73 @@ import ro.sdi.lab24.model.Client;
 
 public class ClientTableAdapter implements TableAdapter<Integer, Client>
 {
+    @Autowired
+    private JdbcOperations jdbcOperations;
+
+    private RowMapper<Client> clientRowMapper = (resultSet, rowNum) ->
+            new Client(
+                    resultSet.getInt("id"),
+                    resultSet.getString("name")
+            );
 
     @Override
-    public void insert(Client entity, Connection connection) throws SQLException
+    public void insert(Client client) throws DatabaseException
     {
-        String query = "insert into clients values(?,?)";
-        PreparedStatement insertStatement = connection.prepareStatement(query);
-        insertStatement.setInt(1, entity.getId());
-        insertStatement.setString(2, entity.getName());
-        insertStatement.executeUpdate();
-    }
-
-    @Override
-    public List<Client> readAll(Connection connection) throws SQLException
-    {
-        List<Client> result = new ArrayList<>();
-        String query = "select * from clients";
-        PreparedStatement selectStatement = connection.prepareStatement(query);
-        ResultSet resultSet = selectStatement.executeQuery();
-        while (resultSet.next())
+        handleConnectionException(DataAccessException.class, () ->
         {
-            int id = resultSet.getInt("id");
-            String name = resultSet.getString("name");
-            result.add(new Client(id, name));
-        }
-        return result;
+            String query = "insert into clients values(?,?)";
+            jdbcOperations.update(query, client.getId(), client.getName());
+            return null;
+        });
     }
 
     @Override
-    public Optional<Client> read(Integer id, Connection connection) throws SQLException
+    public List<Client> readAll() throws DatabaseException
     {
-        String query = "select * from clients where id = ?";
-        PreparedStatement selectStatement = connection.prepareStatement(query);
-        selectStatement.setInt(1, id);
-        ResultSet resultSet = selectStatement.executeQuery();
-        return Optional.of(resultSet.next())
-                       .filter(boolValue -> boolValue)
-                       .map(boolValue ->
-                            {
-                                try
-                                {
-                                    return new Client(
-                                            resultSet.getInt("id"),
-                                            resultSet.getString("name")
-                                    );
-                                }
-                                catch (SQLException e)
-                                {
-                                    throw new DatabaseException("Can't retrieve data on client read");
-                                }
-                            }
-                       );
+        return handleConnectionException(DataAccessException.class, () ->
+        {
+            List<Client> result = new ArrayList<>();
+            String query = "SELECT * FROM clients";
+            return jdbcOperations.query(query, clientRowMapper);
+        });
     }
 
     @Override
-    public void update(Client entity, Connection connection) throws SQLException
+    public Optional<Client> read(Integer id) throws DatabaseException
     {
-        String query = "update clients set name = ? where id = ?";
-        PreparedStatement updateStatement = connection.prepareStatement(query);
-        updateStatement.setString(1, entity.getName());
-        updateStatement.setInt(2, entity.getId());
-        updateStatement.executeUpdate();
+        return handleConnectionException(DataAccessException.class, () ->
+        {
+            String query = "SELECT * FROM clients WHERE id = ?";
+            List<Client> clientList = jdbcOperations.query(
+                    query,
+                    new Object[]{id},
+                    clientRowMapper
+            );
+
+            if (clientList.size() != 1) return Optional.empty();
+            return Optional.of(clientList.get(0));
+        });
     }
 
     @Override
-    public void delete(Integer id, Connection connection) throws SQLException
+    public void update(Client client) throws DatabaseException
     {
-        String query = "delete from clients where id = ?";
-        PreparedStatement deleteStatement = connection.prepareStatement(query);
-        deleteStatement.setInt(1, id);
-        deleteStatement.executeUpdate();
+        handleConnectionException(DataAccessException.class, () ->
+        {
+            String query = "UPDATE clients SET name = ? WHERE id = ?";
+            jdbcOperations.update(query, client.getName(), client.getId());
+            return null;
+        });
+    }
+
+    @Override
+    public void delete(Integer id) throws DatabaseException
+    {
+        handleConnectionException(DataAccessException.class, () ->
+        {
+            String query = "DELETE FROM clients WHERE id = ?";
+            jdbcOperations.update(query, id);
+            return null;
+        });
     }
 }

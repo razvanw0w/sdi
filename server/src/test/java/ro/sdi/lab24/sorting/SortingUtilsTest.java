@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import ro.sdi.lab24.database.PostgreSQL;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Sort;
 import ro.sdi.lab24.model.serialization.database.MovieTableAdapter;
@@ -21,7 +20,7 @@ class SortingUtilsTest
     @BeforeEach
     void setUp()
     {
-        repository = new DatabaseRepository<>(PostgreSQL::newConnection, new MovieTableAdapter());
+        repository = new DatabaseRepository<>(new MovieTableAdapter());
     }
 
     @AfterEach

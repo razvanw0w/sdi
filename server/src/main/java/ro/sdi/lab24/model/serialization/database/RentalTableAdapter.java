@@ -1,11 +1,8 @@
 package ro.sdi.lab24.model.serialization.database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcOperations;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -14,21 +11,25 @@ import ro.sdi.lab24.model.Rental;
 
 public class RentalTableAdapter implements TableAdapter<Rental.RentalID, Rental>
 {
+    @Autowired
+    private JdbcOperations jdbcOperations;
+
     @Override
-    public void insert(Rental entity, Connection connection) throws SQLException
+    public void insert(Rental entity) throws DatabaseException
     {
-        String query = "insert into rentals values(?, ?, ?)";
+        /*String query = "insert into rentals values(?, ?, ?)";
         PreparedStatement insertStatement = connection.prepareStatement(query);
         insertStatement.setInt(1, entity.getId().getMovieId());
         insertStatement.setInt(2, entity.getId().getClientId());
         insertStatement.setObject(3, entity.getTime());
-        insertStatement.executeUpdate();
+        insertStatement.executeUpdate();*/
+        //TODO
     }
 
     @Override
-    public List<Rental> readAll(Connection connection) throws SQLException
+    public List<Rental> readAll() throws DatabaseException
     {
-        List<Rental> result = new ArrayList<>();
+        /*List<Rental> result = new ArrayList<>();
         String query = "select * from rentals";
         PreparedStatement selectStatement = connection.prepareStatement(query);
         ResultSet resultSet = selectStatement.executeQuery();
@@ -39,14 +40,16 @@ public class RentalTableAdapter implements TableAdapter<Rental.RentalID, Rental>
             LocalDateTime date = resultSet.getObject("date", LocalDateTime.class);
             result.add(new Rental(movieID, clientID, date));
         }
-        return result;
+        return result;*/
+        //TODO
+        return null;
     }
 
     @Override
-    public Optional<Rental> read(Rental.RentalID rentalID, Connection connection)
-            throws SQLException
+    public Optional<Rental> read(Rental.RentalID rentalID)
+            throws DatabaseException
     {
-        String query = "select * from rentals where movieid = ? and clientid = ?";
+        /*String query = "select * from rentals where movieid = ? and clientid = ?";
         PreparedStatement selectStatement = connection.prepareStatement(query);
         selectStatement.setInt(1, rentalID.getMovieId());
         selectStatement.setInt(2, rentalID.getClientId());
@@ -68,27 +71,31 @@ public class RentalTableAdapter implements TableAdapter<Rental.RentalID, Rental>
                                     throw new DatabaseException("Can't retrieve data on rental read");
                                 }
                             }
-                       );
+                       );*/
+        //TODO
+        return Optional.empty();
     }
 
     @Override
-    public void update(Rental entity, Connection connection) throws SQLException
+    public void update(Rental entity) throws DatabaseException
     {
-        String query = "update rentals set date = ? where movieid = ? and clientid = ?";
+        /*String query = "update rentals set date = ? where movieid = ? and clientid = ?";
         PreparedStatement updateStatement = connection.prepareStatement(query);
         updateStatement.setObject(1, entity.getTime());
         updateStatement.setInt(2, entity.getId().getMovieId());
         updateStatement.setInt(3, entity.getId().getClientId());
-        updateStatement.executeUpdate();
+        updateStatement.executeUpdate();*/
+        //TODO
     }
 
     @Override
-    public void delete(Rental.RentalID id, Connection connection) throws SQLException
+    public void delete(Rental.RentalID id) throws DatabaseException
     {
-        String query = "delete from rentals where movieid = ? and clientid = ?";
+        /*String query = "delete from rentals where movieid = ? and clientid = ?";
         PreparedStatement deleteStatement = connection.prepareStatement(query);
         deleteStatement.setInt(1, id.getMovieId());
         deleteStatement.setInt(2, id.getClientId());
-        deleteStatement.executeUpdate();
+        deleteStatement.executeUpdate();*/
+        //TODO
     }
 }
