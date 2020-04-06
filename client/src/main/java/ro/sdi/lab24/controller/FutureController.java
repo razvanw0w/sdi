@@ -5,7 +5,7 @@ import ro.sdi.lab24.model.dto.RentedMovieStatistic;
 
 import java.util.concurrent.Future;
 
-public interface Controller {
+public interface FutureController {
     Future<Iterable<RentedMovieStatistic>> getTop10RentedMovies();
 
     Future<Iterable<ClientGenre>> getClientGenres();

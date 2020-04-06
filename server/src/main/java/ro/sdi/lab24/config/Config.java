@@ -3,15 +3,7 @@ package ro.sdi.lab24.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.remoting.rmi.RmiServiceExporter;
-
-import ro.sdi.lab24.controller.ClientController;
-import ro.sdi.lab24.controller.ClientControllerImpl;
-import ro.sdi.lab24.controller.Controller;
-import ro.sdi.lab24.controller.ControllerImpl;
-import ro.sdi.lab24.controller.MovieController;
-import ro.sdi.lab24.controller.MovieControllerImpl;
-import ro.sdi.lab24.controller.RentalController;
-import ro.sdi.lab24.controller.RentalControllerImpl;
+import ro.sdi.lab24.controller.*;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.model.Movie;
 import ro.sdi.lab24.model.Rental;
@@ -116,6 +108,7 @@ public class Config
         rmiServiceExporter.setServiceName("Controller");
         rmiServiceExporter.setServiceInterface(Controller.class);
         rmiServiceExporter.setService(controller);
+        rmiServiceExporter.setRegistryPort(ServerInformation.PORT);
         return rmiServiceExporter;
     }
 

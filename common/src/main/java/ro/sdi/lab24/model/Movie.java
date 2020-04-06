@@ -1,13 +1,13 @@
 package ro.sdi.lab24.model;
 
-public class Movie extends Entity<Integer>
-{
+import java.io.Serializable;
+
+public class Movie extends Entity<Integer> implements Serializable {
     private String name;
     private String genre;
     private int rating;
 
-    public Movie(int id, String name, String genre, int rating)
-    {
+    public Movie(int id, String name, String genre, int rating) {
         super(id);
         this.name = name;
         this.genre = genre;

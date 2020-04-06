@@ -1,41 +1,25 @@
 package ro.sdi.lab24.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import ro.sdi.lab24.model.Client;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 
-import ro.sdi.lab24.model.Client;
-import ro.sdi.lab24.networking.Message;
-import ro.sdi.lab24.networking.NetworkingUtils;
-import ro.sdi.lab24.networking.TCPClient;
-
-public class ClientControllerImpl implements ClientController
-{
+public class ClientControllerImpl implements FutureClientController {
+    @Autowired
     private ExecutorService executorService;
 
-    public ClientControllerImpl(ExecutorService executorService)
-    {
-        this.executorService = executorService;
-    }
+    @Autowired
+    private ClientController clientController;
 
     @Override
-    public Future<Void> addClient(int id, String name)
-    {
+    public Future<Void> addClient(int id, String name) {
         Callable<Void> callable = () ->
         {
-            Message message = new Message("ClientController:addClient");
-
-            message.addString(NetworkingUtils.serialize(id));
-            message.addString(NetworkingUtils.serialize(name));
-
-            Message response = TCPClient.sendAndReceive(message);
-            if (NetworkingUtils.isSuccess(response))
-            {
-                return null;
-            }
-            NetworkingUtils.checkException(response);
-            throw new RuntimeException("Received response was invalid");
+            clientController.addClient(id, name);
+            return null;
         };
         return executorService.submit(callable);
     }
@@ -45,15 +29,8 @@ public class ClientControllerImpl implements ClientController
     {
         Callable<Void> callable = () ->
         {
-            Message message = new Message("ClientController:deleteClient");
-            message.addString(NetworkingUtils.serialize(id));
-            Message response = TCPClient.sendAndReceive(message);
-            if (NetworkingUtils.isSuccess(response))
-            {
-                return null;
-            }
-            NetworkingUtils.checkException(response);
-            throw new RuntimeException("Received response was invalid");
+            clientController.deleteClient(id);
+            return null;
         };
         return executorService.submit(callable);
     }
@@ -63,19 +40,7 @@ public class ClientControllerImpl implements ClientController
     {
         Callable<Iterable<Client>> callable = () ->
         {
-            Message message = new Message("ClientController:getClients");
-            Message response = TCPClient.sendAndReceive(message);
-            if (NetworkingUtils.isSuccess(response))
-            {
-                return response.getBody().stream()
-                               .map(string -> NetworkingUtils.deserializeByType(
-                                       string,
-                                       Client.class
-                               ))
-                               .collect(Collectors.toUnmodifiableList());
-            }
-            NetworkingUtils.checkException(response);
-            throw new RuntimeException("Received response was invalid");
+            return clientController.getClients();
         };
         return executorService.submit(callable);
     }
@@ -85,16 +50,8 @@ public class ClientControllerImpl implements ClientController
     {
         Callable<Void> callable = () ->
         {
-            Message message = new Message("ClientController:updateClient");
-            message.addString(NetworkingUtils.serialize(id));
-            message.addString(NetworkingUtils.serialize(name));
-            Message response = TCPClient.sendAndReceive(message);
-            if (NetworkingUtils.isSuccess(response))
-            {
-                return null;
-            }
-            NetworkingUtils.checkException(response);
-            throw new RuntimeException("Received response was invalid");
+            clientController.updateClient(id, name);
+            return null;
         };
         return executorService.submit(callable);
     }
@@ -104,20 +61,7 @@ public class ClientControllerImpl implements ClientController
     {
         Callable<Iterable<Client>> callable = () ->
         {
-            Message message = new Message("ClientController:filterClientsByName");
-            message.addString(NetworkingUtils.serialize(name));
-            Message response = TCPClient.sendAndReceive(message);
-            if (NetworkingUtils.isSuccess(response))
-            {
-                return response.getBody().stream()
-                               .map(string -> NetworkingUtils.deserializeByType(
-                                       string,
-                                       Client.class
-                               ))
-                               .collect(Collectors.toUnmodifiableList());
-            }
-            NetworkingUtils.checkException(response);
-            throw new RuntimeException("Received response was invalid");
+            return clientController.filterClientsByName(name);
         };
         return executorService.submit(callable);
     }

@@ -1,14 +1,16 @@
 package ro.sdi.lab24.view;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import picocli.CommandLine;
 import ro.sdi.lab24.ResponseDaemon;
-import ro.sdi.lab24.controller.ClientController;
-import ro.sdi.lab24.controller.Controller;
-import ro.sdi.lab24.controller.MovieController;
-import ro.sdi.lab24.controller.RentalController;
+import ro.sdi.lab24.controller.FutureClientController;
+import ro.sdi.lab24.controller.FutureController;
+import ro.sdi.lab24.controller.FutureMovieController;
+import ro.sdi.lab24.controller.FutureRentalController;
 import ro.sdi.lab24.exception.ProgramException;
 import ro.sdi.lab24.view.commands.MovieRentalCommand;
 
+import javax.annotation.PostConstruct;
 import java.io.PrintWriter;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -19,25 +21,37 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Console {
-    public static Controller controller;
-    public static ClientController clientController;
-    public static MovieController movieController;
-    public static RentalController rentalController;
-    public static DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-    public static ResponseBuffer responseBuffer = new ResponseBuffer();
-    public static Timer timer = new Timer();
+    public static FutureController controller;
+    public static FutureClientController clientController;
+    public static FutureMovieController movieController;
+    public static FutureRentalController rentalController;
+    public static DateTimeFormatter dateformatter;
+    public static ResponseBuffer responseBuffer;
+    public static Timer timer;
+    @Autowired
+    private FutureController autowiredController;
+    @Autowired
+    private FutureClientController autowiredClientController;
+    @Autowired
+    private FutureMovieController autowiredMovieController;
+    @Autowired
+    private FutureRentalController autowiredRentalController;
+    @Autowired
+    private DateTimeFormatter autowiredDateFormatter;
+    @Autowired
+    private ResponseBuffer autowiredResponseBuffer;
+    @Autowired
+    private Timer autowiredTimer;
 
-    public static void initialize(
-            Controller controller,
-            ClientController clientController,
-            MovieController movieController,
-            RentalController rentalController
-    )
-    {
-        Console.controller = controller;
-        Console.clientController = clientController;
-        Console.movieController = movieController;
-        Console.rentalController = rentalController;
+    @PostConstruct
+    private void initialize() {
+        Console.controller = autowiredController;
+        Console.clientController = autowiredClientController;
+        Console.movieController = autowiredMovieController;
+        Console.rentalController = autowiredRentalController;
+        Console.dateformatter = autowiredDateFormatter;
+        Console.responseBuffer = autowiredResponseBuffer;
+        Console.timer = autowiredTimer;
         timer.scheduleAtFixedRate(new ResponseDaemon(responseBuffer), 10 * 1000, 10 * 1000);
     }
 

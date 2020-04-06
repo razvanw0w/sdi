@@ -4,15 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import ro.sdi.lab24.exception.DatabaseException;
+import ro.sdi.lab24.model.Movie;
 
 import java.util.List;
 import java.util.Optional;
 
-import ro.sdi.lab24.exception.DatabaseException;
-import ro.sdi.lab24.model.Movie;
-
-public class MovieTableAdapter implements TableAdapter<Integer, Movie>
-{
+public class MovieTableAdapter implements TableAdapter<Integer, Movie> {
     @Autowired
     private JdbcOperations jdbcOperations;
     private RowMapper<Movie> movieRowMapper = (resultSet, rowNumber) ->
@@ -68,25 +66,20 @@ public class MovieTableAdapter implements TableAdapter<Integer, Movie>
     }
 
     @Override
-    public void update(Movie entity) throws DatabaseException
-    {
-        /*String query = "update movies set name = ?, genre = ?, rating = ? where id = ?";
-        PreparedStatement updateStatement = connection.prepareStatement(query);
-        updateStatement.setString(1, entity.getName());
-        updateStatement.setString(2, entity.getGenre());
-        updateStatement.setInt(3, entity.getRating());
-        updateStatement.setInt(4, entity.getId());
-        updateStatement.executeUpdate();*/
-        //TODO
+    public void update(Movie entity) throws DatabaseException {
+        handleConnectionException(DataAccessException.class, () -> {
+            String query = "update movies set name = ?, genre = ?, rating = ? where id = ?";
+            jdbcOperations.update(query, entity.getName(), entity.getGenre(), entity.getRating(), entity.getId());
+            return null;
+        });
     }
 
     @Override
-    public void delete(Integer id) throws DatabaseException
-    {
-        /*String query = "delete from movies where id = ?";
-        PreparedStatement deleteStatement = connection.prepareStatement(query);
-        deleteStatement.setInt(1, id);
-        deleteStatement.executeUpdate();*/
-        //TODO
+    public void delete(Integer id) throws DatabaseException {
+        handleConnectionException(DataAccessException.class, () -> {
+            String query = "delete from movies where id = ?";
+            jdbcOperations.update(query, id);
+            return null;
+        });
     }
 }

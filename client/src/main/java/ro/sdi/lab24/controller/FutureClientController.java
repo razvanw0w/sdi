@@ -4,7 +4,7 @@ import ro.sdi.lab24.model.Client;
 
 import java.util.concurrent.Future;
 
-public interface ClientController {
+public interface FutureClientController {
     Future<Void> addClient(int id, String name);
 
     Future<Void> deleteClient(int id);

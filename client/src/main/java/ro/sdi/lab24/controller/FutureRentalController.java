@@ -4,7 +4,7 @@ import ro.sdi.lab24.model.Rental;
 
 import java.util.concurrent.Future;
 
-public interface RentalController {
+public interface FutureRentalController {
     Future<Void> addRental(int movieId, int clientId, String time);
 
     Future<Void> deleteRental(int movieId, int clientId);

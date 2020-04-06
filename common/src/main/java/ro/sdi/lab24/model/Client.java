@@ -1,11 +1,11 @@
 package ro.sdi.lab24.model;
 
-public class Client extends Entity<Integer>
-{
+import java.io.Serializable;
+
+public class Client extends Entity<Integer> implements Serializable {
     private String name;
 
-    public Client(int id, String name)
-    {
+    public Client(int id, String name) {
         super(id);
         this.name = name;
     }

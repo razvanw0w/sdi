@@ -1,14 +1,13 @@
 package ro.sdi.lab24.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Rental extends Entity<Rental.RentalID>
-{
+public class Rental extends Entity<Rental.RentalID> implements Serializable {
     private LocalDateTime time;
 
-    public Rental(int movieId, int clientId, LocalDateTime time)
-    {
+    public Rental(int movieId, int clientId, LocalDateTime time) {
         super(new RentalID(movieId, clientId));
         this.time = time;
     }

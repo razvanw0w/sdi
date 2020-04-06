@@ -5,7 +5,7 @@ import ro.sdi.lab24.model.Sort;
 
 import java.util.concurrent.Future;
 
-public interface MovieController {
+public interface FutureMovieController {
     Future<Void> addMovie(int id, String name, String genre, int rating);
 
     Future<Void> deleteMovie(int id);

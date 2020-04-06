@@ -1,23 +1,21 @@
 package ro.sdi.lab24.model;
 
+import javafx.util.Pair;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javafx.util.Pair;
-
-public class Sort
-{
+public class Sort implements Serializable {
     public List<Pair<Direction, String>> sortingFields = new ArrayList<>();
 
-    public Sort(String field)
-    {
+    public Sort(String field) {
         addSorting(Direction.ASC, field);
     }
 
-    public Sort(Direction direction, String... fields)
-    {
+    public Sort(Direction direction, String... fields) {
         addSorting(direction, fields);
     }
 
