@@ -8,13 +8,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.stream.StreamSupport;
 
-import ro.sdi.lab24.exception.AlreadyExistingElementException;
-import ro.sdi.lab24.exception.ElementNotFoundException;
-import ro.sdi.lab24.model.Client;
-import ro.sdi.lab24.model.Movie;
-import ro.sdi.lab24.model.Rental;
-import ro.sdi.lab24.repository.MemoryRepository;
-import ro.sdi.lab24.repository.Repository;
+import ro.sdi.lab.common.controller.RentalController;
+import ro.sdi.lab.common.exception.AlreadyExistingElementException;
+import ro.sdi.lab.common.exception.ElementNotFoundException;
+import ro.sdi.lab.common.model.Client;
+import ro.sdi.lab.common.model.Movie;
+import ro.sdi.lab.common.model.Rental;
+import ro.sdi.lab.server.repository.MemoryRepository;
+import ro.sdi.lab.server.repository.Repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
