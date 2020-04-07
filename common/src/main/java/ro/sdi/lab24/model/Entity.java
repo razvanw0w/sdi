@@ -1,18 +1,16 @@
 package ro.sdi.lab24.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Entity<ID>
-{
+public class Entity<ID> implements Serializable {
     protected ID id;
 
-    public Entity(ID id)
-    {
+    public Entity(ID id) {
         this.id = id;
     }
 
-    public ID getId()
-    {
+    public ID getId() {
         return id;
     }
 

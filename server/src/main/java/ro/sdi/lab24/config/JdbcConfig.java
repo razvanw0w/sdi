@@ -5,16 +5,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
+import ro.sdi.lab24.exception.DatabaseException;
 
+import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.Properties;
-
-import javax.sql.DataSource;
-
-import ro.sdi.lab24.exception.DatabaseException;
 
 @Configuration
 public class JdbcConfig
@@ -54,7 +52,7 @@ public class JdbcConfig
             throw new DatabaseException("Error reading database.properties file");
         }
 
-        basicDataSource.setUrl("jdbc:postgresql://localhost:5432/MovieRentalDb");
+        basicDataSource.setUrl("jdbc:postgresql://localhost:5432/MovieRentalDB");
         basicDataSource.setUsername(username);
         basicDataSource.setPassword(password);
         basicDataSource.setInitialSize(2);

@@ -17,13 +17,11 @@ public class Rental extends Entity<Rental.RentalID> implements Serializable {
         return time;
     }
 
-    public static class RentalID
-    {
+    public static class RentalID implements Serializable {
         private int movieId;
         private int clientId;
 
-        public RentalID(int movieId, int clientId)
-        {
+        public RentalID(int movieId, int clientId) {
             this.movieId = movieId;
             this.clientId = clientId;
         }
