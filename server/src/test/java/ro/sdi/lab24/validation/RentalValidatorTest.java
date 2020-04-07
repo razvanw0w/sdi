@@ -5,8 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import ro.sdi.lab24.exception.ValidatorException;
-import ro.sdi.lab24.model.Rental;
+import ro.sdi.lab.common.exception.ValidatorException;
+import ro.sdi.lab.common.model.Rental;
+import ro.sdi.lab.server.validation.RentalValidator;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;

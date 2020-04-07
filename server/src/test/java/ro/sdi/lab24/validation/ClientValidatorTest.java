@@ -3,8 +3,9 @@ package ro.sdi.lab24.validation;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import ro.sdi.lab24.exception.ValidatorException;
-import ro.sdi.lab24.model.Client;
+import ro.sdi.lab.common.exception.ValidatorException;
+import ro.sdi.lab.common.model.Client;
+import ro.sdi.lab.server.validation.ClientValidator;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
