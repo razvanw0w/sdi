@@ -1,11 +1,11 @@
 package ro.sdi.lab24.view.commands.rental;
 
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import ro.sdi.lab24.view.Console;
 import ro.sdi.lab24.view.FutureResponse;
 import ro.sdi.lab24.view.ResponseMapper;
-
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Parameters;
@@ -28,8 +28,15 @@ public class FilterRentalsCommand implements Runnable
                             }
                             return String.format("Rentals filtered  by movie name = %s\n", name) +
                                     StreamSupport.stream(response.spliterator(), false)
-                                            .map(movie -> String.format("%d %d %s", movie.getId().getMovieId(), movie.getId().getClientId(), movie.getTime().format(Console.dateformatter)))
-                                            .collect(Collectors.joining("\n", "", "\n"));
+                                                 .map(movie -> String.format("%d %d %s",
+                                                                             movie.getId()
+                                                                                  .getMovieId(),
+                                                                             movie.getId()
+                                                                                  .getClientId(),
+                                                                             movie.getTime()
+                                                                                  .format(Console.dateFormatter)
+                                                 ))
+                                                 .collect(Collectors.joining("\n", "", "\n"));
                         })
                 )
         );

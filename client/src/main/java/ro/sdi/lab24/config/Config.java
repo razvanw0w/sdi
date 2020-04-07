@@ -3,15 +3,26 @@ package ro.sdi.lab24.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.remoting.rmi.RmiProxyFactoryBean;
-import ro.sdi.lab24.controller.*;
+
+import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import ro.sdi.lab24.controller.ClientController;
+import ro.sdi.lab24.controller.ClientControllerImpl;
+import ro.sdi.lab24.controller.Controller;
+import ro.sdi.lab24.controller.ControllerImpl;
+import ro.sdi.lab24.controller.FutureClientController;
+import ro.sdi.lab24.controller.FutureController;
+import ro.sdi.lab24.controller.FutureMovieController;
+import ro.sdi.lab24.controller.FutureRentalController;
+import ro.sdi.lab24.controller.MovieController;
+import ro.sdi.lab24.controller.MovieControllerImpl;
+import ro.sdi.lab24.controller.RentalController;
+import ro.sdi.lab24.controller.RentalControllerImpl;
 import ro.sdi.lab24.networking.ServerInformation;
 import ro.sdi.lab24.view.Console;
 import ro.sdi.lab24.view.ResponseBuffer;
-
-import java.time.format.DateTimeFormatter;
-import java.util.Timer;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Configuration
 public class Config {
@@ -53,11 +64,6 @@ public class Config {
     @Bean
     ResponseBuffer responseBuffer() {
         return new ResponseBuffer();
-    }
-
-    @Bean
-    Timer timer() {
-        return new Timer();
     }
 
     @Bean

@@ -1,8 +1,18 @@
 package ro.sdi.lab24.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.PrintWriter;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.annotation.PostConstruct;
+
 import picocli.CommandLine;
-import ro.sdi.lab24.ResponseDaemon;
 import ro.sdi.lab24.controller.FutureClientController;
 import ro.sdi.lab24.controller.FutureController;
 import ro.sdi.lab24.controller.FutureMovieController;
@@ -10,24 +20,14 @@ import ro.sdi.lab24.controller.FutureRentalController;
 import ro.sdi.lab24.exception.ProgramException;
 import ro.sdi.lab24.view.commands.MovieRentalCommand;
 
-import javax.annotation.PostConstruct;
-import java.io.PrintWriter;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Timer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class Console {
     public static FutureController controller;
     public static FutureClientController clientController;
     public static FutureMovieController movieController;
     public static FutureRentalController rentalController;
-    public static DateTimeFormatter dateformatter;
+    public static DateTimeFormatter dateFormatter;
     public static ResponseBuffer responseBuffer;
-    public static Timer timer;
+
     @Autowired
     private FutureController autowiredController;
     @Autowired
@@ -40,8 +40,6 @@ public class Console {
     private DateTimeFormatter autowiredDateFormatter;
     @Autowired
     private ResponseBuffer autowiredResponseBuffer;
-    @Autowired
-    private Timer autowiredTimer;
 
     @PostConstruct
     private void initialize() {
@@ -49,10 +47,8 @@ public class Console {
         Console.clientController = autowiredClientController;
         Console.movieController = autowiredMovieController;
         Console.rentalController = autowiredRentalController;
-        Console.dateformatter = autowiredDateFormatter;
+        Console.dateFormatter = autowiredDateFormatter;
         Console.responseBuffer = autowiredResponseBuffer;
-        Console.timer = autowiredTimer;
-        timer.scheduleAtFixedRate(new ResponseDaemon(responseBuffer), 10 * 1000, 10 * 1000);
     }
 
     public static String handleException(ProgramException e)
