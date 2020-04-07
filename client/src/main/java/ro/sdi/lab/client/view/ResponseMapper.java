@@ -1,5 +1,7 @@
 package ro.sdi.lab.client.view;
 
+import org.springframework.remoting.RemoteConnectFailureException;
+
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.function.Function;
@@ -32,6 +34,10 @@ public class ResponseMapper<T> implements Function<Future<T>, String>
             if (e.getCause() instanceof ProgramException)
             {
                 return Console.handleException((ProgramException) e.getCause());
+            }
+            else if (e.getCause() instanceof RemoteConnectFailureException)
+            {
+                return "Remote connection failed!";
             }
             else
             {

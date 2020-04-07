@@ -8,23 +8,22 @@ import ro.sdi.lab.common.controller.ClientController;
 import ro.sdi.lab.common.controller.Controller;
 import ro.sdi.lab.common.controller.MovieController;
 import ro.sdi.lab.common.controller.RentalController;
-import ro.sdi.lab24.controller.*;
 import ro.sdi.lab.common.model.Client;
 import ro.sdi.lab.common.model.Movie;
 import ro.sdi.lab.common.model.Rental;
+import ro.sdi.lab.common.networking.ServerInformation;
+import ro.sdi.lab.server.controller.ClientControllerImpl;
+import ro.sdi.lab.server.controller.ControllerImpl;
+import ro.sdi.lab.server.controller.MovieControllerImpl;
+import ro.sdi.lab.server.controller.RentalControllerImpl;
 import ro.sdi.lab.server.model.serialization.database.ClientTableAdapter;
 import ro.sdi.lab.server.model.serialization.database.MovieTableAdapter;
 import ro.sdi.lab.server.model.serialization.database.RentalTableAdapter;
-import ro.sdi.lab.common.networking.ServerInformation;
 import ro.sdi.lab.server.repository.DatabaseRepository;
 import ro.sdi.lab.server.repository.Repository;
 import ro.sdi.lab.server.validation.ClientValidator;
 import ro.sdi.lab.server.validation.MovieValidator;
 import ro.sdi.lab.server.validation.RentalValidator;
-import ro.sdi.lab.server.controller.ClientControllerImpl;
-import ro.sdi.lab.server.controller.ControllerImpl;
-import ro.sdi.lab.server.controller.MovieControllerImpl;
-import ro.sdi.lab.server.controller.RentalControllerImpl;
 
 @Configuration
 public class Config
