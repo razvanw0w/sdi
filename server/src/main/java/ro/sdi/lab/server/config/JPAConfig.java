@@ -61,7 +61,7 @@ public class JPAConfig
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setDatabase(Database.POSTGRESQL);
         vendorAdapter.setGenerateDdl(generateDDL);
-        vendorAdapter.setShowSql(true);
+        vendorAdapter.setShowSql(false);
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);

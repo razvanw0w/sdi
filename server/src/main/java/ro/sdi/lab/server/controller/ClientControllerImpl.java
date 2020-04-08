@@ -1,5 +1,7 @@
 package ro.sdi.lab.server.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,6 +18,8 @@ import ro.sdi.lab.server.validation.Validator;
 @Service
 public class ClientControllerImpl implements ClientController
 {
+    public static final Logger log = LoggerFactory.getLogger(ClientControllerImpl.class);
+
     Repository<Integer, Client> clientRepository;
     Validator<Client> clientValidator;
     EntityDeletedListener<Client> entityDeletedListener = null;
@@ -46,6 +50,7 @@ public class ClientControllerImpl implements ClientController
     {
         Client client = new Client(id, name);
         clientValidator.validate(client);
+        log.trace("Adding client {}", client);
         clientRepository
                 .save(client)
                 .ifPresent(opt ->
@@ -66,6 +71,7 @@ public class ClientControllerImpl implements ClientController
     @Override
     public void deleteClient(int id)
     {
+        log.trace("Removing client with id {}", id);
         clientRepository
                 .delete(id)
                 .ifPresentOrElse(
@@ -90,6 +96,7 @@ public class ClientControllerImpl implements ClientController
     @Override
     public Iterable<Client> getClients()
     {
+        log.trace("Retrieving all clients");
         return clientRepository.findAll();
     }
 
@@ -105,6 +112,7 @@ public class ClientControllerImpl implements ClientController
     {
         Client client = new Client(id, name);
         clientValidator.validate(client);
+        log.trace("Updating client {}", client);
         clientRepository
                 .update(client)
                 .orElseThrow(() -> new ElementNotFoundException(String.format(
@@ -116,6 +124,7 @@ public class ClientControllerImpl implements ClientController
     @Override
     public Iterable<Client> filterClientsByName(String name)
     {
+        log.trace("Filtering clients by the name {}", name);
         String regex = ".*" + name + ".*";
         return StreamSupport
                 .stream(clientRepository.findAll().spliterator(), false)

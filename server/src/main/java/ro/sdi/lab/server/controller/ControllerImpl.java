@@ -1,5 +1,7 @@
 package ro.sdi.lab.server.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -21,6 +23,8 @@ import ro.sdi.lab.server.validation.Validator;
 @Service
 public class ControllerImpl implements Controller
 {
+    public static final Logger log = LoggerFactory.getLogger(ControllerImpl.class);
+
     Repository<Integer, Client> clientRepository;
     Repository<Integer, Movie> movieRepository;
     Repository<Rental.RentalID, Rental> rentalRepository;
@@ -48,6 +52,7 @@ public class ControllerImpl implements Controller
     @Override
     public Iterable<RentedMovieStatistic> getTop10RentedMovies()
     {
+        log.trace("Retrieving top 10 rented movies");
         Stream<Rental> rentalStream = StreamSupport.stream(rentalRepository.findAll().spliterator(), false);
         Map<String, Long> occurrenceMap = rentalStream
                 .map(rental -> movieRepository.findOne(rental.getId().getMovieId()).get().getName())
@@ -69,6 +74,7 @@ public class ControllerImpl implements Controller
     @Override
     public Iterable<ClientGenre> getClientGenres()
     {
+        log.trace("Retrieving client favorite genres");
         return StreamSupport.stream(clientRepository.findAll().spliterator(), false)
                             .map(client -> new ClientGenre(client,
                                                            StreamSupport.stream(rentalRepository.findAll().spliterator(), false)

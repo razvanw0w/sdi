@@ -1,5 +1,7 @@
 package ro.sdi.lab.server.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,6 +21,8 @@ import ro.sdi.lab.server.validation.Validator;
 @Service
 public class MovieControllerImpl implements MovieController
 {
+    public static final Logger log = LoggerFactory.getLogger(MovieControllerImpl.class);
+
     Repository<Integer, Movie> movieRepository;
     Validator<Movie> movieValidator;
     EntityDeletedListener<Movie> entityDeletedListener = null;
@@ -49,6 +53,7 @@ public class MovieControllerImpl implements MovieController
     {
         Movie movie = new Movie(id, name, genre, rating);
         movieValidator.validate(movie);
+        log.trace("Adding movie {}", movie);
         movieRepository.save(movie).ifPresent(opt ->
                                               {
                                                   throw new AlreadyExistingElementException(String.format(
@@ -67,6 +72,7 @@ public class MovieControllerImpl implements MovieController
     @Override
     public void deleteMovie(int id)
     {
+        log.trace("Removing movie with id {}", id);
         movieRepository
                 .delete(id)
                 .ifPresentOrElse(
@@ -91,6 +97,7 @@ public class MovieControllerImpl implements MovieController
     @Override
     public Iterable<Movie> getMovies()
     {
+        log.trace("Retrieving all movies");
         return movieRepository.findAll();
     }
 
@@ -121,6 +128,7 @@ public class MovieControllerImpl implements MovieController
                                 Optional.ofNullable(rating).orElseGet(storedMovie::getRating)
         );
         movieValidator.validate(movie);
+        log.trace("Updating movie {}", movie);
         movieRepository.update(movie)
                        .orElseThrow(() -> new ElementNotFoundException(String.format(
                                "Movie %d does not exist",
@@ -131,6 +139,7 @@ public class MovieControllerImpl implements MovieController
     @Override
     public Iterable<Movie> filterMoviesByGenre(String genre)
     {
+        log.trace("Filtering movies by the genre {}", genre);
         String regex = ".*" + genre + ".*";
         return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
                             .filter(movie -> movie.getGenre().matches(regex))
@@ -145,6 +154,7 @@ public class MovieControllerImpl implements MovieController
     @Override
     public Iterable<Movie> sortMovies(Sort criteria)
     {
+        log.trace("Sorting movies");
         SortingRepository<Integer, Movie> sortingRepo = Optional.of(movieRepository)
                                                                 .filter(repo -> repo instanceof SortingRepository)
                                                                 .map(repo -> (SortingRepository<Integer, Movie>) repo)
