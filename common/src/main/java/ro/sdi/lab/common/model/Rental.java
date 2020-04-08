@@ -4,10 +4,18 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Rental extends Entity<Rental.RentalID> implements Serializable {
+@javax.persistence.Entity
+public class Rental extends Entity<Rental.RentalID> implements Serializable
+{
     private LocalDateTime time;
 
-    public Rental(int movieId, int clientId, LocalDateTime time) {
+    public Rental()
+    {
+        super(new RentalID(0, 0));
+    }
+
+    public Rental(int movieId, int clientId, LocalDateTime time)
+    {
         super(new RentalID(movieId, clientId));
         this.time = time;
     }

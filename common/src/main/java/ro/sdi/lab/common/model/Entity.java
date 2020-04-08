@@ -3,14 +3,23 @@ package ro.sdi.lab.common.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Entity<ID> implements Serializable {
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
+public abstract class Entity<ID extends Serializable> implements Serializable
+{
+
+    @Id
     protected ID id;
 
-    public Entity(ID id) {
+    public Entity(ID id)
+    {
         this.id = id;
     }
 
-    public ID getId() {
+    public ID getId()
+    {
         return id;
     }
 

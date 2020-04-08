@@ -1,5 +1,7 @@
 package ro.sdi.lab.server.controller;
 
+import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -14,6 +16,7 @@ import ro.sdi.lab.server.repository.Repository;
 import ro.sdi.lab.server.repository.SortingRepository;
 import ro.sdi.lab.server.validation.Validator;
 
+@Service
 public class MovieControllerImpl implements MovieController
 {
     Repository<Integer, Movie> movieRepository;

@@ -2,10 +2,18 @@ package ro.sdi.lab.common.model;
 
 import java.io.Serializable;
 
-public class Client extends Entity<Integer> implements Serializable {
+@javax.persistence.Entity
+public class Client extends Entity<Integer> implements Serializable
+{
     private String name;
 
-    public Client(int id, String name) {
+    public Client()
+    {
+        super(0);
+    }
+
+    public Client(int id, String name)
+    {
         super(id);
         this.name = name;
     }

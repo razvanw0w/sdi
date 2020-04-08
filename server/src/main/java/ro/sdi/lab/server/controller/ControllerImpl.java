@@ -1,5 +1,7 @@
 package ro.sdi.lab.server.controller;
 
+import org.springframework.stereotype.Service;
+
 import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Function;
@@ -8,14 +10,15 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import ro.sdi.lab.common.controller.Controller;
-import ro.sdi.lab.common.model.dto.ClientGenre;
-import ro.sdi.lab.common.model.dto.RentedMovieStatistic;
 import ro.sdi.lab.common.model.Client;
 import ro.sdi.lab.common.model.Movie;
 import ro.sdi.lab.common.model.Rental;
+import ro.sdi.lab.common.model.dto.ClientGenre;
+import ro.sdi.lab.common.model.dto.RentedMovieStatistic;
 import ro.sdi.lab.server.repository.Repository;
 import ro.sdi.lab.server.validation.Validator;
 
+@Service
 public class ControllerImpl implements Controller
 {
     Repository<Integer, Client> clientRepository;
@@ -67,27 +70,27 @@ public class ControllerImpl implements Controller
     public Iterable<ClientGenre> getClientGenres()
     {
         return StreamSupport.stream(clientRepository.findAll().spliterator(), false)
-                .map(client -> new ClientGenre(client,
-                                StreamSupport.stream(rentalRepository.findAll().spliterator(), false)
-                                        .filter(rental -> rental.getId().getClientId() == client.getId())
-                                        .map(this::getMovieGenre)
-                                        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                                        .entrySet()
-                                        .stream()
-                                        .max(Map.Entry.comparingByValue())
-                                        .map(Map.Entry::getKey)
-                                        .orElse("")
-                        )
-                )
-                .collect(Collectors.toUnmodifiableList());
+                            .map(client -> new ClientGenre(client,
+                                                           StreamSupport.stream(rentalRepository.findAll().spliterator(), false)
+                                                                        .filter(rental -> rental.getId().getClientId() == client.getId())
+                                                                        .map(this::getMovieGenre)
+                                                                        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                                                                        .entrySet()
+                                                                        .stream()
+                                                                        .max(Map.Entry.comparingByValue())
+                                                                        .map(Map.Entry::getKey)
+                                                                        .orElse("")
+                                 )
+                            )
+                            .collect(Collectors.toUnmodifiableList());
     }
 
     private String getMovieGenre(Rental rental)
     {
         return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
-                .filter(movie -> movie.getId() == rental.getId().getMovieId())
-                .findAny()
-                .map(Movie::getGenre)
-                .orElse("");
+                            .filter(movie -> movie.getId() == rental.getId().getMovieId())
+                            .findAny()
+                            .map(Movie::getGenre)
+                            .orElse("");
     }
 }

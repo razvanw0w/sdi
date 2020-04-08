@@ -1,5 +1,7 @@
 package ro.sdi.lab.server.controller;
 
+import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -11,6 +13,7 @@ import ro.sdi.lab.common.model.Client;
 import ro.sdi.lab.server.repository.Repository;
 import ro.sdi.lab.server.validation.Validator;
 
+@Service
 public class ClientControllerImpl implements ClientController
 {
     Repository<Integer, Client> clientRepository;

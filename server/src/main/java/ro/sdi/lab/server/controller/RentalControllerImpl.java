@@ -1,5 +1,7 @@
 package ro.sdi.lab.server.controller;
 
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -14,6 +16,7 @@ import ro.sdi.lab.common.model.Rental;
 import ro.sdi.lab.server.repository.Repository;
 import ro.sdi.lab.server.validation.Validator;
 
+@Service
 public class RentalControllerImpl implements RentalController
 {
     private final ClientControllerImpl clientController;
@@ -70,7 +73,12 @@ public class RentalControllerImpl implements RentalController
         Rental rental;
         try
         {
-            rental = new Rental(movieId, clientId, LocalDateTime.parse(time, formatter));
+            LocalDateTime dateTime;
+            if (time.equals("now"))
+                dateTime = LocalDateTime.now();
+            else
+                dateTime = LocalDateTime.parse(time, formatter);
+            rental = new Rental(movieId, clientId, dateTime);
         }
         catch (DateTimeParseException e)
         {
