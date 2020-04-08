@@ -6,12 +6,14 @@ import org.junit.jupiter.api.Test;
 import java.util.Iterator;
 import java.util.stream.StreamSupport;
 
-import ro.sdi.lab24.exception.AlreadyExistingElementException;
-import ro.sdi.lab24.exception.ElementNotFoundException;
-import ro.sdi.lab24.model.Movie;
-import ro.sdi.lab24.repository.MemoryRepository;
-import ro.sdi.lab24.repository.Repository;
-import ro.sdi.lab24.validation.MovieValidator;
+import ro.sdi.lab.common.controller.MovieController;
+import ro.sdi.lab.common.exception.AlreadyExistingElementException;
+import ro.sdi.lab.common.exception.ElementNotFoundException;
+import ro.sdi.lab.common.model.Movie;
+import ro.sdi.lab.server.controller.MovieControllerImpl;
+import ro.sdi.lab.server.repository.MemoryRepository;
+import ro.sdi.lab.server.repository.Repository;
+import ro.sdi.lab.server.validation.MovieValidator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
