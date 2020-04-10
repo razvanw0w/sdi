@@ -7,6 +7,7 @@ public class ClientCopyAdapter implements CopyAdapter<Client>
     @Override
     public void copy(Client source, Client destination)
     {
-        //TODO
+        destination.setId(source.getId());
+        destination.setName(source.getName());
     }
 }

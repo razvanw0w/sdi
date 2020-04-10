@@ -14,15 +14,17 @@ public class Rental extends Entity<Rental.RentalID> implements Serializable
         super(new RentalID(0, 0));
     }
 
-    public Rental(int movieId, int clientId, LocalDateTime time)
-    {
+    public Rental(int movieId, int clientId, LocalDateTime time) {
         super(new RentalID(movieId, clientId));
         this.time = time;
     }
 
-    public LocalDateTime getTime()
-    {
+    public LocalDateTime getTime() {
         return time;
+    }
+
+    public void setTime(LocalDateTime time) {
+        this.time = time;
     }
 
     public static class RentalID implements Serializable {
@@ -34,14 +36,20 @@ public class Rental extends Entity<Rental.RentalID> implements Serializable
             this.clientId = clientId;
         }
 
-        public int getMovieId()
-        {
+        public int getMovieId() {
             return movieId;
         }
 
-        public int getClientId()
-        {
+        public int getClientId() {
             return clientId;
+        }
+
+        public void setMovieId(int movieId) {
+            this.movieId = movieId;
+        }
+
+        public void setClientId(int clientId) {
+            this.clientId = clientId;
         }
 
         @Override

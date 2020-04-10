@@ -7,6 +7,7 @@ public class RentalCopyAdapter implements CopyAdapter<Rental>
     @Override
     public void copy(Rental source, Rental destination)
     {
-        //TODO
+        destination.setId(source.getId());
+        destination.setTime(source.getTime());
     }
 }

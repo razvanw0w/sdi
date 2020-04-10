@@ -12,20 +12,21 @@ public class Client extends Entity<Integer> implements Serializable
         super(0);
     }
 
-    public Client(int id, String name)
-    {
+    public Client(int id, String name) {
         super(id);
         this.name = name;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("Client[%d, %s]", id, name);
     }
 }

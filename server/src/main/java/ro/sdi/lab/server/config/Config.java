@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.remoting.rmi.RmiServiceExporter;
-
 import ro.sdi.lab.common.controller.ClientController;
 import ro.sdi.lab.common.controller.Controller;
 import ro.sdi.lab.common.controller.MovieController;
@@ -30,7 +29,7 @@ import ro.sdi.lab.server.validation.MovieValidator;
 import ro.sdi.lab.server.validation.RentalValidator;
 
 @Configuration
-@ComponentScan("ro.sdi.lab.server.controller")
+@ComponentScan({"ro.sdi.lab.server.controller", "ro.sdi.lab.server.repository"})
 public class Config
 {
     @Bean

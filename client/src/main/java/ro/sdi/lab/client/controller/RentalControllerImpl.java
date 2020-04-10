@@ -1,7 +1,9 @@
 package ro.sdi.lab.client.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.stereotype.Service;
 import ro.sdi.lab.common.controller.RentalController;
 import ro.sdi.lab.common.model.Rental;
 
@@ -9,7 +11,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+@Service
 public class RentalControllerImpl implements FutureRentalController {
+    public static final Logger log = LoggerFactory.getLogger(RentalControllerImpl.class);
+
     @Autowired
     private ExecutorService executorService;
 

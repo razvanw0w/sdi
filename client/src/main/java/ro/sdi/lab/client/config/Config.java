@@ -1,25 +1,8 @@
 package ro.sdi.lab.client.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
+import org.springframework.context.annotation.*;
 import org.springframework.remoting.rmi.RmiProxyFactoryBean;
-
-import java.time.format.DateTimeFormatter;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import ro.sdi.lab.client.controller.ClientControllerImpl;
-import ro.sdi.lab.client.controller.ControllerImpl;
-import ro.sdi.lab.client.controller.FutureClientController;
-import ro.sdi.lab.client.controller.FutureController;
-import ro.sdi.lab.client.controller.FutureMovieController;
-import ro.sdi.lab.client.controller.FutureRentalController;
-import ro.sdi.lab.client.controller.MovieControllerImpl;
-import ro.sdi.lab.client.controller.RentalControllerImpl;
-import ro.sdi.lab.client.view.Console;
 import ro.sdi.lab.client.view.ResponseBuffer;
 import ro.sdi.lab.common.controller.ClientController;
 import ro.sdi.lab.common.controller.Controller;
@@ -27,38 +10,17 @@ import ro.sdi.lab.common.controller.MovieController;
 import ro.sdi.lab.common.controller.RentalController;
 import ro.sdi.lab.common.networking.ServerInformation;
 
+import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 @Configuration
 @PropertySources({@PropertySource(value = "classpath:timer.properties")})
+@ComponentScan({"ro.sdi.lab.client.controller", "ro.sdi.lab.client.view"})
 public class Config {
-    @Bean
-    Console console() {
-        return new Console();
-    }
-
     @Bean
     ExecutorService executorService() {
         return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-    }
-
-    @Bean
-    FutureController futureController() {
-        return new ControllerImpl();
-    }
-
-    @Bean
-    FutureClientController futureClientController() {
-        return new ClientControllerImpl();
-    }
-
-    @Bean
-    FutureMovieController futureMovieController() {
-        return new MovieControllerImpl();
-    }
-
-    @Bean
-    FutureRentalController futureRentalController()
-    {
-        return new RentalControllerImpl();
     }
 
     @Bean
