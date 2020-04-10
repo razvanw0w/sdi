@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
+    <Properties>
+        <Property name="filename">./log/server.log</Property>
+        <Property name="filenamePattern">log/server-%i.log</Property>
+        <Property name="pattern">%d{ISO8601} %-5p [%t]: %-36.36c{1} - %m %n
+        </Property>
+    </Properties>
     <Loggers>
-
         <!-- Spring framework -->
         <!--        <Logger name="org.hibernate.stat" level="INFO" />-->
         <Logger name="org.springframework.data" level="WARN"/>
@@ -36,12 +41,4 @@
             </Policies>
         </RollingFile>
     </Appenders>
-
-    <Properties>
-        <!--TODO this doesn't work for me - razvan. it doesn't fetch the properties format and creates for example a file names ${filename} and prints ${pattern} all over the place-->
-        <Property name="filename">./log/server.log</Property>
-        <Property name="filenamePattern">log/server-%i.log</Property>
-        <Property name="pattern">%d{ISO8601} %-5p [%t]: %-36.36c{1} - %m %n
-        </Property>
-    </Properties>
 </Configuration>
