@@ -1,16 +1,18 @@
 package ro.sdi.lab.server.repository;
 
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
 import ro.sdi.lab.common.exception.ValidatorException;
 import ro.sdi.lab.common.model.Entity;
 import ro.sdi.lab.common.model.Sort;
 import ro.sdi.lab.common.model.copyadapters.CopyAdapter;
 import ro.sdi.lab.server.repository.tableadapters.TableAdapter;
 import ro.sdi.lab.server.sorting.SortingUtils;
-
-import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 public class DatabaseRepository<ID extends Serializable, T extends Entity<ID>>
         implements SortingRepository<ID, T>
@@ -66,6 +68,7 @@ public class DatabaseRepository<ID extends Serializable, T extends Entity<ID>>
     }
 
     @Override
+    @Transactional
     public Optional<T> update(T entity) throws ValidatorException
     {
         Objects.requireNonNull(entity, "Entity must not be null");
@@ -74,9 +77,7 @@ public class DatabaseRepository<ID extends Serializable, T extends Entity<ID>>
                 readEntity ->
                 {
                     tableAdapter.findById(entity.getId())
-                            .ifPresent(e -> {
-                                tableAdapter.save(entity);
-                            });
+                                .ifPresent(e -> copyAdapter.copy(entity, e));
                     return entity;
                 }
         );
