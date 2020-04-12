@@ -25,7 +25,10 @@ public class ControllerImpl implements FutureController {
     @Override
     public Future<Iterable<RentedMovieStatistic>> getTop10RentedMovies() {
         Callable<Iterable<RentedMovieStatistic>> callable = () -> {
-            return controller.getTop10RentedMovies();
+            log.trace("Sending request: get top 10 rented movies");
+            Iterable<RentedMovieStatistic> top10RentedMovies = controller.getTop10RentedMovies();
+            log.trace("Received response: retrieved top 10 rented movies");
+            return top10RentedMovies;
         };
         return executorService.submit(callable);
     }
@@ -33,7 +36,10 @@ public class ControllerImpl implements FutureController {
     @Override
     public Future<Iterable<ClientGenre>> getClientGenres() {
         Callable<Iterable<ClientGenre>> callable = () -> {
-            return controller.getClientGenres();
+            log.trace("Sending request: get most rented genre for each client");
+            Iterable<ClientGenre> clientGenres = controller.getClientGenres();
+            log.trace("Received response: retrieved most rented genre for each client");
+            return clientGenres;
         };
         return executorService.submit(callable);
     }
