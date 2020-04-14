@@ -1,13 +1,13 @@
 package ro.sdi.lab24.sorting;
 
+import ro.sdi.lab24.exception.SortingException;
+import ro.sdi.lab24.utils.Pair;
+
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-
-import javafx.util.Pair;
-import ro.sdi.lab24.exception.SortingException;
 
 public class SortingUtils
 {

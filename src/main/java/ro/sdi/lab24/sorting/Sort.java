@@ -1,11 +1,11 @@
 package ro.sdi.lab24.sorting;
 
+import ro.sdi.lab24.utils.Pair;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javafx.util.Pair;
 
 public class Sort
 {
