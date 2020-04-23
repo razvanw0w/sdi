@@ -20,14 +20,14 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class XMLRepository<ID, T extends Entity<ID>> extends AbstractRepository<ID, T>
-{
+public class XMLRepository<ID extends Serializable, T extends Entity<ID>> extends AbstractRepository<ID, T> {
     String fileName;
     XMLSerializer<T> serializer;
     private Validator<T> validator;
@@ -35,8 +35,7 @@ public class XMLRepository<ID, T extends Entity<ID>> extends AbstractRepository<
     private final DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
     private final TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
-    public XMLRepository(String fileName, XMLSerializer<T> serializer, Validator<T> validator) throws ParserConfigurationException
-    {
+    public XMLRepository(String fileName, XMLSerializer<T> serializer, Validator<T> validator) throws ParserConfigurationException {
         this.fileName = fileName;
         this.serializer = serializer;
         this.validator = validator;

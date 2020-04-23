@@ -1,21 +1,13 @@
 package ro.sdi.lab24.model.serialization.database;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 import ro.sdi.lab24.model.Entity;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
+import java.io.Serializable;
 
-public interface TableAdapter<ID, T extends Entity<ID>>
-{
-    void insert(T entity, Connection connection) throws SQLException;
+@NoRepositoryBean
+public interface TableAdapter<ID extends Serializable, T extends Entity<ID>>
+        extends JpaRepository<T, ID> {
 
-    List<T> readAll(Connection connection) throws SQLException;
-
-    Optional<T> read(ID id, Connection connection) throws SQLException;
-
-    void update(T entity, Connection connection) throws SQLException;
-
-    void delete(ID id, Connection connection) throws SQLException;
 }

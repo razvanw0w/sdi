@@ -1,32 +1,32 @@
 package ro.sdi.lab24.controller;
 
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
 import ro.sdi.lab24.model.Client;
 import ro.sdi.lab24.repository.Repository;
 import ro.sdi.lab24.validation.Validator;
 
-public class ClientController
-{
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+@Service
+public class ClientController {
+    public static final Logger log = LoggerFactory.getLogger(ClientController.class);
+
+    @Autowired
     Repository<Integer, Client> clientRepository;
+
+    @Autowired
     Validator<Client> clientValidator;
+
     EntityDeletedListener<Client> entityDeletedListener = null;
 
-    public ClientController(
-            Repository<Integer, Client> clientRepository,
-            Validator<Client> clientValidator
-    )
-    {
-        this.clientRepository = clientRepository;
-        this.clientValidator = clientValidator;
-    }
-
-    public void setEntityDeletedListener(EntityDeletedListener<Client> entityDeletedListener)
-    {
+    public void setEntityDeletedListener(EntityDeletedListener<Client> entityDeletedListener) {
         this.entityDeletedListener = entityDeletedListener;
     }
 
@@ -37,19 +37,19 @@ public class ClientController
      * @param name: the name of the client
      * @throws AlreadyExistingElementException if the client (the ID) is already there
      */
-    public void addClient(int id, String name)
-    {
+    public void addClient(int id, String name) {
         Client client = new Client(id, name);
         clientValidator.validate(client);
+        log.trace("Adding client {}", client);
         clientRepository
                 .save(client)
                 .ifPresent(opt ->
-                           {
-                               throw new AlreadyExistingElementException(String.format(
-                                       "Client %d already exists",
-                                       id
-                               ));
-                           });
+                {
+                    throw new AlreadyExistingElementException(String.format(
+                            "Client %d already exists",
+                            id
+                    ));
+                });
     }
 
     /**
@@ -58,8 +58,8 @@ public class ClientController
      * @param id: the ID of the client
      * @throws ElementNotFoundException if the client isn't found in the repository based on their ID
      */
-    public void deleteClient(int id)
-    {
+    public void deleteClient(int id) {
+        log.trace("Removing client with id {}", id);
         clientRepository
                 .delete(id)
                 .ifPresentOrElse(
@@ -81,8 +81,8 @@ public class ClientController
      *
      * @return all: an iterable collection of clients
      */
-    public Iterable<Client> getClients()
-    {
+    public Iterable<Client> getClients() {
+        log.trace("Fetching all clients");
         return clientRepository.findAll();
     }
 
@@ -93,10 +93,10 @@ public class ClientController
      * @param name: the new name of the client
      * @throws ElementNotFoundException if the client isn't found in the repository based on their ID
      */
-    public void updateClient(int id, String name)
-    {
+    public void updateClient(int id, String name) {
         Client client = new Client(id, name);
         clientValidator.validate(client);
+        log.trace("Updating client {}", client);
         clientRepository
                 .update(client)
                 .orElseThrow(() -> new ElementNotFoundException(String.format(
@@ -105,8 +105,8 @@ public class ClientController
                 )));
     }
 
-    public Iterable<Client> filterClientsByName(String name)
-    {
+    public Iterable<Client> filterClientsByName(String name) {
+        log.trace("Filtering clients by the name {}", name);
         String regex = ".*" + name + ".*";
         return StreamSupport
                 .stream(clientRepository.findAll().spliterator(), false)
@@ -114,8 +114,7 @@ public class ClientController
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    public Optional<Client> findOne(int clientId)
-    {
+    public Optional<Client> findOne(int clientId) {
         return clientRepository.findOne(clientId);
     }
 }

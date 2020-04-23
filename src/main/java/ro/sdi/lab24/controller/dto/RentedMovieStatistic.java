@@ -1,6 +1,8 @@
 package ro.sdi.lab24.controller.dto;
 
-public class RentedMovieStatistic implements Comparable<RentedMovieStatistic> {
+import java.io.Serializable;
+
+public class RentedMovieStatistic implements Comparable<RentedMovieStatistic>, Serializable {
     private String movieName;
     private Long numberOfRentals;
 

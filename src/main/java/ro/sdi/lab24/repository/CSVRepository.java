@@ -6,20 +6,19 @@ import ro.sdi.lab24.model.serialization.csv.CSVSerializer;
 import ro.sdi.lab24.validation.Validator;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
-public class CSVRepository<ID, T extends Entity<ID>> extends AbstractRepository<ID, T>
-{
+public class CSVRepository<ID extends Serializable, T extends Entity<ID>> extends AbstractRepository<ID, T> {
     public Path path;
     private CSVSerializer<T> serializer;
     private String fileName;
     private Validator<T> validator;
 
-    public CSVRepository(String fileName, CSVSerializer<T> serializer, Validator<T> validator)
-    {
+    public CSVRepository(String fileName, CSVSerializer<T> serializer, Validator<T> validator) {
         super();
         this.fileName = fileName;
         this.path = Paths.get(fileName);

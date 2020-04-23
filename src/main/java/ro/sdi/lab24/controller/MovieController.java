@@ -1,10 +1,9 @@
 package ro.sdi.lab24.controller;
 
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ro.sdi.lab24.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.exception.ElementNotFoundException;
 import ro.sdi.lab24.exception.SortingException;
@@ -15,21 +14,24 @@ import ro.sdi.lab24.sorting.Sort;
 import ro.sdi.lab24.validation.Validator;
 import ro.sdi.lab24.view.commands.movie.utils.SortingCriteria;
 
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+@Service
 public class MovieController {
+    public static final Logger log = LoggerFactory.getLogger(MovieController.class);
+
+    @Autowired
     Repository<Integer, Movie> movieRepository;
+
+    @Autowired
     Validator<Movie> movieValidator;
+
     EntityDeletedListener<Movie> entityDeletedListener = null;
 
-    public MovieController(
-            Repository<Integer, Movie> movieRepository,
-            Validator<Movie> movieValidator
-    ) {
-        this.movieRepository = movieRepository;
-        this.movieValidator = movieValidator;
-    }
-
-    public void setEntityDeletedListener(EntityDeletedListener<Movie> entityDeletedListener)
-    {
+    public void setEntityDeletedListener(EntityDeletedListener<Movie> entityDeletedListener) {
         this.entityDeletedListener = entityDeletedListener;
     }
 
@@ -43,6 +45,7 @@ public class MovieController {
     public void addMovie(int id, String name, String genre, int rating) {
         Movie movie = new Movie(id, name, genre, rating);
         movieValidator.validate(movie);
+        log.trace("Adding movie {}", movie);
         movieRepository.save(movie).ifPresent(opt ->
         {
             throw new AlreadyExistingElementException(String.format(
@@ -59,6 +62,7 @@ public class MovieController {
      * @throws ElementNotFoundException if the movie isn't found in the repository based on their ID
      */
     public void deleteMovie(int id) {
+        log.trace("Deleting movie with id {}", id);
         movieRepository.delete(id)
                 .orElseThrow(() -> new ElementNotFoundException(String.format(
                         "Movie %d does not exist",
@@ -72,6 +76,7 @@ public class MovieController {
      * @return all: an iterable collection of movies
      */
     public Iterable<Movie> getMovies() {
+        log.trace("Fetching all movies");
         return movieRepository.findAll();
     }
 
@@ -100,6 +105,7 @@ public class MovieController {
                 Optional.ofNullable(rating).orElseGet(storedMovie::getRating)
         );
         movieValidator.validate(movie);
+        log.trace("Updating movie {}", movie);
         movieRepository.update(movie)
                 .orElseThrow(() -> new ElementNotFoundException(String.format(
                         "Movie %d does not exist",
@@ -108,18 +114,19 @@ public class MovieController {
     }
 
     public Iterable<Movie> filterMoviesByGenre(String genre) {
+        log.trace("Filtering movies by the genre {}", genre);
         String regex = ".*" + genre + ".*";
         return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
                 .filter(movie -> movie.getGenre().matches(regex))
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    public Optional<Movie> findOne(int movieId)
-    {
+    public Optional<Movie> findOne(int movieId) {
         return movieRepository.findOne(movieId);
     }
 
     public Iterable<Movie> sortMovies(SortingCriteria[] criteria) {
+        log.trace("Sorting movies");
         Sort reducedSort = Arrays.stream(criteria, 0, criteria.length)
                 .map(sort -> new Sort(sort.getDirection(), sort.getField()))
                 .reduce(Sort::and)

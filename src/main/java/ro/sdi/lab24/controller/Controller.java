@@ -1,5 +1,9 @@
 package ro.sdi.lab24.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ro.sdi.lab24.controller.dto.ClientGenre;
 import ro.sdi.lab24.controller.dto.RentedMovieStatistic;
 import ro.sdi.lab24.model.Client;
@@ -15,13 +19,26 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class Controller
-{
+@Service
+public class Controller {
+    public static final Logger log = LoggerFactory.getLogger(Controller.class);
+
+    @Autowired
     Repository<Integer, Client> clientRepository;
+
+    @Autowired
     Repository<Integer, Movie> movieRepository;
+
+    @Autowired
     Repository<Rental.RentalID, Rental> rentalRepository;
+
+    @Autowired
     Validator<Client> clientValidator;
+
+    @Autowired
     Validator<Movie> movieValidator;
+
+    @Autowired
     Validator<Rental> rentalValidator;
 
     public Controller(
@@ -31,8 +48,7 @@ public class Controller
             Validator<Client> clientValidator,
             Validator<Movie> movieValidator,
             Validator<Rental> rentalValidator
-    )
-    {
+    ) {
         this.clientRepository = clientRepository;
         this.movieRepository = movieRepository;
         this.rentalRepository = rentalRepository;
@@ -41,8 +57,8 @@ public class Controller
         this.rentalValidator = rentalValidator;
     }
 
-    public Iterable<RentedMovieStatistic> getTop10RentedMovies()
-    {
+    public Iterable<RentedMovieStatistic> getTop10RentedMovies() {
+        log.trace("Fetching top 10 rented movies");
         Stream<Rental> rentalStream = StreamSupport.stream(rentalRepository.findAll().spliterator(), false);
         Map<String, Long> occurrenceMap = rentalStream
                 .map(rental -> movieRepository.findOne(rental.getId().getMovieId()).get().getName())
@@ -61,8 +77,8 @@ public class Controller
     /**
      * Retrieves the most rented genre for each client, or the empty string if the client did not rent any movies
      */
-    public Iterable<ClientGenre> getClientGenres()
-    {
+    public Iterable<ClientGenre> getClientGenres() {
+        log.trace("Fetching client favorite genres");
         return StreamSupport.stream(clientRepository.findAll().spliterator(), false)
                 .map(client -> new ClientGenre(client,
                                 StreamSupport.stream(rentalRepository.findAll().spliterator(), false)
@@ -79,8 +95,7 @@ public class Controller
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    private String getMovieGenre(Rental rental)
-    {
+    private String getMovieGenre(Rental rental) {
         return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
                 .filter(movie -> movie.getId() == rental.getId().getMovieId())
                 .findAny()

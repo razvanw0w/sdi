@@ -3,14 +3,13 @@ package ro.sdi.lab24.repository;
 import ro.sdi.lab24.exception.ValidatorException;
 import ro.sdi.lab24.model.Entity;
 
+import java.io.Serializable;
 import java.util.*;
 
-public abstract class AbstractRepository<ID, T extends Entity<ID>> implements Repository<ID, T>
-{
+public abstract class AbstractRepository<ID extends Serializable, T extends Entity<ID>> implements Repository<ID, T> {
     protected Map<ID, T> entities;
 
-    public AbstractRepository()
-    {
+    public AbstractRepository() {
         this.entities = new HashMap<>();
     }
 
