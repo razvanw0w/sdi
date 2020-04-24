@@ -2,8 +2,8 @@ package ro.sdi.lab24.client.view.commands.movie;
 
 import picocli.CommandLine.Command;
 import ro.sdi.lab24.client.view.Console;
-import ro.sdi.lab24.exception.ProgramException;
-import ro.sdi.lab24.model.Movie;
+import ro.sdi.lab24.core.exception.ProgramException;
+import ro.sdi.lab24.core.model.Movie;
 
 @Command(description = "List all movies", name = "list")
 public class ListMoviesCommand implements Runnable

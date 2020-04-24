@@ -3,7 +3,7 @@ package ro.sdi.lab24.client.view.commands.report;
 import picocli.CommandLine.Command;
 import ro.sdi.lab24.client.view.Console;
 import ro.sdi.lab24.core.controller.dto.ClientGenre;
-import ro.sdi.lab24.exception.ProgramException;
+import ro.sdi.lab24.core.exception.ProgramException;
 
 @Command(description = "Shows the most watched genre for each client", name = "clientgenres")
 public class ReportClientGenresCommand implements Runnable

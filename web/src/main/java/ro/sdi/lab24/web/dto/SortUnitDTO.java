@@ -1,4 +1,4 @@
-package ro.sdi.lab24.core.utils;
+package ro.sdi.lab24.web.dto;
 
 
 import lombok.*;
@@ -11,7 +11,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @ToString
 @Builder
-public class Pair<K, V> implements Serializable {
-    private K key;
-    private V value;
+public class SortUnitDTO implements Serializable {
+    String direction;
+    String field;
 }

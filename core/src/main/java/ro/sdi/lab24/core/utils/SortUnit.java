@@ -1,7 +1,7 @@
 package ro.sdi.lab24.core.utils;
 
-
 import lombok.*;
+import ro.sdi.lab24.core.sorting.Sort;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @ToString
 @Builder
-public class Pair<K, V> implements Serializable {
-    private K key;
-    private V value;
+public class SortUnit implements Serializable {
+    private Sort.Direction direction;
+    private String field;
 }

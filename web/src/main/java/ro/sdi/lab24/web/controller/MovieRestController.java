@@ -1,0 +1,99 @@
+package ro.sdi.lab24.web.controller;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ro.sdi.lab24.core.controller.MovieCoreController;
+import ro.sdi.lab24.core.exception.AlreadyExistingElementException;
+import ro.sdi.lab24.core.exception.ElementNotFoundException;
+import ro.sdi.lab24.core.model.Movie;
+import ro.sdi.lab24.web.converter.MovieConverter;
+import ro.sdi.lab24.web.converter.SortConverter;
+import ro.sdi.lab24.web.dto.MovieDTO;
+import ro.sdi.lab24.web.dto.MoviesDTO;
+import ro.sdi.lab24.web.dto.SortDTO;
+
+@RestController
+public class MovieRestController {
+    public static final Logger log = LoggerFactory.getLogger(MovieRestController.class);
+
+    @Autowired
+    private MovieCoreController movieCoreController;
+
+    @Autowired
+    private MovieConverter movieConverter;
+
+    @Autowired
+    private SortConverter sortConverter;
+
+    @RequestMapping(value = "/movies", method = RequestMethod.GET)
+    public MoviesDTO getMovies() {
+        Iterable<Movie> movies = movieCoreController.getMovies();
+        log.trace("fetched movies: {}", movies);
+        return new MoviesDTO(movieConverter.toDTOSet(movies));
+    }
+
+    @RequestMapping(value = "/movies", method = RequestMethod.POST)
+    public ResponseEntity<?> addMovie(@RequestBody MovieDTO dto) {
+        Movie movie = movieConverter.toModel(dto);
+        try {
+            movieCoreController.addMovie(
+                    movie.getId(),
+                    movie.getName(),
+                    movie.getGenre(),
+                    movie.getRating()
+            );
+        } catch (AlreadyExistingElementException e) {
+            log.trace("movie {} already exists", movie);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        log.trace("movie {} added", movie);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/movies/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateMovie(@PathVariable int id, @RequestBody MovieDTO dto) {
+        Movie movie = movieConverter.toModel(dto);
+        try {
+            movieCoreController.updateMovie(
+                    id,
+                    movie.getName(),
+                    movie.getGenre(),
+                    movie.getRating()
+            );
+        } catch (ElementNotFoundException e) {
+            log.trace("movie {} could not be updated", movie);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        log.trace("movie id = {} updated: {}", id, movie);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/movies/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteMovie(@PathVariable int id) {
+        try {
+            movieCoreController.deleteMovie(id);
+        } catch (ElementNotFoundException e) {
+            log.trace("movie id = {} could not be deleted", id);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        log.trace("movie id = {} deleted", id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/movies/filter/{genre}", method = RequestMethod.GET)
+    public MoviesDTO filterMoviesByGenre(@PathVariable String genre) {
+        log.trace("filtered movies by genre = {}", genre);
+        return new MoviesDTO(movieConverter.toDTOSet(movieCoreController.filterMoviesByGenre(genre)));
+    }
+
+    @RequestMapping(value = "/movies/sort", method = RequestMethod.POST)
+    public MoviesDTO sortMovies(@RequestBody SortDTO dto) {
+        log.trace("sorting movies by criteria = {}", dto);
+        return new MoviesDTO(movieConverter.toDTOSet(movieCoreController.sortMovies(sortConverter.toModel(dto))));
+    }
+}

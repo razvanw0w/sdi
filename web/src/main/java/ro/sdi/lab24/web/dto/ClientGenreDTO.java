@@ -1,0 +1,16 @@
+package ro.sdi.lab24.web.dto;
+
+import lombok.*;
+
+import java.io.Serializable;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@EqualsAndHashCode
+@ToString
+@Builder
+public class ClientGenreDTO implements Serializable {
+    private ClientDTO client;
+    private String genre;
+}

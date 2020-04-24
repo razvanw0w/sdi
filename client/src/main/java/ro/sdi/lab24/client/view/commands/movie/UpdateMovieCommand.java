@@ -2,7 +2,7 @@ package ro.sdi.lab24.client.view.commands.movie;
 
 import picocli.CommandLine.Command;
 import ro.sdi.lab24.client.view.Console;
-import ro.sdi.lab24.exception.ProgramException;
+import ro.sdi.lab24.core.exception.ProgramException;
 
 import static picocli.CommandLine.Option;
 import static picocli.CommandLine.Parameters;

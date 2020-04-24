@@ -1,8 +1,10 @@
-allprojects {
+subprojects {
     group 'ro.sdi.lab24'
     version '1.0'
 
     apply plugin: 'java'
+
+    sourceCompatibility = JavaVersion.VERSION_11
 
     ext {
         springVersion = '5.1.6.RELEASE'

@@ -3,10 +3,10 @@ package ro.sdi.lab24.client.view;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
-import ro.sdi.lab24.client.controller.ClientController;
-import ro.sdi.lab24.client.controller.Controller;
-import ro.sdi.lab24.client.controller.MovieController;
-import ro.sdi.lab24.client.controller.RentalController;
+import ro.sdi.lab24.client.controller.ClientRestTemplateController;
+import ro.sdi.lab24.client.controller.MovieRestTemplateController;
+import ro.sdi.lab24.client.controller.RentalRestTemplateController;
+import ro.sdi.lab24.client.controller.RestTemplateController;
 import ro.sdi.lab24.client.view.commands.MovieRentalCommand;
 import ro.sdi.lab24.core.exception.ProgramException;
 
@@ -20,26 +20,25 @@ import java.util.regex.Pattern;
 
 @Component
 public class Console {
+    public static RestTemplateController controller;
+    public static ClientRestTemplateController clientController;
+    public static MovieRestTemplateController movieController;
+    public static RentalRestTemplateController rentalController;
     @Autowired
-    private Controller autowiredController;
+    private RestTemplateController autowiredRestTemplateController;
     @Autowired
-    private ClientController autowiredClientController;
+    private ClientRestTemplateController autowiredClientRestTemplateController;
     @Autowired
-    private MovieController autowiredMovieController;
+    private MovieRestTemplateController autowiredMovieRestTemplateController;
     @Autowired
-    private RentalController autowiredRentalController;
-
-    public static Controller controller;
-    public static ClientController clientController;
-    public static MovieController movieController;
-    public static RentalController rentalController;
+    private RentalRestTemplateController autowiredRentalRestTemplateController;
 
     @PostConstruct
     private void initialize() {
-        Console.controller = autowiredController;
-        Console.clientController = autowiredClientController;
-        Console.movieController = autowiredMovieController;
-        Console.rentalController = autowiredRentalController;
+        Console.controller = autowiredRestTemplateController;
+        Console.clientController = autowiredClientRestTemplateController;
+        Console.movieController = autowiredMovieRestTemplateController;
+        Console.rentalController = autowiredRentalRestTemplateController;
     }
 
     public static void handleException(ProgramException e) {

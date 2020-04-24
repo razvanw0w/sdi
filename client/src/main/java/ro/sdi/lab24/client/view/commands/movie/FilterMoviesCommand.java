@@ -1,8 +1,8 @@
 package ro.sdi.lab24.client.view.commands.movie;
 
 import ro.sdi.lab24.client.view.Console;
-import ro.sdi.lab24.exception.ProgramException;
-import ro.sdi.lab24.model.Movie;
+import ro.sdi.lab24.core.exception.ProgramException;
+import ro.sdi.lab24.core.model.Movie;
 
 import static picocli.CommandLine.Command;
 import static picocli.CommandLine.Parameters;

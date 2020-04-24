@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class ClientController {
-    public static final Logger log = LoggerFactory.getLogger(ClientController.class);
+public class ClientCoreController {
+    public static final Logger log = LoggerFactory.getLogger(ClientCoreController.class);
 
     @Autowired
     Repository<Integer, Client> clientRepository;

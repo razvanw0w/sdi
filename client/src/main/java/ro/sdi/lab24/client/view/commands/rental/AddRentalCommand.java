@@ -3,7 +3,7 @@ package ro.sdi.lab24.client.view.commands.rental;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import ro.sdi.lab24.client.view.Console;
-import ro.sdi.lab24.exception.ProgramException;
+import ro.sdi.lab24.core.exception.ProgramException;
 
 @Command(description = "Add a rental", name = "add")
 public class AddRentalCommand implements Runnable

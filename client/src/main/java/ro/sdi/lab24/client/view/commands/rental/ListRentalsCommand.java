@@ -2,8 +2,8 @@ package ro.sdi.lab24.client.view.commands.rental;
 
 import picocli.CommandLine.Command;
 import ro.sdi.lab24.client.view.Console;
-import ro.sdi.lab24.exception.ProgramException;
-import ro.sdi.lab24.model.Rental;
+import ro.sdi.lab24.core.exception.ProgramException;
+import ro.sdi.lab24.core.model.Rental;
 
 @Command(description = "List rentals", name = "list")
 public class ListRentalsCommand implements Runnable

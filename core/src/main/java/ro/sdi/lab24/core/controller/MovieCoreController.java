@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class MovieController {
-    public static final Logger log = LoggerFactory.getLogger(MovieController.class);
+public class MovieCoreController {
+    public static final Logger log = LoggerFactory.getLogger(MovieCoreController.class);
 
     @Autowired
     Repository<Integer, Movie> movieRepository;

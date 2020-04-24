@@ -3,7 +3,7 @@ package ro.sdi.lab24.client.view.commands.rental;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import ro.sdi.lab24.client.view.Console;
-import ro.sdi.lab24.exception.ProgramException;
+import ro.sdi.lab24.core.exception.ProgramException;
 
 @Command(description = "Delete rental", name = "delete")
 public class DeleteRentalCommand implements Runnable

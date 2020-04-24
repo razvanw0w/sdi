@@ -1,7 +1,7 @@
 package ro.sdi.lab24.core.sorting;
 
 import ro.sdi.lab24.core.exception.SortingException;
-import ro.sdi.lab24.core.utils.Pair;
+import ro.sdi.lab24.core.utils.SortUnit;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
@@ -21,18 +21,17 @@ public class SortingUtils
         {
             return Collections.emptyList();
         }
-        List<Pair<Sort.Direction, String>> sortingFields = new LinkedList<>(sort.sortingFields);
+        List<SortUnit> sortingFields = new LinkedList<>(sort.sortingFields);
         Collections.reverse(sortingFields);
 
         sortingFields.forEach(
                 sortingField ->
                 {
-                    Sort.Direction direction = sortingField.getKey();
-                    String name = sortingField.getValue();
+                    Sort.Direction direction = sortingField.getDirection();
+                    String name = sortingField.getField();
 
                     Class<?> entityClass = entities.get(0).getClass();
-                    try
-                    {
+                    try {
                         Field field = getField(entityClass, name);
                         field.setAccessible(true);
                         entities.sort(

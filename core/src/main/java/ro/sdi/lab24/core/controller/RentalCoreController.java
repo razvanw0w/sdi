@@ -19,14 +19,14 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class RentalController {
-    public static final Logger log = LoggerFactory.getLogger(RentalController.class);
+public class RentalCoreController {
+    public static final Logger log = LoggerFactory.getLogger(RentalCoreController.class);
 
     @Autowired
-    ClientController clientController;
+    ClientCoreController clientCoreController;
 
     @Autowired
-    MovieController movieController;
+    MovieCoreController movieCoreController;
 
     @Autowired
     Repository<Rental.RentalID, Rental> rentalRepository;
@@ -38,14 +38,14 @@ public class RentalController {
 
     @PostConstruct
     private void setupCascadeDeletion() {
-        clientController.setEntityDeletedListener(
+        clientCoreController.setEntityDeletedListener(
                 client -> StreamSupport
                         .stream(rentalRepository.findAll().spliterator(), false)
                         .filter(rental -> rental.getId().getClientId() == client.getId())
                         .forEach(rental -> rentalRepository.delete(rental.getId()))
         );
 
-        movieController.setEntityDeletedListener(
+        movieCoreController.setEntityDeletedListener(
                 movie -> StreamSupport
                         .stream(rentalRepository.findAll().spliterator(), false)
                         .filter(rental -> rental.getId().getMovieId() == movie.getId())
@@ -85,12 +85,12 @@ public class RentalController {
     }
 
     private void checkRentalID(int movieId, int clientId) {
-        movieController.findOne(movieId)
+        movieCoreController.findOne(movieId)
                 .orElseThrow(() -> new ElementNotFoundException(String.format(
                         "Movie %d does not exist",
                         movieId
                 )));
-        clientController.findOne(clientId)
+        clientCoreController.findOne(clientId)
                 .orElseThrow(() -> new ElementNotFoundException(String.format(
                         "Client %d does not exist",
                         clientId
@@ -156,7 +156,7 @@ public class RentalController {
         String regex = ".*" + name + ".*";
         log.trace("Filtering rentals by the movie name {}", name);
         return StreamSupport.stream(rentalRepository.findAll().spliterator(), false)
-                .filter(rental -> movieController.findOne(rental.getId().getMovieId())
+                .filter(rental -> movieCoreController.findOne(rental.getId().getMovieId())
                         .filter(t -> t.getName()
                                 .matches(regex))
                         .isPresent())

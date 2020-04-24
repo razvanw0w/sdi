@@ -20,8 +20,8 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @Service
-public class Controller {
-    public static final Logger log = LoggerFactory.getLogger(Controller.class);
+public class CoreController {
+    public static final Logger log = LoggerFactory.getLogger(CoreController.class);
 
     @Autowired
     Repository<Integer, Client> clientRepository;
@@ -41,7 +41,7 @@ public class Controller {
     @Autowired
     Validator<Rental> rentalValidator;
 
-    public Controller(
+    public CoreController(
             Repository<Integer, Client> clientRepository,
             Repository<Integer, Movie> movieRepository,
             Repository<Rental.RentalID, Rental> rentalRepository,
