@@ -29,7 +29,7 @@ public class ClientRestController {
     public ClientsDTO getClients() {
         Iterable<Client> clients = clientCoreController.getClients();
         log.trace("fetch clients: {}", clients);
-        return new ClientsDTO(clientConverter.toDTOSet(clients));
+        return new ClientsDTO(clientConverter.toDTOList(clients));
     }
 
     @RequestMapping(value = "/clients", method = RequestMethod.POST)
@@ -74,7 +74,7 @@ public class ClientRestController {
     public ClientsDTO filterClientsByName(@PathVariable String name) {
         log.trace("filtered clients by name = {}", name);
         return new ClientsDTO(
-                clientConverter.toDTOSet(
+                clientConverter.toDTOList(
                         clientCoreController.filterClientsByName(name)
                 )
         );

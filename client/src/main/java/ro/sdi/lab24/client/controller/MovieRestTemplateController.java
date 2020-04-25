@@ -90,11 +90,10 @@ public class MovieRestTemplateController {
         SortDTO sort = sortConverter.toDTO(criteria);
         MoviesDTO dto = restTemplate.postForObject(url + "/sort", sort, MoviesDTO.class);
         assert dto != null;
-        System.out.println(dto);
-        List<Movie> movies = dto.getMovies()
+        Iterable<Movie> movies = dto.getMovies()
                 .stream()
                 .map(movieConverter::toModel)
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
         log.trace("sorted movies by criteria = {}: {}", criteria, movies);
         return movies;
     }

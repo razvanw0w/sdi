@@ -18,13 +18,12 @@ public class SortConverter implements Converter<Sort, SortDTO> {
 
     @Override
     public Sort toModel(SortDTO dto) {
-        Sort sort = dto.getUnits()
+        return dto.getUnits()
                 .stream()
                 .map(sortUnitConverter::toModel)
                 .map(unit -> new Sort(unit.getDirection(), unit.getField()))
                 .reduce(Sort::and)
                 .orElse(new Sort());
-        return sort;
     }
 
     @Override
@@ -33,7 +32,7 @@ public class SortConverter implements Converter<Sort, SortDTO> {
                 sort.getSortingFields()
                         .stream()
                         .map(sortUnitConverter::toDTO)
-                        .collect(Collectors.toSet())
+                        .collect(Collectors.toList())
         );
     }
 }

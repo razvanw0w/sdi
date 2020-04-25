@@ -32,7 +32,7 @@ public class RentalRestController {
     public RentalsDTO getRentals() {
         Iterable<Rental> rentals = rentalCoreController.getRentals();
         log.trace("fetch rentals: {}", rentals);
-        return new RentalsDTO(rentalConverter.toDTOSet(rentals));
+        return new RentalsDTO(rentalConverter.toDTOList(rentals));
     }
 
     @RequestMapping(value = "/rentals", method = RequestMethod.POST)
@@ -85,7 +85,7 @@ public class RentalRestController {
     public RentalsDTO filterRentalsByMovieName(@PathVariable String name) {
         log.trace("filtered rentals by movie name = {}", name);
         return new RentalsDTO(
-                rentalConverter.toDTOSet(
+                rentalConverter.toDTOList(
                         rentalCoreController.filterRentalsByMovieName(name)
                 )
         );

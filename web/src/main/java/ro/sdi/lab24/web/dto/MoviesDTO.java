@@ -3,7 +3,7 @@ package ro.sdi.lab24.web.dto;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,5 +11,5 @@ import java.util.Set;
 @EqualsAndHashCode
 @ToString
 public class MoviesDTO implements Serializable {
-    private Set<MovieDTO> movies;
+    private List<MovieDTO> movies;
 }

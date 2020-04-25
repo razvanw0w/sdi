@@ -28,7 +28,7 @@ public class RestController {
     public RentedMovieStatisticsDTO getTop10RentedMovies() {
         log.trace("fetched top 10 rented movies");
         return new RentedMovieStatisticsDTO(
-                rentedMovieStatisticConverter.toDTOSet(
+                rentedMovieStatisticConverter.toDTOList(
                         coreController.getTop10RentedMovies()
                 )
         );
@@ -38,7 +38,7 @@ public class RestController {
     public ClientGenresDTO getClientGenres() {
         log.trace("fetched favourite rented genre for each client");
         return new ClientGenresDTO(
-                clientGenreConverter.toDTOSet(
+                clientGenreConverter.toDTOList(
                         coreController.getClientGenres()
                 )
         );

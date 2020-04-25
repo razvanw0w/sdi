@@ -34,7 +34,7 @@ public class MovieRestController {
     public MoviesDTO getMovies() {
         Iterable<Movie> movies = movieCoreController.getMovies();
         log.trace("fetched movies: {}", movies);
-        return new MoviesDTO(movieConverter.toDTOSet(movies));
+        return new MoviesDTO(movieConverter.toDTOList(movies));
     }
 
     @RequestMapping(value = "/movies", method = RequestMethod.POST)
@@ -88,12 +88,13 @@ public class MovieRestController {
     @RequestMapping(value = "/movies/filter/{genre}", method = RequestMethod.GET)
     public MoviesDTO filterMoviesByGenre(@PathVariable String genre) {
         log.trace("filtered movies by genre = {}", genre);
-        return new MoviesDTO(movieConverter.toDTOSet(movieCoreController.filterMoviesByGenre(genre)));
+        return new MoviesDTO(movieConverter.toDTOList(movieCoreController.filterMoviesByGenre(genre)));
     }
 
     @RequestMapping(value = "/movies/sort", method = RequestMethod.POST)
     public MoviesDTO sortMovies(@RequestBody SortDTO dto) {
         log.trace("sorting movies by criteria = {}", dto);
-        return new MoviesDTO(movieConverter.toDTOSet(movieCoreController.sortMovies(sortConverter.toModel(dto))));
+        Iterable<Movie> movies = movieCoreController.sortMovies(sortConverter.toModel(dto));
+        return new MoviesDTO(movieConverter.toDTOList(movies));
     }
 }

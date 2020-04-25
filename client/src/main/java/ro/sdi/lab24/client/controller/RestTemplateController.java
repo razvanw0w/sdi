@@ -12,7 +12,6 @@ import ro.sdi.lab24.web.converter.RentedMovieStatisticConverter;
 import ro.sdi.lab24.web.dto.ClientGenresDTO;
 import ro.sdi.lab24.web.dto.RentedMovieStatisticsDTO;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,10 +31,10 @@ public class RestTemplateController {
                 RentedMovieStatisticsDTO.class
         );
         assert dto != null;
-        List<RentedMovieStatistic> rentedMovieStatistics = dto.getRentedMovieStatistics()
+        Iterable<RentedMovieStatistic> rentedMovieStatistics = dto.getRentedMovieStatistics()
                 .stream()
                 .map(rentedMovieStatisticConverter::toModel)
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
         log.trace("rented movie statistic: {}", rentedMovieStatistics);
         return rentedMovieStatistics;
     }
@@ -49,10 +48,10 @@ public class RestTemplateController {
                 ClientGenresDTO.class
         );
         assert dto != null;
-        List<ClientGenre> clientGenres = dto.getClientGenres()
+        Iterable<ClientGenre> clientGenres = dto.getClientGenres()
                 .stream()
                 .map(clientGenreConverter::toModel)
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
         log.trace("client genres: {}", clientGenres);
         return clientGenres;
     }
