@@ -1,4 +1,4 @@
-package ro.sdi.lab24.core.controller.dto;
+package ro.sdi.lab24.core.service.dto;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package ro.sdi.lab24.core.controller;
+package ro.sdi.lab24.core.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class MovieCoreController {
-    public static final Logger log = LoggerFactory.getLogger(MovieCoreController.class);
+public class MovieService {
+    private static final Logger log = LoggerFactory.getLogger(MovieService.class);
 
     @Autowired
     Repository<Integer, Movie> movieRepository;

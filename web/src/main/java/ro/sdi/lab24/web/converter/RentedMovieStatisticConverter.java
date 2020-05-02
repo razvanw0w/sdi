@@ -1,7 +1,7 @@
 package ro.sdi.lab24.web.converter;
 
 import org.springframework.stereotype.Component;
-import ro.sdi.lab24.core.controller.dto.RentedMovieStatistic;
+import ro.sdi.lab24.core.service.dto.RentedMovieStatistic;
 import ro.sdi.lab24.web.dto.RentedMovieStatisticDTO;
 
 @Component

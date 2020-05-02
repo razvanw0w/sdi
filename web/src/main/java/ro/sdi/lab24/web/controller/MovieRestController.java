@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
-import ro.sdi.lab24.core.controller.MovieCoreController;
 import ro.sdi.lab24.core.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.core.exception.ElementNotFoundException;
 import ro.sdi.lab24.core.model.Movie;
+import ro.sdi.lab24.core.service.MovieService;
 import ro.sdi.lab24.web.converter.MovieConverter;
 import ro.sdi.lab24.web.converter.SortConverter;
 import ro.sdi.lab24.web.dto.MovieDTO;
@@ -19,10 +19,10 @@ import ro.sdi.lab24.web.dto.SortDTO;
 
 @RestController
 public class MovieRestController {
-    public static final Logger log = LoggerFactory.getLogger(MovieRestController.class);
+    private static final Logger log = LoggerFactory.getLogger(MovieRestController.class);
 
     @Autowired
-    private MovieCoreController movieCoreController;
+    private MovieService movieService;
 
     @Autowired
     private MovieConverter movieConverter;
@@ -32,7 +32,7 @@ public class MovieRestController {
 
     @RequestMapping(value = "/movies", method = RequestMethod.GET)
     public MoviesDTO getMovies() {
-        Iterable<Movie> movies = movieCoreController.getMovies();
+        Iterable<Movie> movies = movieService.getMovies();
         log.trace("fetched movies: {}", movies);
         return new MoviesDTO(movieConverter.toDTOList(movies));
     }
@@ -41,7 +41,7 @@ public class MovieRestController {
     public ResponseEntity<?> addMovie(@RequestBody MovieDTO dto) {
         Movie movie = movieConverter.toModel(dto);
         try {
-            movieCoreController.addMovie(
+            movieService.addMovie(
                     movie.getId(),
                     movie.getName(),
                     movie.getGenre(),
@@ -59,7 +59,7 @@ public class MovieRestController {
     public ResponseEntity<?> updateMovie(@PathVariable int id, @RequestBody MovieDTO dto) {
         Movie movie = movieConverter.toModel(dto);
         try {
-            movieCoreController.updateMovie(
+            movieService.updateMovie(
                     id,
                     movie.getName(),
                     movie.getGenre(),
@@ -76,7 +76,7 @@ public class MovieRestController {
     @RequestMapping(value = "/movies/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteMovie(@PathVariable int id) {
         try {
-            movieCoreController.deleteMovie(id);
+            movieService.deleteMovie(id);
         } catch (ElementNotFoundException e) {
             log.trace("movie id = {} could not be deleted", id);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -88,13 +88,13 @@ public class MovieRestController {
     @RequestMapping(value = "/movies/filter/{genre}", method = RequestMethod.GET)
     public MoviesDTO filterMoviesByGenre(@PathVariable String genre) {
         log.trace("filtered movies by genre = {}", genre);
-        return new MoviesDTO(movieConverter.toDTOList(movieCoreController.filterMoviesByGenre(genre)));
+        return new MoviesDTO(movieConverter.toDTOList(movieService.filterMoviesByGenre(genre)));
     }
 
     @RequestMapping(value = "/movies/sort", method = RequestMethod.POST)
     public MoviesDTO sortMovies(@RequestBody SortDTO dto) {
         log.trace("sorting movies by criteria = {}", dto);
-        Iterable<Movie> movies = movieCoreController.sortMovies(sortConverter.toModel(dto));
+        Iterable<Movie> movies = movieService.sortMovies(sortConverter.toModel(dto));
         return new MoviesDTO(movieConverter.toDTOList(movies));
     }
 }

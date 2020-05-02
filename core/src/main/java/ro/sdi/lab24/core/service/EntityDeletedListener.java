@@ -1,4 +1,4 @@
-package ro.sdi.lab24.core.controller;
+package ro.sdi.lab24.core.service;
 
 @FunctionalInterface
 public interface EntityDeletedListener<T>

@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 public class RentalRestTemplateController {
     public static final String url = "http://localhost:8080/api/rentals";
-    public static final Logger log = LoggerFactory.getLogger(RentalRestTemplateController.class);
+    private static final Logger log = LoggerFactory.getLogger(RentalRestTemplateController.class);
     public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     @Autowired
     private RestTemplate restTemplate;

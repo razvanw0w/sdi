@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 public class MovieRestTemplateController {
     public static final String url = "http://localhost:8080/api/movies";
-    public static final Logger log = LoggerFactory.getLogger(MovieRestTemplateController.class);
+    private static final Logger log = LoggerFactory.getLogger(MovieRestTemplateController.class);
 
     @Autowired
     private RestTemplate restTemplate;

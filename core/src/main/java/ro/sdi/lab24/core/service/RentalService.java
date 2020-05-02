@@ -1,4 +1,4 @@
-package ro.sdi.lab24.core.controller;
+package ro.sdi.lab24.core.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,14 +19,14 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class RentalCoreController {
-    public static final Logger log = LoggerFactory.getLogger(RentalCoreController.class);
+public class RentalService {
+    private static final Logger log = LoggerFactory.getLogger(RentalService.class);
 
     @Autowired
-    ClientCoreController clientCoreController;
+    ClientService clientService;
 
     @Autowired
-    MovieCoreController movieCoreController;
+    MovieService movieService;
 
     @Autowired
     Repository<Rental.RentalID, Rental> rentalRepository;
@@ -38,14 +38,14 @@ public class RentalCoreController {
 
     @PostConstruct
     private void setupCascadeDeletion() {
-        clientCoreController.setEntityDeletedListener(
+        clientService.setEntityDeletedListener(
                 client -> StreamSupport
                         .stream(rentalRepository.findAll().spliterator(), false)
                         .filter(rental -> rental.getId().getClientId() == client.getId())
                         .forEach(rental -> rentalRepository.delete(rental.getId()))
         );
 
-        movieCoreController.setEntityDeletedListener(
+        movieService.setEntityDeletedListener(
                 movie -> StreamSupport
                         .stream(rentalRepository.findAll().spliterator(), false)
                         .filter(rental -> rental.getId().getMovieId() == movie.getId())
@@ -85,12 +85,12 @@ public class RentalCoreController {
     }
 
     private void checkRentalID(int movieId, int clientId) {
-        movieCoreController.findOne(movieId)
+        movieService.findOne(movieId)
                 .orElseThrow(() -> new ElementNotFoundException(String.format(
                         "Movie %d does not exist",
                         movieId
                 )));
-        clientCoreController.findOne(clientId)
+        clientService.findOne(clientId)
                 .orElseThrow(() -> new ElementNotFoundException(String.format(
                         "Client %d does not exist",
                         clientId
@@ -156,7 +156,7 @@ public class RentalCoreController {
         String regex = ".*" + name + ".*";
         log.trace("Filtering rentals by the movie name {}", name);
         return StreamSupport.stream(rentalRepository.findAll().spliterator(), false)
-                .filter(rental -> movieCoreController.findOne(rental.getId().getMovieId())
+                .filter(rental -> movieService.findOne(rental.getId().getMovieId())
                         .filter(t -> t.getName()
                                 .matches(regex))
                         .isPresent())

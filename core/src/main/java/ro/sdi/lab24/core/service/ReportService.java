@@ -1,15 +1,14 @@
-package ro.sdi.lab24.core.controller;
+package ro.sdi.lab24.core.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import ro.sdi.lab24.core.controller.dto.ClientGenre;
-import ro.sdi.lab24.core.controller.dto.RentedMovieStatistic;
 import ro.sdi.lab24.core.model.Client;
 import ro.sdi.lab24.core.model.Movie;
 import ro.sdi.lab24.core.model.Rental;
 import ro.sdi.lab24.core.repository.Repository;
+import ro.sdi.lab24.core.service.dto.ClientGenre;
+import ro.sdi.lab24.core.service.dto.RentedMovieStatistic;
 import ro.sdi.lab24.core.validation.Validator;
 
 import java.util.Comparator;
@@ -19,9 +18,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-@Service
-public class CoreController {
-    public static final Logger log = LoggerFactory.getLogger(CoreController.class);
+@org.springframework.stereotype.Service
+public class ReportService {
+    private static final Logger log = LoggerFactory.getLogger(ReportService.class);
 
     @Autowired
     Repository<Integer, Client> clientRepository;
@@ -41,7 +40,7 @@ public class CoreController {
     @Autowired
     Validator<Rental> rentalValidator;
 
-    public CoreController(
+    public ReportService(
             Repository<Integer, Client> clientRepository,
             Repository<Integer, Movie> movieRepository,
             Repository<Rental.RentalID, Rental> rentalRepository,

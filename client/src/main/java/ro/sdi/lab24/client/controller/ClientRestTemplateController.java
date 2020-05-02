@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class ClientRestTemplateController {
     public static final String url = "http://localhost:8080/api/clients";
-    public static final Logger log = LoggerFactory.getLogger(ClientRestTemplateController.class);
+    private static final Logger log = LoggerFactory.getLogger(ClientRestTemplateController.class);
     @Autowired
     private RestTemplate restTemplate;
     @Autowired

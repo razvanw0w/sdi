@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
-import ro.sdi.lab24.core.controller.RentalCoreController;
 import ro.sdi.lab24.core.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.core.exception.ElementNotFoundException;
 import ro.sdi.lab24.core.model.Rental;
+import ro.sdi.lab24.core.service.RentalService;
 import ro.sdi.lab24.web.converter.RentalConverter;
 import ro.sdi.lab24.web.dto.RentalDTO;
 import ro.sdi.lab24.web.dto.RentalsDTO;
@@ -19,11 +19,11 @@ import java.time.format.DateTimeFormatter;
 
 @RestController
 public class RentalRestController {
-    public static final Logger log = LoggerFactory.getLogger(RentalRestController.class);
+    private static final Logger log = LoggerFactory.getLogger(RentalRestController.class);
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     @Autowired
-    private RentalCoreController rentalCoreController;
+    private RentalService rentalCoreController;
 
     @Autowired
     private RentalConverter rentalConverter;
