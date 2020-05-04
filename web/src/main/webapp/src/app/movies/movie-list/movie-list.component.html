@@ -1,0 +1,16 @@
+<!--<p>movie-list works!</p>-->
+<h2>List of movies</h2>
+<table>
+  <tr>
+    <th>Movie ID</th>
+    <th>Movie name</th>
+    <th>Movie genre</th>
+    <th>Movie rating</th>
+  </tr>
+  <tr *ngFor="let movie of movies">
+    <td>{{movie.id}}</td>
+    <td>{{movie.name}}</td>
+    <td>{{movie.genre}}</td>
+    <td>{{movie.rating}}</td>
+  </tr>
+</table>
