@@ -9,6 +9,7 @@ import {RentalService} from "../shared/rental.service";
 })
 export class RentalListComponent implements OnInit {
   rentals: Rental[];
+  selectedRental: Rental;
 
   constructor(private rentalService: RentalService) {
   }
@@ -17,4 +18,7 @@ export class RentalListComponent implements OnInit {
     this.rentalService.getRentals().subscribe(dto => this.rentals = dto.rentals);
   }
 
+  onSelect(rental: Rental): void {
+    this.selectedRental = rental;
+  }
 }

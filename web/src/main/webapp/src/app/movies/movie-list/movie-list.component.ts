@@ -9,11 +9,16 @@ import {MovieService} from "../shared/movie.service";
 })
 export class MovieListComponent implements OnInit {
   movies: Movie[];
+  selectedMovie: Movie;
 
   constructor(private movieService: MovieService) {
   }
 
   ngOnInit(): void {
     this.movieService.getMovies().subscribe(dto => this.movies = dto.movies);
+  }
+
+  onSelect(movie: Movie): void {
+    this.selectedMovie = movie;
   }
 }

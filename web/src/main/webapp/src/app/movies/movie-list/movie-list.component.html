@@ -1,16 +1,32 @@
-<!--<p>movie-list works!</p>-->
 <h2>List of movies</h2>
-<table>
-  <tr>
-    <th>Movie ID</th>
-    <th>Movie name</th>
-    <th>Movie genre</th>
-    <th>Movie rating</th>
-  </tr>
-  <tr *ngFor="let movie of movies">
-    <td>{{movie.id}}</td>
-    <td>{{movie.name}}</td>
-    <td>{{movie.genre}}</td>
-    <td>{{movie.rating}}</td>
-  </tr>
-</table>
+<ul class="movies">
+  <li (click)="onSelect(movie)" *ngFor="let movie of movies" [class.selected]="movie === selectedMovie">
+    <span class="badge">{{movie.id}}</span> {{movie.name}}
+  </li>
+</ul>
+
+<div *ngIf="selectedMovie" class=details>
+  <h3>
+    Details for movie {{selectedMovie.name}}
+  </h3>
+  <div>
+    <span>Movie ID: </span>{{selectedMovie.id}}
+  </div>
+  <label>
+    Movie name: <input [(ngModel)]="selectedMovie.name" placeholder="movie name"/>
+  </label>
+  <br>
+  <label>
+    Movie genre: <input [(ngModel)]="selectedMovie.genre" placeholder="movie genre"/>
+  </label>
+  <br>
+  <label>
+    Movie rating: <input [(ngModel)]="selectedMovie.rating" placeholder="movie rating (0-100)"/>
+  </label>
+  <br>
+</div>
+
+
+<nav>
+  <div class="panels" routerLink="/movies" routerLinkActive="active">< Back</div>
+</nav>

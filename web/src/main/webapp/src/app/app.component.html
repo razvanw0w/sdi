@@ -16,9 +16,12 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
 <nav>
-  <a routerLink="/clients" routerLinkActive="active">Clients</a> &nbsp;
-  <a routerLink="/movies" routerLinkActive="active">Movies</a> &nbsp;
-  <a routerLink="/rentals" routerLinkActive="active">Rentals</a> &nbsp;
+  <h1>{{title}}</h1>
+  <div style="display: flex; flex-direction: row">
+    <div class="panels" routerLink="/clients" routerLinkActive="active">Clients</div>
+    <div class="panels" routerLink="/movies" routerLinkActive="active">Movies</div>
+    <div class="panels" routerLink="/rentals" routerLinkActive="active">Rentals</div>
+  </div>
 </nav>
 
 <router-outlet></router-outlet>
