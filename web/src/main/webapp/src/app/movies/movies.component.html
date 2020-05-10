@@ -3,5 +3,10 @@
   Movies control panel
 </h2>
 <nav>
-  <div class="panels" routerLink="/movies/list" routerLinkActive="active">List</div>
+  <div style="display: flex; flex-direction: row;">
+    <div class="panels" routerLink="/movies/list" routerLinkActive="active">List</div>
+    <div class="panels" routerLink="/movies/add" routerLinkActive="active">Add</div>
+    <div class="panels" routerLink="/movies/update" routerLinkActive="active">Update</div>
+    <div class="panels" routerLink="/movies/delete" routerLinkActive="active">Delete</div>
+  </div>
 </nav>

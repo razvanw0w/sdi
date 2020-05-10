@@ -17,6 +17,9 @@ import {RentalService} from "./rentals/shared/rental.service";
 import {ClientAddComponent} from './clients/client-add/client-add.component';
 import {ClientUpdateComponent} from './clients/client-update/client-update.component';
 import {ClientDeleteComponent} from './clients/client-delete/client-delete.component';
+import {MovieAddComponent} from './movies/movie-add/movie-add.component';
+import {MovieDeleteComponent} from './movies/movie-delete/movie-delete.component';
+import {MovieUpdateComponent} from './movies/movie-update/movie-update.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +32,10 @@ import {ClientDeleteComponent} from './clients/client-delete/client-delete.compo
     RentalListComponent,
     ClientAddComponent,
     ClientUpdateComponent,
-    ClientDeleteComponent
+    ClientDeleteComponent,
+    MovieAddComponent,
+    MovieDeleteComponent,
+    MovieUpdateComponent
   ],
   imports: [
     BrowserModule,

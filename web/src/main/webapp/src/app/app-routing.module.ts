@@ -9,6 +9,9 @@ import {RentalListComponent} from "./rentals/rental-list/rental-list.component";
 import {ClientAddComponent} from "./clients/client-add/client-add.component";
 import {ClientUpdateComponent} from "./clients/client-update/client-update.component";
 import {ClientDeleteComponent} from "./clients/client-delete/client-delete.component";
+import {MovieAddComponent} from "./movies/movie-add/movie-add.component";
+import {MovieDeleteComponent} from "./movies/movie-delete/movie-delete.component";
+import {MovieUpdateComponent} from "./movies/movie-update/movie-update.component";
 
 
 const routes: Routes = [
@@ -19,6 +22,9 @@ const routes: Routes = [
   {path: 'clients/delete', component: ClientDeleteComponent},
   {path: 'movies', component: MoviesComponent},
   {path: 'movies/list', component: MovieListComponent},
+  {path: 'movies/add', component: MovieAddComponent},
+  {path: 'movies/delete', component: MovieDeleteComponent},
+  {path: 'movies/update', component: MovieUpdateComponent},
   {path: 'rentals', component: RentalsComponent},
   {path: 'rentals/list', component: RentalListComponent}
 ];

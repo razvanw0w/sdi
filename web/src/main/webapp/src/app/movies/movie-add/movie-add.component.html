@@ -1,0 +1,76 @@
+<h2>Add movie</h2>
+<form #formDir="ngForm" [formGroup]="movieForm">
+  <div [hidden]="formDir.submitted">
+    <div class="form-group">
+      <label for="id">ID</label>
+      <input class="form-control" formControlName="id" id="id" required>
+      <div *ngIf="id.invalid && (id.dirty || id.touched)" class="alert alert-danger">
+        <div *ngIf="id.errors.required">
+          ID is required.
+        </div>
+        <div *ngIf="id.errors.min">
+          ID must be greater or equal than 0.
+        </div>
+        <div *ngIf="id.errors.pattern">
+          ID must consist only of digits.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input class="form-control" formControlName="name" id="name" required>
+      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert">
+        <div *ngIf="name.errors.required">
+          Name is required.
+        </div>
+        <div *ngIf="name.errors.pattern">
+          Name must consist only of upper/lower-case letters.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="genre">Genre</label>
+      <input class="form-control" formControlName="genre" id="genre" required>
+      <div *ngIf="genre.invalid && (genre.dirty || genre.touched)" class="alert">
+        <div *ngIf="genre.errors.required">
+          Genre is required.
+        </div>
+        <div *ngIf="genre.errors.pattern">
+          Genre must consist only of upper/lower-case letters.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="rating">Rating</label>
+      <input class="form-control" formControlName="rating" id="rating" required>
+      <div *ngIf="rating.invalid && (rating.dirty || rating.touched)" class="alert alert-danger">
+        <div *ngIf="rating.errors.required">
+          Rating is required.
+        </div>
+        <div *ngIf="rating.errors.min">
+          Rating must be greater or equal than 0.
+        </div>
+        <div *ngIf="rating.errors.max">
+          Rating must be less or equal than 100.
+        </div>
+        <div *ngIf="rating.errors.pattern">
+          Rating must consist only of digits.
+        </div>
+      </div>
+    </div>
+    <button (click)="add(id.value, name.value, genre.value, rating.value)" [disabled]="movieForm.invalid" type="submit">
+      Submit
+    </button>
+  </div>
+  <div *ngIf="formDir.submitted" class="submitted-message">
+    <p *ngIf="successfulAdd">New movie: {{movieForm.value.name}}!</p>
+    <p *ngIf="!successfulAdd">Movie add failed: movie already exists</p>
+  </div>
+</form>
+
+<nav>
+  <div class="panels" routerLink="/movies" routerLinkActive="active">< Back</div>
+</nav>
