@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Clients} from "./client.model";
+import {Client, Clients} from "./client.model";
 
 @Injectable()
 export class ClientService {
@@ -12,5 +12,17 @@ export class ClientService {
 
   getClients(): Observable<Clients> {
     return this.httpClient.get<Clients>(this.clientsURL);
+  }
+
+  addClient(client: Client): Observable<HttpResponse<any>> {
+    return this.httpClient.post<HttpResponse<any>>(this.clientsURL, client, {observe: "response"});
+  }
+
+  updateClient(client: Client): Observable<HttpResponse<any>> {
+    return this.httpClient.put<HttpResponse<any>>(`${this.clientsURL}/${client.id}`, client, {observe: "response"});
+  }
+
+  deleteClient(id: number): Observable<HttpResponse<any>> {
+    return this.httpClient.delete(`${this.clientsURL}/${id}`, {observe: "response"});
   }
 }
