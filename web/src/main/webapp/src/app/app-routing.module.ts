@@ -12,6 +12,9 @@ import {ClientDeleteComponent} from "./clients/client-delete/client-delete.compo
 import {MovieAddComponent} from "./movies/movie-add/movie-add.component";
 import {MovieDeleteComponent} from "./movies/movie-delete/movie-delete.component";
 import {MovieUpdateComponent} from "./movies/movie-update/movie-update.component";
+import {RentalAddComponent} from "./rentals/rental-add/rental-add.component";
+import {RentalUpdateComponent} from "./rentals/rental-update/rental-update.component";
+import {RentalDeleteComponent} from "./rentals/rental-delete/rental-delete.component";
 
 
 const routes: Routes = [
@@ -26,7 +29,10 @@ const routes: Routes = [
   {path: 'movies/delete', component: MovieDeleteComponent},
   {path: 'movies/update', component: MovieUpdateComponent},
   {path: 'rentals', component: RentalsComponent},
-  {path: 'rentals/list', component: RentalListComponent}
+  {path: 'rentals/list', component: RentalListComponent},
+  {path: 'rentals/add', component: RentalAddComponent},
+  {path: 'rentals/update', component: RentalUpdateComponent},
+  {path: 'rentals/delete', component: RentalDeleteComponent}
 ];
 
 @NgModule({

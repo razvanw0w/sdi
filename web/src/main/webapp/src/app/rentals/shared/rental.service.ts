@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Rentals} from "./rental.model";
+import {Rental, Rentals} from "./rental.model";
 
 @Injectable()
 export class RentalService {
@@ -12,5 +12,17 @@ export class RentalService {
 
   getRentals(): Observable<Rentals> {
     return this.httpClient.get<Rentals>(this.rentalsURL);
+  }
+
+  addRental(rental: Rental): Observable<HttpResponse<any>> {
+    return this.httpClient.post<HttpResponse<any>>(this.rentalsURL, rental, {observe: "response"});
+  }
+
+  updateRental(rental: Rental): Observable<HttpResponse<any>> {
+    return this.httpClient.put<HttpResponse<any>>(`${this.rentalsURL}/${rental.movieId}&${rental.clientId}`, rental, {observe: "response"});
+  }
+
+  deleteRental(movieId: number, clientId: number): Observable<HttpResponse<any>> {
+    return this.httpClient.delete<HttpResponse<any>>(`${this.rentalsURL}/${movieId}&${clientId}`, {observe: "response"});
   }
 }

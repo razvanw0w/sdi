@@ -20,6 +20,9 @@ import {ClientDeleteComponent} from './clients/client-delete/client-delete.compo
 import {MovieAddComponent} from './movies/movie-add/movie-add.component';
 import {MovieDeleteComponent} from './movies/movie-delete/movie-delete.component';
 import {MovieUpdateComponent} from './movies/movie-update/movie-update.component';
+import {RentalAddComponent} from './rentals/rental-add/rental-add.component';
+import {RentalDeleteComponent} from './rentals/rental-delete/rental-delete.component';
+import {RentalUpdateComponent} from './rentals/rental-update/rental-update.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,10 @@ import {MovieUpdateComponent} from './movies/movie-update/movie-update.component
     ClientDeleteComponent,
     MovieAddComponent,
     MovieDeleteComponent,
-    MovieUpdateComponent
+    MovieUpdateComponent,
+    RentalAddComponent,
+    RentalDeleteComponent,
+    RentalUpdateComponent
   ],
   imports: [
     BrowserModule,
