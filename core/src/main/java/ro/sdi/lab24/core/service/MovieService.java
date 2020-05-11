@@ -3,6 +3,7 @@ package ro.sdi.lab24.core.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ro.sdi.lab24.core.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.core.exception.ElementNotFoundException;
@@ -10,7 +11,6 @@ import ro.sdi.lab24.core.exception.SortingException;
 import ro.sdi.lab24.core.model.Movie;
 import ro.sdi.lab24.core.repository.Repository;
 import ro.sdi.lab24.core.repository.SortingRepository;
-import ro.sdi.lab24.core.sorting.Sort;
 import ro.sdi.lab24.core.validation.Validator;
 
 import java.util.Optional;

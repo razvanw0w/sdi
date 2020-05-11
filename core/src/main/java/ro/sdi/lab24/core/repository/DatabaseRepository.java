@@ -1,12 +1,11 @@
 package ro.sdi.lab24.core.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import ro.sdi.lab24.core.exception.ValidatorException;
 import ro.sdi.lab24.core.model.Entity;
 import ro.sdi.lab24.core.model.copyadapters.CopyAdapter;
 import ro.sdi.lab24.core.model.serialization.database.TableAdapter;
-import ro.sdi.lab24.core.sorting.Sort;
-import ro.sdi.lab24.core.sorting.SortingUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -85,6 +84,6 @@ public class DatabaseRepository<ID extends Serializable, T extends Entity<ID>>
     @Override
     public Iterable<T> findAll(Sort sort)
     {
-        return SortingUtils.sort(getAll(), sort);
+        return tableAdapter.findAll(sort);
     }
 }

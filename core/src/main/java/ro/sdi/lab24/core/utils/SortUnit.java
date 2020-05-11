@@ -1,7 +1,7 @@
 package ro.sdi.lab24.core.utils;
 
 import lombok.*;
-import ro.sdi.lab24.core.sorting.Sort;
+import org.springframework.data.domain.Sort;
 
 import java.io.Serializable;
 

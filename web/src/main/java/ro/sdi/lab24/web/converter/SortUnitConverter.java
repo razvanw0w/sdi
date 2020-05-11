@@ -1,7 +1,7 @@
 package ro.sdi.lab24.web.converter;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import ro.sdi.lab24.core.sorting.Sort;
 import ro.sdi.lab24.core.utils.SortUnit;
 import ro.sdi.lab24.web.dto.SortUnitDTO;
 
