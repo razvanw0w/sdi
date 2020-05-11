@@ -1,0 +1,47 @@
+<h2>Filter movies by genre</h2>
+<form #formDir="ngForm" [formGroup]="movieForm">
+  <div class="form-group">
+    <label for="genre">Genre</label>
+    <input class="form-control" formControlName="genre" id="genre" required>
+    <div *ngIf="genre.invalid && (genre.dirty || genre.touched)" class="alert">
+      <div *ngIf="genre.errors.required">
+        Genre is required.
+      </div>
+      <div *ngIf="genre.errors.pattern">
+        Genre must consist only of upper/lower-case letters.
+      </div>
+    </div>
+  </div>
+  <button (click)="filterByGenre(genre.value)" [disabled]="movieForm.invalid" type="submit">Filter</button>
+</form>
+
+<ul class="movies">
+  <li (click)="onSelect(movie)" *ngFor="let movie of movies" [class.selected]="movie === selectedMovie">
+    <span class="badge">{{movie.id}}</span> {{movie.name}}
+  </li>
+</ul>
+
+<div *ngIf="selectedMovie" class=details>
+  <h3>
+    Details for movie {{selectedMovie.name}}
+  </h3>
+  <div>
+    <span>Movie ID: </span>{{selectedMovie.id}}
+  </div>
+  <label>
+    Movie name: <input [(ngModel)]="selectedMovie.name" placeholder="movie name"/>
+  </label>
+  <br>
+  <label>
+    Movie genre: <input [(ngModel)]="selectedMovie.genre" placeholder="movie genre"/>
+  </label>
+  <br>
+  <label>
+    Movie rating: <input [(ngModel)]="selectedMovie.rating" placeholder="movie rating (0-100)"/>
+  </label>
+  <br>
+</div>
+
+<nav>
+  <div class="panels" routerLink="/movies" routerLinkActive="active">< Back</div>
+</nav>

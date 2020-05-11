@@ -25,4 +25,8 @@ export class RentalService {
   deleteRental(movieId: number, clientId: number): Observable<HttpResponse<any>> {
     return this.httpClient.delete<HttpResponse<any>>(`${this.rentalsURL}/${movieId}&${clientId}`, {observe: "response"});
   }
+
+  filterRentalsByMovieName(movieName: string): Observable<Rentals> {
+    return this.httpClient.get<Rentals>(`${this.rentalsURL}/filter/${movieName}`);
+  }
 }

@@ -1,0 +1,53 @@
+<h2>Filter movies by rating (greater or equal than specified)</h2>
+<form #formDir="ngForm" [formGroup]="movieForm">
+  <div class="form-group">
+    <label for="rating">Rating</label>
+    <input class="form-control" formControlName="rating" id="rating" required>
+    <div *ngIf="rating.invalid && (rating.dirty || rating.touched)" class="alert alert-danger">
+      <div *ngIf="rating.errors.required">
+        Rating is required.
+      </div>
+      <div *ngIf="rating.errors.min">
+        Rating must be greater or equal than 0.
+      </div>
+      <div *ngIf="rating.errors.max">
+        Rating must be less or equal than 100.
+      </div>
+      <div *ngIf="rating.errors.pattern">
+        Rating must consist only of digits.
+      </div>
+    </div>
+  </div>
+  <button (click)="filterByRating(rating.value)" [disabled]="movieForm.invalid" type="submit">Filter</button>
+</form>
+
+<ul class="movies">
+  <li (click)="onSelect(movie)" *ngFor="let movie of movies" [class.selected]="movie === selectedMovie">
+    <span class="badge">{{movie.id}}</span> {{movie.name}}
+  </li>
+</ul>
+
+<div *ngIf="selectedMovie" class=details>
+  <h3>
+    Details for movie {{selectedMovie.name}}
+  </h3>
+  <div>
+    <span>Movie ID: </span>{{selectedMovie.id}}
+  </div>
+  <label>
+    Movie name: <input [(ngModel)]="selectedMovie.name" placeholder="movie name"/>
+  </label>
+  <br>
+  <label>
+    Movie genre: <input [(ngModel)]="selectedMovie.genre" placeholder="movie genre"/>
+  </label>
+  <br>
+  <label>
+    Movie rating: <input [(ngModel)]="selectedMovie.rating" placeholder="movie rating (0-100)"/>
+  </label>
+  <br>
+</div>
+
+<nav>
+  <div class="panels" routerLink="/movies" routerLinkActive="active">< Back</div>
+</nav>

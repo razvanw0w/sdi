@@ -1,0 +1,44 @@
+<h2>Filter rentals by movie name</h2>
+<form #formDir="ngForm" [formGroup]="rentalForm">
+  <div class="form-group">
+    <label for="movieName">MovieName</label>
+    <input class="form-control" formControlName="movieName" id="movieName" required>
+    <div *ngIf="movieName.invalid && (movieName.dirty || movieName.touched)" class="alert">
+      <div *ngIf="movieName.errors.required">
+        MovieName is required.
+      </div>
+      <div *ngIf="movieName.errors.pattern">
+        MovieName must consist only of upper/lower-case letters.
+      </div>
+    </div>
+  </div>
+  <button (click)="filterByMovieName(movieName.value)" [disabled]="rentalForm.invalid" type="submit">Filter</button>
+</form>
+
+<ul class="rentals">
+  <li (click)="onSelect(rental)" *ngFor="let rental of rentals" [class.selected]="rental === selectedRental">
+    <span class="badge">Movie: {{rental.movieId}}</span> Client: {{rental.clientId}}
+  </li>
+</ul>
+
+<div *ngIf="selectedRental" class=details>
+  <h3>
+    Details for rental for movie {{selectedRental.movieId}} and client {{selectedRental.clientId}}
+  </h3>
+  <div>
+    <span>Rental Movie ID: </span>{{selectedRental.movieId}}
+  </div>
+  <div>
+    <span>Rental Client ID: </span>{{selectedRental.clientId}}
+  </div>
+  <label>
+    Rental time: <input [(ngModel)]="selectedRental.time" placeholder="rental date"/>
+  </label>
+  <br>
+  <br>
+</div>
+
+
+<nav>
+  <div class="panels" routerLink="/rentals" routerLinkActive="active">< Back</div>
+</nav>

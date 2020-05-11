@@ -25,5 +25,9 @@ export class MovieService {
   deleteMovie(id: number): Observable<HttpResponse<any>> {
     return this.httpClient.delete<HttpResponse<any>>(`${this.moviesURL}/${id}`, {observe: "response"});
   }
+
+  filterMoviesByGenre(genre: string): Observable<Movies> {
+    return this.httpClient.get<Movies>(`${this.moviesURL}/filter/${genre}`);
+  }
 }
 

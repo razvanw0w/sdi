@@ -1,0 +1,38 @@
+<h2>Filter clients by name</h2>
+<form #formDir="ngForm" [formGroup]="clientForm">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input class="form-control" formControlName="name" id="name" required>
+    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert">
+      <div *ngIf="name.errors.required">
+        Name is required.
+      </div>
+      <div *ngIf="name.errors.pattern">
+        Name must consist only of upper/lower-case letters.
+      </div>
+    </div>
+  </div>
+  <button (click)="filterByName(name.value)" [disabled]="clientForm.invalid" type="submit">Filter</button>
+</form>
+
+<ul class="clients">
+  <li (click)="onSelect(client)" *ngFor="let client of clients" [class.selected]="client === selectedClient">
+    <span class="badge">{{client.id}}</span> {{client.name}}
+  </li>
+</ul>
+
+<div *ngIf="selectedClient" class=details>
+  <h3>
+    Details for client {{selectedClient.name}}
+  </h3>
+  <div>
+    <span>Client ID: </span>{{selectedClient.id}}
+  </div>
+  <label>
+    Client name: <input [(ngModel)]="selectedClient.name" placeholder="client name"/>
+  </label>
+</div>
+
+<nav>
+  <div class="panels" routerLink="/clients" routerLinkActive="active">< Back</div>
+</nav>

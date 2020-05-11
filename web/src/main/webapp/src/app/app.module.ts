@@ -27,6 +27,10 @@ import {ReportsComponent} from './reports/reports.component';
 import {ReportTopmoviesComponent} from './reports/report-topmovies/report-topmovies.component';
 import {ReportClientgenresComponent} from './reports/report-clientgenres/report-clientgenres.component';
 import {ReportService} from "./reports/shared/report.service";
+import {ClientFilterComponent} from './clients/client-filter/client-filter.component';
+import {MovieFilterGenreComponent} from './movies/movie-filter-genre/movie-filter-genre.component';
+import {MovieFilterRatingComponent} from './movies/movie-filter-rating/movie-filter-rating.component';
+import {RentalFilterComponent} from './rentals/rental-filter/rental-filter.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +52,11 @@ import {ReportService} from "./reports/shared/report.service";
     RentalUpdateComponent,
     ReportsComponent,
     ReportTopmoviesComponent,
-    ReportClientgenresComponent
+    ReportClientgenresComponent,
+    ClientFilterComponent,
+    MovieFilterGenreComponent,
+    MovieFilterRatingComponent,
+    RentalFilterComponent
   ],
   imports: [
     BrowserModule,

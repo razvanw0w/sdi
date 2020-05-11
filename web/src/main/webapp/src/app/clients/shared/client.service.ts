@@ -25,4 +25,8 @@ export class ClientService {
   deleteClient(id: number): Observable<HttpResponse<any>> {
     return this.httpClient.delete(`${this.clientsURL}/${id}`, {observe: "response"});
   }
+
+  filterClientsByName(name: string): Observable<Clients> {
+    return this.httpClient.get<Clients>(`${this.clientsURL}/filter/${name}`);
+  }
 }

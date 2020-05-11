@@ -18,6 +18,10 @@ import {RentalDeleteComponent} from "./rentals/rental-delete/rental-delete.compo
 import {ReportsComponent} from "./reports/reports.component";
 import {ReportTopmoviesComponent} from "./reports/report-topmovies/report-topmovies.component";
 import {ReportClientgenresComponent} from "./reports/report-clientgenres/report-clientgenres.component";
+import {ClientFilterComponent} from "./clients/client-filter/client-filter.component";
+import {MovieFilterGenreComponent} from "./movies/movie-filter-genre/movie-filter-genre.component";
+import {MovieFilterRatingComponent} from "./movies/movie-filter-rating/movie-filter-rating.component";
+import {RentalFilterComponent} from "./rentals/rental-filter/rental-filter.component";
 
 
 const routes: Routes = [
@@ -26,16 +30,20 @@ const routes: Routes = [
   {path: 'clients/add', component: ClientAddComponent},
   {path: 'clients/update', component: ClientUpdateComponent},
   {path: 'clients/delete', component: ClientDeleteComponent},
+  {path: 'clients/filter/name', component: ClientFilterComponent},
   {path: 'movies', component: MoviesComponent},
   {path: 'movies/list', component: MovieListComponent},
   {path: 'movies/add', component: MovieAddComponent},
   {path: 'movies/delete', component: MovieDeleteComponent},
   {path: 'movies/update', component: MovieUpdateComponent},
+  {path: 'movies/filter/genre', component: MovieFilterGenreComponent},
+  {path: 'movies/filter/rating', component: MovieFilterRatingComponent},
   {path: 'rentals', component: RentalsComponent},
   {path: 'rentals/list', component: RentalListComponent},
   {path: 'rentals/add', component: RentalAddComponent},
   {path: 'rentals/update', component: RentalUpdateComponent},
   {path: 'rentals/delete', component: RentalDeleteComponent},
+  {path: 'rentals/filter/moviename', component: RentalFilterComponent},
   {path: 'reports', component: ReportsComponent},
   {path: 'reports/topmovies', component: ReportTopmoviesComponent},
   {path: 'reports/clientgenres', component: ReportClientgenresComponent}
