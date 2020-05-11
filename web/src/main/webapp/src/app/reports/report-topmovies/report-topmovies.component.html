@@ -1,0 +1,11 @@
+<h2>Top 10 rented movies</h2>
+<ul class="movies">
+  <li *ngFor="let movie of movies">
+    <span class="badge">{{movie.movieName}}</span>rented {{movie.numberOfRentals}} times
+  </li>
+</ul>
+
+
+<nav>
+  <div class="panels" routerLink="/reports" routerLinkActive="active">< Back</div>
+</nav>

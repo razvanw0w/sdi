@@ -1,0 +1,11 @@
+<h2>Favourite genre for each client</h2>
+<ul class="clientgenres">
+  <li *ngFor="let clientGenre of clientGenres">
+    <span class="badge">{{clientGenre.client.name}}</span> {{clientGenre.genre}}
+  </li>
+</ul>
+
+
+<nav>
+  <div class="panels" routerLink="/reports" routerLinkActive="active">< Back</div>
+</nav>

@@ -23,6 +23,10 @@ import {MovieUpdateComponent} from './movies/movie-update/movie-update.component
 import {RentalAddComponent} from './rentals/rental-add/rental-add.component';
 import {RentalDeleteComponent} from './rentals/rental-delete/rental-delete.component';
 import {RentalUpdateComponent} from './rentals/rental-update/rental-update.component';
+import {ReportsComponent} from './reports/reports.component';
+import {ReportTopmoviesComponent} from './reports/report-topmovies/report-topmovies.component';
+import {ReportClientgenresComponent} from './reports/report-clientgenres/report-clientgenres.component';
+import {ReportService} from "./reports/shared/report.service";
 
 @NgModule({
   declarations: [
@@ -41,7 +45,10 @@ import {RentalUpdateComponent} from './rentals/rental-update/rental-update.compo
     MovieUpdateComponent,
     RentalAddComponent,
     RentalDeleteComponent,
-    RentalUpdateComponent
+    RentalUpdateComponent,
+    ReportsComponent,
+    ReportTopmoviesComponent,
+    ReportClientgenresComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +57,7 @@ import {RentalUpdateComponent} from './rentals/rental-update/rental-update.compo
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [ClientService, MovieService, RentalService],
+  providers: [ClientService, MovieService, RentalService, ReportService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

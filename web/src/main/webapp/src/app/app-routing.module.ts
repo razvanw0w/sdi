@@ -15,6 +15,9 @@ import {MovieUpdateComponent} from "./movies/movie-update/movie-update.component
 import {RentalAddComponent} from "./rentals/rental-add/rental-add.component";
 import {RentalUpdateComponent} from "./rentals/rental-update/rental-update.component";
 import {RentalDeleteComponent} from "./rentals/rental-delete/rental-delete.component";
+import {ReportsComponent} from "./reports/reports.component";
+import {ReportTopmoviesComponent} from "./reports/report-topmovies/report-topmovies.component";
+import {ReportClientgenresComponent} from "./reports/report-clientgenres/report-clientgenres.component";
 
 
 const routes: Routes = [
@@ -32,7 +35,10 @@ const routes: Routes = [
   {path: 'rentals/list', component: RentalListComponent},
   {path: 'rentals/add', component: RentalAddComponent},
   {path: 'rentals/update', component: RentalUpdateComponent},
-  {path: 'rentals/delete', component: RentalDeleteComponent}
+  {path: 'rentals/delete', component: RentalDeleteComponent},
+  {path: 'reports', component: ReportsComponent},
+  {path: 'reports/topmovies', component: ReportTopmoviesComponent},
+  {path: 'reports/clientgenres', component: ReportClientgenresComponent}
 ];
 
 @NgModule({
