@@ -1,6 +1,7 @@
 package ro.sdi.lab24.core.repository;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 import ro.sdi.lab24.core.exception.ValidatorException;
 import ro.sdi.lab24.core.model.Entity;
@@ -76,14 +77,17 @@ public class DatabaseRepository<ID extends Serializable, T extends Entity<ID>>
         );
     }
 
-    private List<T> getAll()
-    {
+    private List<T> getAll() {
         return tableAdapter.findAll();
     }
 
     @Override
-    public Iterable<T> findAll(Sort sort)
-    {
+    public Iterable<T> findAll(Sort sort) {
         return tableAdapter.findAll(sort);
+    }
+
+    @Override
+    public Iterable<T> findAll(Specification<T> specification) {
+        return tableAdapter.findAll(specification);
     }
 }

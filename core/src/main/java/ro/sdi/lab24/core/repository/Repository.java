@@ -1,5 +1,6 @@
 package ro.sdi.lab24.core.repository;
 
+import org.springframework.data.jpa.domain.Specification;
 import ro.sdi.lab24.core.exception.ValidatorException;
 import ro.sdi.lab24.core.model.Entity;
 
@@ -55,7 +56,7 @@ public interface Repository<ID extends Serializable, T extends Entity<ID>> {
 
     /**
      * Updates the given entity.
-     * 
+     *
      * @param entity
      *            must not be null.
      * @return an {@code Optional} - the new entity if it was updated, otherwise (e.g. id does not exist) returns null.
@@ -65,4 +66,6 @@ public interface Repository<ID extends Serializable, T extends Entity<ID>> {
      *             if the entity is not valid.
      */
     Optional<T> update(T entity) throws ValidatorException;
+
+    Iterable<T> findAll(Specification<T> specification);
 }

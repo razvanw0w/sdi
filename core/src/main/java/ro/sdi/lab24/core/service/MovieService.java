@@ -4,18 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ro.sdi.lab24.core.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.core.exception.ElementNotFoundException;
 import ro.sdi.lab24.core.exception.SortingException;
 import ro.sdi.lab24.core.model.Movie;
+import ro.sdi.lab24.core.model.specification.MovieGenreSpecification;
 import ro.sdi.lab24.core.repository.Repository;
 import ro.sdi.lab24.core.repository.SortingRepository;
 import ro.sdi.lab24.core.validation.Validator;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class MovieService {
@@ -113,10 +113,12 @@ public class MovieService {
 
     public Iterable<Movie> filterMoviesByGenre(String genre) {
         log.trace("Filtering movies by the genre {}", genre);
-        String regex = ".*" + genre + ".*";
+        /*String regex = ".*" + genre + ".*";
         return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
                 .filter(movie -> movie.getGenre().matches(regex))
-                .collect(Collectors.toUnmodifiableList());
+                .collect(Collectors.toUnmodifiableList());*/
+        Specification<Movie> specification = new MovieGenreSpecification(genre);
+        return movieRepository.findAll(specification);
     }
 
     public Optional<Movie> findOne(int movieId) {
