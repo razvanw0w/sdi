@@ -1,11 +1,24 @@
 package ro.sdi.lab24.core.model;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 @javax.persistence.Entity
 public class Movie extends Entity<Integer> implements Serializable {
+    @NotNull
+    @Pattern(regexp = "^[a-zA-Z0-9]+$")
     private String name;
+
+    @NotNull
+    @Pattern(regexp = "^[a-zA-Z]+$")
     private String genre;
+
+    @NotNull
+    @Min(0)
+    @Max(100)
     private int rating;
 
     public Movie() {

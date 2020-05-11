@@ -1,11 +1,13 @@
 package ro.sdi.lab24.core.model;
 
+import javax.validation.constraints.Past;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @javax.persistence.Entity
 public class Rental extends Entity<Rental.RentalID> implements Serializable {
+    @Past
     private LocalDateTime time;
 
     public Rental() {

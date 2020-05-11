@@ -2,12 +2,14 @@ package ro.sdi.lab24.core.model;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
 @MappedSuperclass
 public class Entity<ID extends Serializable> implements Serializable {
     @Id
+    @NotNull
     protected ID id;
 
     public Entity(ID id) {
