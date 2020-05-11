@@ -1,0 +1,23 @@
+<h2>List of clients</h2>
+<ul class="clients">
+  <li (click)="onSelect(client)" *ngFor="let client of clients" [class.selected]="client === selectedClient">
+    <span class="badge">{{client.id}}</span> {{client.name}}
+  </li>
+</ul>
+
+<div *ngIf="selectedClient" class=details>
+  <h3>
+    Details for client {{selectedClient.name}}
+  </h3>
+  <div>
+    <span>Client ID: </span>{{selectedClient.id}}
+  </div>
+  <label>
+    Client name: <input [(ngModel)]="selectedClient.name" placeholder="client name"/>
+  </label>
+</div>
+
+
+<nav>
+  <div class="panels" routerLink="/clients" routerLinkActive="active">< Back</div>
+</nav>

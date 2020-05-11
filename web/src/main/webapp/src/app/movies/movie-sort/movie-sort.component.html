@@ -1,0 +1,59 @@
+<h2>Sort movies</h2>
+<form #formDir="ngForm" [formGroup]="sortForm">
+  <div class="form-group">
+    <label for="name">Name sort direction</label>
+    <select class="form-control" formControlName="name" id="name">
+      <option value="N/A">N/A</option>
+      <option value="asc">asc</option>
+      <option value="desc">desc</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="genre">Genre sort direction</label>
+    <select class="form-control" formControlName="genre" id="genre">
+      <option value="N/A">N/A</option>
+      <option value="asc">asc</option>
+      <option value="desc">desc</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="rating">Rating sort direction</label>
+    <select class="form-control" formControlName="rating" id="rating">
+      <option value="N/A">N/A</option>
+      <option value="asc">asc</option>
+      <option value="desc">desc</option>
+    </select>
+  </div>
+  <button (click)="sort(name.value, genre.value, rating.value)" type="submit">Sort</button>
+</form>
+
+<ul class="movies">
+  <li (click)="onSelect(movie)" *ngFor="let movie of movies" [class.selected]="movie === selectedMovie">
+    <span class="badge">{{movie.id}}</span> {{movie.name}}
+  </li>
+</ul>
+
+<div *ngIf="selectedMovie" class=details>
+  <h3>
+    Details for movie {{selectedMovie.name}}
+  </h3>
+  <div>
+    <span>Movie ID: </span>{{selectedMovie.id}}
+  </div>
+  <label>
+    Movie name: <input [(ngModel)]="selectedMovie.name" placeholder="movie name"/>
+  </label>
+  <br>
+  <label>
+    Movie genre: <input [(ngModel)]="selectedMovie.genre" placeholder="movie genre"/>
+  </label>
+  <br>
+  <label>
+    Movie rating: <input [(ngModel)]="selectedMovie.rating" placeholder="movie rating (0-100)"/>
+  </label>
+  <br>
+</div>
+
+<nav>
+  <div class="panels" routerLink="/movies" routerLinkActive="active">< Back</div>
+</nav>

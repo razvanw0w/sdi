@@ -22,6 +22,8 @@ import {ClientFilterComponent} from "./clients/client-filter/client-filter.compo
 import {MovieFilterGenreComponent} from "./movies/movie-filter-genre/movie-filter-genre.component";
 import {MovieFilterRatingComponent} from "./movies/movie-filter-rating/movie-filter-rating.component";
 import {RentalFilterComponent} from "./rentals/rental-filter/rental-filter.component";
+import {ClientSortComponent} from "./clients/client-sort/client-sort.component";
+import {MovieSortComponent} from "./movies/movie-sort/movie-sort.component";
 
 
 const routes: Routes = [
@@ -31,6 +33,7 @@ const routes: Routes = [
   {path: 'clients/update', component: ClientUpdateComponent},
   {path: 'clients/delete', component: ClientDeleteComponent},
   {path: 'clients/filter/name', component: ClientFilterComponent},
+  {path: 'clients/sort', component: ClientSortComponent},
   {path: 'movies', component: MoviesComponent},
   {path: 'movies/list', component: MovieListComponent},
   {path: 'movies/add', component: MovieAddComponent},
@@ -38,6 +41,7 @@ const routes: Routes = [
   {path: 'movies/update', component: MovieUpdateComponent},
   {path: 'movies/filter/genre', component: MovieFilterGenreComponent},
   {path: 'movies/filter/rating', component: MovieFilterRatingComponent},
+  {path: 'movies/sort', component: MovieSortComponent},
   {path: 'rentals', component: RentalsComponent},
   {path: 'rentals/list', component: RentalListComponent},
   {path: 'rentals/add', component: RentalAddComponent},
