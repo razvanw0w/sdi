@@ -3,6 +3,9 @@ package ro.sdi.lab24.core.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ro.sdi.lab24.core.exception.AlreadyExistingElementException;
@@ -86,6 +89,11 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
+    public Page<Client> getClientsPaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return clientRepository.findAll(pageable);
+    }
+
     /**
      * This function updated a client based on their ID with a new name
      *
@@ -114,6 +122,18 @@ public class ClientService {
                 .collect(Collectors.toUnmodifiableList());*/
         Specification<Client> specification = new ClientNameSpecification(name);
         return clientRepository.findAll(specification);
+    }
+
+    public Iterable<Client> filterClientsByNamePaginated(String name, int page, int size) {
+        log.trace("Filtering clients by the name {}", name);
+        /*String regex = ".*" + name + ".*";
+        return StreamSupport
+                .stream(clientRepository.findAll().spliterator(), false)
+                .filter(client -> client.getName().matches(regex))
+                .collect(Collectors.toUnmodifiableList());*/
+        Specification<Client> specification = new ClientNameSpecification(name);
+        Pageable pageable = PageRequest.of(page, size);
+        return clientRepository.findAll(specification, pageable);
     }
 
     public Optional<Client> findOne(int clientId) {

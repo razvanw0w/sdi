@@ -1,5 +1,7 @@
 package ro.sdi.lab24.core.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,5 +91,15 @@ public class DatabaseRepository<ID extends Serializable, T extends Entity<ID>>
     @Override
     public Iterable<T> findAll(Specification<T> specification) {
         return tableAdapter.findAll(specification);
+    }
+
+    @Override
+    public Page<T> findAll(Pageable pageable) {
+        return tableAdapter.findAll(pageable);
+    }
+
+    @Override
+    public Page<T> findAll(Specification<T> specification, Pageable pageable) {
+        return tableAdapter.findAll(specification, pageable);
     }
 }

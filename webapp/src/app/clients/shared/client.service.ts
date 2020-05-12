@@ -14,6 +14,10 @@ export class ClientService {
     return this.httpClient.get<Clients>(this.clientsURL);
   }
 
+  getClientsPaginated(page: number, size: number): Observable<Clients> {
+    return this.httpClient.get<Clients>(`${this.clientsURL}/page=${page}&size=${size}`);
+  }
+
   addClient(client: Client): Observable<HttpResponse<any>> {
     return this.httpClient.post<HttpResponse<any>>(this.clientsURL, client, {observe: "response"});
   }
@@ -28,5 +32,10 @@ export class ClientService {
 
   filterClientsByName(name: string): Observable<Clients> {
     return this.httpClient.get<Clients>(`${this.clientsURL}/filter/${name}`);
+  }
+
+  filterClientsByNamePaginated(name: string, page: number, size: number): Observable<Clients> {
+    console.log("paginated filter", name, page, size);
+    return this.httpClient.get<Clients>(`${this.clientsURL}/filter-paginated/${name}&page=${page}&size=${size}`);
   }
 }

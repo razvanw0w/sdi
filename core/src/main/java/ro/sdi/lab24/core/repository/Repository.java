@@ -1,5 +1,7 @@
 package ro.sdi.lab24.core.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import ro.sdi.lab24.core.exception.ValidatorException;
 import ro.sdi.lab24.core.model.Entity;
@@ -68,4 +70,8 @@ public interface Repository<ID extends Serializable, T extends Entity<ID>> {
     Optional<T> update(T entity) throws ValidatorException;
 
     Iterable<T> findAll(Specification<T> specification);
+
+    Page<T> findAll(Pageable pageable);
+
+    Page<T> findAll(Specification<T> specification, Pageable pageable);
 }

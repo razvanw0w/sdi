@@ -32,6 +32,13 @@ public class ClientRestController {
         return new ClientsDTO(clientConverter.toDTOList(clients));
     }
 
+    @RequestMapping(value = "/clients/page={page}&size={size}", method = RequestMethod.GET)
+    public ClientsDTO getClientsPaginated(@PathVariable int page, @PathVariable int size) {
+        Iterable<Client> clients = clientService.getClientsPaginated(page, size);
+        log.trace("fetch clients paginated (size={} page={}): {}", size, page, clients);
+        return new ClientsDTO(clientConverter.toDTOList(clients));
+    }
+
     @RequestMapping(value = "/clients", method = RequestMethod.POST)
     public ResponseEntity<?> addClient(@RequestBody ClientDTO dto) {
         Client client = clientConverter.toModel(dto);
@@ -68,6 +75,16 @@ public class ClientRestController {
         }
         log.trace("client id = {} updated: {}", id, client);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/clients/filter-paginated/{name}&page={page}&size={size}", method = RequestMethod.GET)
+    public ClientsDTO filterClientsByNamePaginated(@PathVariable String name, @PathVariable int page, @PathVariable int size) {
+        log.trace("filtered clients by name = {} page = {} size = {}", name, page, size);
+        return new ClientsDTO(
+                clientConverter.toDTOList(
+                        clientService.filterClientsByNamePaginated(name, page, size)
+                )
+        );
     }
 
     @RequestMapping(value = "/clients/filter/{name}", method = RequestMethod.GET)
