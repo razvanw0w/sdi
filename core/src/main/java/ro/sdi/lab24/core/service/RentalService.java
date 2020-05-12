@@ -3,11 +3,13 @@ package ro.sdi.lab24.core.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ro.sdi.lab24.core.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.core.exception.DateTimeInvalidException;
 import ro.sdi.lab24.core.exception.ElementNotFoundException;
 import ro.sdi.lab24.core.model.Rental;
+import ro.sdi.lab24.core.model.specification.RentalDateSpecification;
 import ro.sdi.lab24.core.repository.Repository;
 import ro.sdi.lab24.core.validation.Validator;
 
@@ -161,5 +163,14 @@ public class RentalService {
                                 .matches(regex))
                         .isPresent())
                 .collect(Collectors.toUnmodifiableList());
+    }
+
+    public Iterable<Rental> filterRentalsByDate(LocalDateTime time) {
+        log.trace("Filtering rentals by date {}", time);
+
+        Specification<Rental> specification = new RentalDateSpecification(time);
+        Iterable<Rental> all = rentalRepository.findAll(specification);
+        log.trace("filtered by date {}", all);
+        return all;
     }
 }

@@ -15,6 +15,7 @@ import ro.sdi.lab24.web.converter.RentalConverter;
 import ro.sdi.lab24.web.dto.RentalDTO;
 import ro.sdi.lab24.web.dto.RentalsDTO;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @RestController
@@ -88,6 +89,16 @@ public class RentalRestController {
                 rentalConverter.toDTOList(
                         rentalCoreController.filterRentalsByMovieName(name)
                 )
+        );
+    }
+
+    @RequestMapping(value = "/rentals/filter/date/{date}", method = RequestMethod.GET)
+    public RentalsDTO filterRentalsByDate(@PathVariable String date) {
+        log.trace("filtered rentals by date = {}", date);
+        String time = date + " 00:00";
+        return new RentalsDTO(rentalConverter.toDTOList(
+                rentalCoreController.filterRentalsByDate(LocalDateTime.parse(time, formatter))
+        )
         );
     }
 }

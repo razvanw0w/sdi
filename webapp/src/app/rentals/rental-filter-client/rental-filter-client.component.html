@@ -1,0 +1,44 @@
+<h2>Filter rentals having rental date greater than a different one</h2>
+<form #formDir="ngForm" [formGroup]="rentalForm">
+  <div class="form-group">
+    <label for="date">Date</label>
+    <input class="form-control" formControlName="date" id="date" required>
+    <div *ngIf="date.invalid && (date.dirty || date.touched)" class="alert">
+      <div *ngIf="date.errors.required">
+        Date is required.
+      </div>
+      <div *ngIf="date.errors.pattern">
+        Date is invalid (format: DD-MM-YYYY).
+      </div>
+    </div>
+  </div>
+  <button (click)="filterByDate(date.value)" [disabled]="rentalForm.invalid" type="submit">Filter</button>
+</form>
+
+<ul class="rentals">
+  <li (click)="onSelect(rental)" *ngFor="let rental of rentals" [class.selected]="rental === selectedRental">
+    <span class="badge">Movie: {{rental.movieId}}</span> Client: {{rental.clientId}}
+  </li>
+</ul>
+
+<div *ngIf="selectedRental" class=details>
+  <h3>
+    Details for rental for movie {{selectedRental.movieId}} and client {{selectedRental.clientId}}
+  </h3>
+  <div>
+    <span>Rental Movie ID: </span>{{selectedRental.movieId}}
+  </div>
+  <div>
+    <span>Rental Client ID: </span>{{selectedRental.clientId}}
+  </div>
+  <label>
+    Rental time: <input [(ngModel)]="selectedRental.time" placeholder="rental date"/>
+  </label>
+  <br>
+  <br>
+</div>
+
+
+<nav>
+  <div class="panels" routerLink="/rentals" routerLinkActive="active">< Back</div>
+</nav>

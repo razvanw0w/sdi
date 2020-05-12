@@ -29,4 +29,8 @@ export class RentalService {
   filterRentalsByMovieName(movieName: string): Observable<Rentals> {
     return this.httpClient.get<Rentals>(`${this.rentalsURL}/filter/${movieName}`);
   }
+
+  filterRentalsByDate(date: string): Observable<Rentals> {
+    return this.httpClient.get<Rentals>(`${this.rentalsURL}/filter/date/${date}`);
+  }
 }

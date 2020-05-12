@@ -26,7 +26,7 @@ export class RentalFilterComponent implements OnInit {
         Validators.required,
         Validators.pattern("^[a-zA-Z0-9]+$")
       ])
-    })
+    });
   }
 
   filterByMovieName(movieName: string): void {
