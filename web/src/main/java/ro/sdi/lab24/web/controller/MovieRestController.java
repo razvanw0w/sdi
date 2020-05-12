@@ -37,6 +37,13 @@ public class MovieRestController {
         return new MoviesDTO(movieConverter.toDTOList(movies));
     }
 
+    @RequestMapping(value = "/movies/page={page}&size={size}", method = RequestMethod.GET)
+    public MoviesDTO getMoviesPaginated(@PathVariable int page, @PathVariable int size) {
+        Iterable<Movie> movies = movieService.getMoviesPaginated(page, size);
+        log.trace("fetched movies (page={} size={}): {}", page, size, movies);
+        return new MoviesDTO(movieConverter.toDTOList(movies));
+    }
+
     @RequestMapping(value = "/movies", method = RequestMethod.POST)
     public ResponseEntity<?> addMovie(@RequestBody MovieDTO dto) {
         Movie movie = movieConverter.toModel(dto);
@@ -91,10 +98,23 @@ public class MovieRestController {
         return new MoviesDTO(movieConverter.toDTOList(movieService.filterMoviesByGenre(genre)));
     }
 
+    @RequestMapping(value = "/movies/filter-paginated/{genre}&page={page}&size={size}", method = RequestMethod.GET)
+    public MoviesDTO filterMoviesByGenrePaginated(@PathVariable String genre, @PathVariable int page, @PathVariable int size) {
+        log.trace("filtered movies by genre = {} page = {} size = {}", genre, page, size);
+        return new MoviesDTO(movieConverter.toDTOList(movieService.filterMoviesByGenrePaginated(genre, page, size)));
+    }
+
     @RequestMapping(value = "/movies/sort", method = RequestMethod.POST)
     public MoviesDTO sortMovies(@RequestBody SortDTO dto) {
         log.trace("sorting movies by criteria = {}", dto);
         Iterable<Movie> movies = movieService.sortMovies(sortConverter.toModel(dto));
+        return new MoviesDTO(movieConverter.toDTOList(movies));
+    }
+
+    @RequestMapping(value = "/movies/sort&page={page}&size={size}", method = RequestMethod.POST)
+    public MoviesDTO sortMoviesPaginated(@RequestBody SortDTO dto, @PathVariable int page, @PathVariable int size) {
+        log.trace("sorting movies by criteria = {} page = {} size = {}", dto, page, size);
+        Iterable<Movie> movies = movieService.sortMoviesPaginated(sortConverter.toModel(dto), page, size);
         return new MoviesDTO(movieConverter.toDTOList(movies));
     }
 }

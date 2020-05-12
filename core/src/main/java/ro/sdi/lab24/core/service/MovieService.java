@@ -3,6 +3,9 @@ package ro.sdi.lab24.core.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -78,6 +81,12 @@ public class MovieService {
         return movieRepository.findAll();
     }
 
+    public Page<Movie> getMoviesPaginated(int page, int size) {
+        log.trace("Fetching all movies page = {} size = {}", page, size);
+        Pageable pageable = PageRequest.of(page, size);
+        return movieRepository.findAll(pageable);
+    }
+
     /**
      * This function updated a movie based on their ID with a new name
      *
@@ -132,5 +141,21 @@ public class MovieService {
                 .map(repo -> (SortingRepository<Integer, Movie>) repo)
                 .orElseThrow(() -> new SortingException("repository doesn't support sorting"));
         return sortingRepo.findAll(sort);
+    }
+
+    public Iterable<Movie> sortMoviesPaginated(Sort sort, int page, int size) {
+        log.trace("Sorting movies");
+        SortingRepository<Integer, Movie> sortingRepo = Optional.of(movieRepository)
+                .filter(repo -> repo instanceof SortingRepository)
+                .map(repo -> (SortingRepository<Integer, Movie>) repo)
+                .orElseThrow(() -> new SortingException("repository doesn't support sorting"));
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return sortingRepo.findAll(pageable);
+    }
+
+    public Page<Movie> filterMoviesByGenrePaginated(String genre, int page, int size) {
+        Specification<Movie> specification = new MovieGenreSpecification(genre);
+        Pageable pageable = PageRequest.of(page, size);
+        return movieRepository.findAll(specification, pageable);
     }
 }
