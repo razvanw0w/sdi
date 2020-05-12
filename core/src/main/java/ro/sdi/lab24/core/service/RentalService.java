@@ -3,6 +3,8 @@ package ro.sdi.lab24.core.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ro.sdi.lab24.core.exception.AlreadyExistingElementException;
@@ -127,6 +129,11 @@ public class RentalService {
         return rentalRepository.findAll();
     }
 
+    public Iterable<Rental> getRentalsPaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return rentalRepository.findAll(pageable);
+    }
+
     /**
      * This function updates a rental based on the movie ID and client ID with its new time
      *
@@ -170,6 +177,15 @@ public class RentalService {
 
         Specification<Rental> specification = new RentalDateSpecification(time);
         Iterable<Rental> all = rentalRepository.findAll(specification);
+        log.trace("filtered by date {}", all);
+        return all;
+    }
+
+    public Iterable<Rental> filterRentalsByDatePaginated(LocalDateTime time, int page, int size) {
+        log.trace("Filtering rentals by date {} page = {} size = {}", time, page, size);
+        Specification<Rental> specification = new RentalDateSpecification(time);
+        Pageable pageable = PageRequest.of(page, size);
+        Iterable<Rental> all = rentalRepository.findAll(specification, pageable);
         log.trace("filtered by date {}", all);
         return all;
     }

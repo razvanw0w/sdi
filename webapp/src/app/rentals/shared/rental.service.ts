@@ -14,6 +14,10 @@ export class RentalService {
     return this.httpClient.get<Rentals>(this.rentalsURL);
   }
 
+  getRentalsPaginated(page: number, size: number): Observable<Rentals> {
+    return this.httpClient.get<Rentals>(`${this.rentalsURL}/page=${page}&size=${size}`);
+  }
+
   addRental(rental: Rental): Observable<HttpResponse<any>> {
     return this.httpClient.post<HttpResponse<any>>(this.rentalsURL, rental, {observe: "response"});
   }
@@ -32,5 +36,9 @@ export class RentalService {
 
   filterRentalsByDate(date: string): Observable<Rentals> {
     return this.httpClient.get<Rentals>(`${this.rentalsURL}/filter/date/${date}`);
+  }
+
+  filterRentalsByDatePaginated(date: string, page: number, size: number) {
+    return this.httpClient.get<Rentals>(`${this.rentalsURL}/filter-paginated/date/${date}&page=${page}&size=${size}`);
   }
 }

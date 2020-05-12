@@ -36,6 +36,13 @@ public class RentalRestController {
         return new RentalsDTO(rentalConverter.toDTOList(rentals));
     }
 
+    @RequestMapping(value = "/rentals/page={page}&size={size}", method = RequestMethod.GET)
+    public RentalsDTO getRentals(@PathVariable int page, @PathVariable int size) {
+        Iterable<Rental> rentals = rentalCoreController.getRentalsPaginated(page, size);
+        log.trace("fetch rentals: {} page = {} size = {}", rentals, page, size);
+        return new RentalsDTO(rentalConverter.toDTOList(rentals));
+    }
+
     @RequestMapping(value = "/rentals", method = RequestMethod.POST)
     public ResponseEntity<?> addRental(@RequestBody RentalDTO dto) {
         Rental rental = rentalConverter.toModel(dto);
@@ -95,6 +102,16 @@ public class RentalRestController {
     @RequestMapping(value = "/rentals/filter/date/{date}", method = RequestMethod.GET)
     public RentalsDTO filterRentalsByDate(@PathVariable String date) {
         log.trace("filtered rentals by date = {}", date);
+        String time = date + " 00:00";
+        return new RentalsDTO(rentalConverter.toDTOList(
+                rentalCoreController.filterRentalsByDate(LocalDateTime.parse(time, formatter))
+        )
+        );
+    }
+
+    @RequestMapping(value = "/rentals/filter-paginated/date/{date}&page={page}&size={size}", method = RequestMethod.GET)
+    public RentalsDTO filterRentalsByDate(@PathVariable String date, @PathVariable int page, @PathVariable int size) {
+        log.trace("filtered rentals by date = {} page = {} size = {}", date, page, size);
         String time = date + " 00:00";
         return new RentalsDTO(rentalConverter.toDTOList(
                 rentalCoreController.filterRentalsByDate(LocalDateTime.parse(time, formatter))
