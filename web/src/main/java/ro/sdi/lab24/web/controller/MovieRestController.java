@@ -49,7 +49,6 @@ public class MovieRestController {
         Movie movie = movieConverter.toModel(dto);
         try {
             movieService.addMovie(
-                    movie.getId(),
                     movie.getName(),
                     movie.getGenre(),
                     movie.getRating()

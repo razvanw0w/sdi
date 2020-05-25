@@ -10,11 +10,6 @@ import ro.sdi.lab24.core.model.copyadapters.ClientCopyAdapter;
 import ro.sdi.lab24.core.model.copyadapters.CopyAdapter;
 import ro.sdi.lab24.core.model.copyadapters.MovieCopyAdapter;
 import ro.sdi.lab24.core.model.copyadapters.RentalCopyAdapter;
-import ro.sdi.lab24.core.model.serialization.database.ClientTableAdapter;
-import ro.sdi.lab24.core.model.serialization.database.MovieTableAdapter;
-import ro.sdi.lab24.core.model.serialization.database.RentalTableAdapter;
-import ro.sdi.lab24.core.repository.DatabaseRepository;
-import ro.sdi.lab24.core.repository.Repository;
 import ro.sdi.lab24.core.validation.ClientValidator;
 import ro.sdi.lab24.core.validation.MovieValidator;
 import ro.sdi.lab24.core.validation.RentalValidator;
@@ -77,27 +72,27 @@ public class AppLocalConfig {
         return DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     }
 
-    @Bean
-    Repository<Integer, Client> clientRepository(
-            ClientTableAdapter clientTableAdapter,
-            CopyAdapter<Client> clientCopyAdapter
-    ) {
-        return new DatabaseRepository<>(clientTableAdapter, clientCopyAdapter);
-    }
-
-    @Bean
-    Repository<Integer, Movie> movieRepository(
-            MovieTableAdapter movieTableAdapter,
-            CopyAdapter<Movie> movieCopyAdapter
-    ) {
-        return new DatabaseRepository<>(movieTableAdapter, movieCopyAdapter);
-    }
-
-    @Bean
-    Repository<Rental.RentalID, Rental> rentalRepository(
-            RentalTableAdapter rentalTableAdapter,
-            CopyAdapter<Rental> rentalCopyAdapter
-    ) {
-        return new DatabaseRepository<>(rentalTableAdapter, rentalCopyAdapter);
-    }
+//    @Bean
+//    Repository<Integer, Client> clientRepository(
+//            ClientTableAdapter clientTableAdapter,
+//            CopyAdapter<Client> clientCopyAdapter
+//    ) {
+//        return new DatabaseRepository<>(clientTableAdapter, clientCopyAdapter);
+//    }
+//
+//    @Bean
+//    Repository<Integer, Movie> movieRepository(
+//            MovieTableAdapter movieTableAdapter,
+//            CopyAdapter<Movie> movieCopyAdapter
+//    ) {
+//        return new DatabaseRepository<>(movieTableAdapter, movieCopyAdapter);
+//    }
+//
+//    @Bean
+//    Repository<Rental.RentalID, Rental> rentalRepository(
+//            RentalTableAdapter rentalTableAdapter,
+//            CopyAdapter<Rental> rentalCopyAdapter
+//    ) {
+//        return new DatabaseRepository<>(rentalTableAdapter, rentalCopyAdapter);
+//    }
 }

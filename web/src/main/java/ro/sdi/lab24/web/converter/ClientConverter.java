@@ -4,11 +4,20 @@ import org.springframework.stereotype.Component;
 import ro.sdi.lab24.core.model.Client;
 import ro.sdi.lab24.web.dto.ClientDTO;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 @Component
 public class ClientConverter implements Converter<Client, ClientDTO> {
+    @PersistenceContext
+    EntityManager entityManager;
+
     @Override
     public Client toModel(ClientDTO clientDTO) {
-        return new Client(clientDTO.getId(), clientDTO.getName());
+        Client client = Client.builder()
+                .name(clientDTO.getName()).build();
+        client.setId(clientDTO.getId());
+        return client;
     }
 
     @Override

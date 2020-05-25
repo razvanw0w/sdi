@@ -33,14 +33,17 @@
 
 <ul class="rentals">
   <li (click)="onSelect(rental)" *ngFor="let rental of rentals" [class.selected]="rental === selectedRental">
-    <span class="badge">Movie: {{rental.movieId}}</span> Client: {{rental.clientId}}
+    <span class="badge">ID: {{rental.rentalId}}</span> Movie: {{rental.movieId}} Client: {{rental.clientId}}
   </li>
 </ul>
 
 <div *ngIf="selectedRental" class=details>
   <h3>
-    Details for rental for movie {{selectedRental.movieId}} and client {{selectedRental.clientId}}
+    Details for rental {{selectedRental.rentalId}}
   </h3>
+  <div>
+    <span>Rental ID: </span>{{selectedRental.rentalId}}
+  </div>
   <div>
     <span>Rental Movie ID: </span>{{selectedRental.movieId}}
   </div>

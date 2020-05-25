@@ -24,68 +24,66 @@ public class RentalRestController {
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     @Autowired
-    private RentalService rentalCoreController;
+    private RentalService rentalService;
 
     @Autowired
     private RentalConverter rentalConverter;
 
     @RequestMapping(value = "/rentals", method = RequestMethod.GET)
     public RentalsDTO getRentals() {
-        Iterable<Rental> rentals = rentalCoreController.getRentals();
+        Iterable<Rental> rentals = rentalService.getRentals();
         log.trace("fetch rentals: {}", rentals);
         return new RentalsDTO(rentalConverter.toDTOList(rentals));
     }
 
     @RequestMapping(value = "/rentals/page={page}&size={size}", method = RequestMethod.GET)
     public RentalsDTO getRentals(@PathVariable int page, @PathVariable int size) {
-        Iterable<Rental> rentals = rentalCoreController.getRentalsPaginated(page, size);
+        Iterable<Rental> rentals = rentalService.getRentalsPaginated(page, size);
         log.trace("fetch rentals: {} page = {} size = {}", rentals, page, size);
         return new RentalsDTO(rentalConverter.toDTOList(rentals));
     }
 
     @RequestMapping(value = "/rentals", method = RequestMethod.POST)
     public ResponseEntity<?> addRental(@RequestBody RentalDTO dto) {
-        Rental rental = rentalConverter.toModel(dto);
         try {
-            rentalCoreController.addRental(
-                    rental.getId().getMovieId(),
-                    rental.getId().getClientId(),
-                    formatter.format(rental.getTime())
+            rentalService.addRental(
+                    dto.getMovieId(),
+                    dto.getClientId(),
+                    dto.getTime()
             );
         } catch (AlreadyExistingElementException e) {
-            log.trace("rental {} already exists", rental);
+            log.trace("rental already exists");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        log.trace("rental {} added", rental);
+        log.trace("rental added");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/rentals/{movieId}&{clientId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteRental(@PathVariable int movieId, @PathVariable int clientId) {
+    @RequestMapping(value = "/rentals/{rentalId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteRental(@PathVariable int rentalId) {
         try {
-            rentalCoreController.deleteRental(movieId, clientId);
+            rentalService.deleteRental(rentalId);
         } catch (ElementNotFoundException e) {
-            log.trace("rental id = {} could not be deleted", new Rental.RentalID(movieId, clientId));
+            log.trace("rental id = {} could not be deleted", rentalId);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        log.trace("rental id = {} deleted", new Rental.RentalID(movieId, clientId));
+        log.trace("rental id = {} deleted", rentalId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/rentals/{movieId}&{clientId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/rentals/{rentalId}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateRental(
-            @PathVariable int movieId,
-            @PathVariable int clientId,
+            @PathVariable int rentalId,
             @RequestBody RentalDTO dto
     ) {
-        Rental rental = rentalConverter.toModel(dto);
+
         try {
-            rentalCoreController.updateRental(movieId, clientId, formatter.format(rental.getTime()));
+            rentalService.updateRental(rentalId, dto.getTime());
         } catch (ElementNotFoundException e) {
-            log.trace("rental id = {} could not be deleted", new Rental.RentalID(movieId, clientId));
+            log.trace("rental id = {} could not be updated", rentalId);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        log.trace("rental id = {} updated: {}", new Rental.RentalID(movieId, clientId), rental);
+        log.trace("rental id = {} updated", rentalId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -94,7 +92,7 @@ public class RentalRestController {
         log.trace("filtered rentals by movie name = {}", name);
         return new RentalsDTO(
                 rentalConverter.toDTOList(
-                        rentalCoreController.filterRentalsByMovieName(name)
+                        rentalService.filterRentalsByMovieName(name)
                 )
         );
     }
@@ -104,7 +102,7 @@ public class RentalRestController {
         log.trace("filtered rentals by date = {}", date);
         String time = date + " 00:00";
         return new RentalsDTO(rentalConverter.toDTOList(
-                rentalCoreController.filterRentalsByDate(LocalDateTime.parse(time, formatter))
+                rentalService.filterRentalsByDate(LocalDateTime.parse(time, formatter))
         )
         );
     }
@@ -114,7 +112,7 @@ public class RentalRestController {
         log.trace("filtered rentals by date = {} page = {} size = {}", date, page, size);
         String time = date + " 00:00";
         return new RentalsDTO(rentalConverter.toDTOList(
-                rentalCoreController.filterRentalsByDate(LocalDateTime.parse(time, formatter))
+                rentalService.filterRentalsByDate(LocalDateTime.parse(time, formatter))
         )
         );
     }

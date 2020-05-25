@@ -8,14 +8,10 @@ import {MovieService} from "../../movies/shared/movie.service";
   styleUrls: ['./movie-add.component.css']
 })
 export class MovieAddComponent implements OnInit {
-  movieForm: FormGroup
-  successfulAdd: Boolean
+  movieForm: FormGroup;
+  successfulAdd: Boolean;
 
   constructor(private movieService: MovieService) {
-  }
-
-  get id() {
-    return this.movieForm.get('id');
   }
 
   get name() {
@@ -32,11 +28,6 @@ export class MovieAddComponent implements OnInit {
 
   ngOnInit(): void {
     this.movieForm = new FormGroup({
-      'id': new FormControl("", [
-        Validators.required,
-        Validators.min(0),
-        Validators.pattern("^0$|^[1-9]+[0-9]*$")
-      ]),
       'name': new FormControl("", [
         Validators.required,
         Validators.pattern("^[a-zA-Z0-9]+$")
@@ -54,9 +45,9 @@ export class MovieAddComponent implements OnInit {
     });
   }
 
-  add(id: string, name: string, genre: string, rating: string): void {
+  add(name: string, genre: string, rating: string): void {
     this.movieService.addMovie({
-      id: +id,
+      id: 0,
       name,
       genre,
       rating: +rating

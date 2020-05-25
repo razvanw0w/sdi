@@ -9,6 +9,7 @@ import lombok.*;
 @ToString
 @Builder
 public class RentalDTO {
+    private int rentalId;
     String time;
     private int movieId;
     private int clientId;

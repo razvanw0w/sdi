@@ -16,7 +16,6 @@ public class MovieValidator implements Validator<Movie> {
      */
     @Override
     public void validate(Movie entity) throws ValidatorException {
-        Optional.of(entity).filter(movie -> movie.getId() >= 0).orElseThrow(() -> new ValidatorException(String.format("movie %d has an invalid ID", entity.getId())));
         Optional.of(entity).filter(movie -> movie.getName().matches("^[a-zA-Z0-9]+$")).orElseThrow(() -> new ValidatorException(String.format("movie %d has an invalid name", entity.getId())));
         Optional.of(entity).filter(movie -> {
             int rating = movie.getRating();

@@ -59,6 +59,7 @@ export class RentalAddComponent implements OnInit {
   add(movieId: string, clientId: string, date: string, time: string): void {
     var datetime = `${date} ${time}`;
     this.rentalService.addRental({
+      rentalId: 0,
       movieId: +movieId,
       clientId: +clientId,
       time: datetime

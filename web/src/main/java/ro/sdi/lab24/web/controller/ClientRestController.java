@@ -43,7 +43,7 @@ public class ClientRestController {
     public ResponseEntity<?> addClient(@RequestBody ClientDTO dto) {
         Client client = clientConverter.toModel(dto);
         try {
-            clientService.addClient(client.getId(), client.getName());
+            clientService.addClient(client.getName());
         } catch (AlreadyExistingElementException e) {
             log.trace("client id = {} already exists", client.getId());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

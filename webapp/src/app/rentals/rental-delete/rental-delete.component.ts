@@ -8,29 +8,20 @@ import {RentalService} from "../shared/rental.service";
   styleUrls: ['./rental-delete.component.css']
 })
 export class RentalDeleteComponent implements OnInit {
-  rentalForm: FormGroup
-  successfulDelete: Boolean
+  rentalForm: FormGroup;
+  successfulDelete: Boolean;
 
   constructor(private rentalService: RentalService) {
 
   }
 
-  get movieId() {
-    return this.rentalForm.get('movieId');
-  }
-
-  get clientId() {
-    return this.rentalForm.get('clientId');
+  get rentalId() {
+    return this.rentalForm.get('rentalId');
   }
 
   ngOnInit(): void {
     this.rentalForm = new FormGroup({
-      'movieId': new FormControl("", [
-        Validators.required,
-        Validators.min(0),
-        Validators.pattern("^0$|^[1-9]+[0-9]*$")
-      ]),
-      'clientId': new FormControl("", [
+      'rentalId': new FormControl("", [
         Validators.required,
         Validators.min(0),
         Validators.pattern("^0$|^[1-9]+[0-9]*$")
@@ -38,7 +29,7 @@ export class RentalDeleteComponent implements OnInit {
     });
   }
 
-  delete(movieId: string, clientId: string): void {
-    this.rentalService.deleteRental(+movieId, +clientId).subscribe(response => this.successfulDelete = response.status === 200);
+  delete(rentalId: string): void {
+    this.rentalService.deleteRental(+rentalId).subscribe(response => this.successfulDelete = response.status === 200);
   }
 }

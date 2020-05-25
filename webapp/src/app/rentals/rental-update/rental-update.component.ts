@@ -33,18 +33,18 @@ export class RentalUpdateComponent implements OnInit {
     return this.rentalForm.get('date');
   }
 
+  get rentalId() {
+    return this.rentalForm.get('rentalId');
+  }
+
   ngOnInit(): void {
     this.rentalForm = new FormGroup({
-      'movieId': new FormControl("", [
+      'rentalId': new FormControl("", [
         Validators.required,
         Validators.min(0),
         Validators.pattern("^0$|^[1-9]+[0-9]*$")
       ]),
-      'clientId': new FormControl("", [
-        Validators.required,
-        Validators.min(0),
-        Validators.pattern("^0$|^[1-9]+[0-9]*$")
-      ]),
+
       'date': new FormControl("", [
         Validators.required,
         Validators.pattern(this.dateRegex)
@@ -56,12 +56,13 @@ export class RentalUpdateComponent implements OnInit {
     });
   }
 
-  update(movieId: string, clientId: string, date: string, time: string): void {
+  update(rentalId: string, date: string, time: string): void {
     var datetime = `${date} ${time}`;
-    console.log(movieId, clientId, datetime);
+    console.log(rentalId, datetime);
     this.rentalService.updateRental({
-      movieId: +movieId,
-      clientId: +clientId,
+      rentalId: +rentalId,
+      movieId: 0,
+      clientId: 0,
       time: datetime
     }).subscribe(response => this.successfulUpdate = response.status === 200);
   }

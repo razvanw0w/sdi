@@ -7,18 +7,26 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ro.sdi.lab24.core.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.core.exception.DateTimeInvalidException;
 import ro.sdi.lab24.core.exception.ElementNotFoundException;
+import ro.sdi.lab24.core.model.Client;
+import ro.sdi.lab24.core.model.Movie;
 import ro.sdi.lab24.core.model.Rental;
+import ro.sdi.lab24.core.model.serialization.database.ClientTableAdapter;
+import ro.sdi.lab24.core.model.serialization.database.MovieTableAdapter;
+import ro.sdi.lab24.core.model.serialization.database.RentalTableAdapter;
 import ro.sdi.lab24.core.model.specification.RentalDateSpecification;
-import ro.sdi.lab24.core.repository.Repository;
 import ro.sdi.lab24.core.validation.Validator;
 
-import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -27,35 +35,21 @@ public class RentalService {
     private static final Logger log = LoggerFactory.getLogger(RentalService.class);
 
     @Autowired
-    ClientService clientService;
+    ClientTableAdapter clientRepository;
 
     @Autowired
-    MovieService movieService;
+    MovieTableAdapter movieRepository;
 
     @Autowired
-    Repository<Rental.RentalID, Rental> rentalRepository;
+    RentalTableAdapter rentalRepository;
 
     @Autowired
     Validator<Rental> rentalValidator;
 
+    @PersistenceContext
+    EntityManager entityManager;
+
     public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-
-    @PostConstruct
-    private void setupCascadeDeletion() {
-        clientService.setEntityDeletedListener(
-                client -> StreamSupport
-                        .stream(rentalRepository.findAll().spliterator(), false)
-                        .filter(rental -> rental.getId().getClientId() == client.getId())
-                        .forEach(rental -> rentalRepository.delete(rental.getId()))
-        );
-
-        movieService.setEntityDeletedListener(
-                movie -> StreamSupport
-                        .stream(rentalRepository.findAll().spliterator(), false)
-                        .filter(rental -> rental.getId().getMovieId() == movie.getId())
-                        .forEach(rental -> rentalRepository.delete(rental.getId()))
-        );
-    }
 
     /**
      * This function adds a rental to the repository
@@ -67,34 +61,26 @@ public class RentalService {
      * @throws AlreadyExistingElementException if the rental already exists in the repository
      * @throws DateTimeInvalidException        if the date and time cannot be parsed
      */
+    @Transactional
     public void addRental(int movieId, int clientId, String time) {
         checkRentalID(movieId, clientId);
-        Rental rental;
-        try {
-            rental = new Rental(movieId, clientId, LocalDateTime.parse(time, formatter));
-        } catch (DateTimeParseException e) {
-            throw new DateTimeInvalidException("Date and time invalid");
-        }
+        Rental rental = new Rental(LocalDateTime.parse(time, formatter),
+                entityManager.getReference(Client.class, clientId),
+                entityManager.getReference(Movie.class, movieId));
+
         rentalValidator.validate(rental);
         log.trace("Adding rental {}", rental);
-        rentalRepository.save(rental)
-                .ifPresent(opt ->
-                {
-                    throw new AlreadyExistingElementException(String.format(
-                            "Rental of movie %d and client %d already exists",
-                            movieId,
-                            clientId
-                    ));
-                });
+        clientRepository.findByIdWithRentals(clientId).orElseThrow(RuntimeException::new).getRentals().add(rental);
+//        movieRepository.findByIdWithRentals(movieId).orElseThrow(RuntimeException::new).getRentals().add(rental);
     }
 
     private void checkRentalID(int movieId, int clientId) {
-        movieService.findOne(movieId)
+        movieRepository.findById(movieId)
                 .orElseThrow(() -> new ElementNotFoundException(String.format(
                         "Movie %d does not exist",
                         movieId
                 )));
-        clientService.findOne(clientId)
+        clientRepository.findById(clientId)
                 .orElseThrow(() -> new ElementNotFoundException(String.format(
                         "Client %d does not exist",
                         clientId
@@ -103,20 +89,21 @@ public class RentalService {
 
     /**
      * This function deletes a rental from the repository
-     *
-     * @param movieId:  the ID of the movie
-     * @param clientId: the ID of the client
-     * @throws ElementNotFoundException if the movie, client don't exist of if the rental itself doesn't exist in the repository
      */
-    public void deleteRental(int movieId, int clientId) {
-        checkRentalID(movieId, clientId);
-        log.trace("Removing rental with id {} {}", movieId, clientId);
-        rentalRepository.delete(new Rental.RentalID(movieId, clientId))
-                .orElseThrow(() -> new ElementNotFoundException(String.format(
-                        "Rental of movie %d and client %d does not exist",
-                        movieId,
-                        clientId
-                )));
+    @Transactional
+    public void deleteRental(int rentalId) {
+        Optional<Rental> optionalRental = clientRepository.findAllClientsWithRentals()
+                .stream()
+                .map(client -> client.getRentals())
+                .flatMap(rentals -> rentals.stream())
+                .filter(rental -> rental.getId().equals(rentalId))
+                .findFirst();
+        optionalRental.ifPresent(
+                rental -> {
+                    Optional<Client> client = clientRepository.findByIdWithRentals(rental.getClient().getId());
+                    client.ifPresent(c -> c.getRentals().remove(rental));
+                }
+        );
     }
 
     /**
@@ -126,46 +113,60 @@ public class RentalService {
      */
     public Iterable<Rental> getRentals() {
         log.trace("Fetching all rentals");
-        return rentalRepository.findAll();
+        return clientRepository.findAllClientsWithRentals()
+                .stream()
+                .map(client -> client.getRentals())
+                .reduce(new ArrayList<>(), (a, b) -> {
+                    a.addAll(b);
+                    return a;
+                });
     }
 
     public Iterable<Rental> getRentalsPaginated(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return rentalRepository.findAll(pageable);
+//        Pageable pageable = PageRequest.of(page, size);
+//        return rentalRepository.findAll(pageable);
+        return clientRepository.findAllClientsWithRentals()
+                .stream()
+                .map(Client::getRentals)
+                .reduce(new ArrayList<>(), (a, b) -> {
+                    a.addAll(b);
+                    return a;
+                });
     }
 
     /**
      * This function updates a rental based on the movie ID and client ID with its new time
      *
-     * @param movieId:  the ID of the movie
-     * @param clientId: the ID of the client
      * @param time:     date and time - the object of updation
      * @throws ElementNotFoundException if the movie or client does not exist in the repository or
      *                                  if the rental is nowhere to be found
      */
-    public void updateRental(int movieId, int clientId, String time) {
-        checkRentalID(movieId, clientId);
-        Rental rental;
+    @Transactional
+    public void updateRental(int rentalId, String time) {
+        LocalDateTime dateTime;
         try {
-            rental = new Rental(movieId, clientId, LocalDateTime.parse(time, formatter));
+            dateTime = LocalDateTime.parse(time, formatter);
         } catch (DateTimeParseException e) {
             throw new DateTimeInvalidException("Date and time invalid");
         }
-        rentalValidator.validate(rental);
-        log.trace("Updating rental {}", rental);
-        rentalRepository.update(rental)
-                .orElseThrow(() -> new ElementNotFoundException(String.format(
-                        "Rental of movie %d and client %d does not exist",
-                        movieId,
-                        clientId
-                )));
+        clientRepository.findAllClientsWithRentals().stream()
+                .map(client -> client.getRentals())
+                .reduce(new ArrayList<>(), (a, b) -> {
+                    a.addAll(b);
+                    return a;
+                })
+                .stream()
+                .filter(rental -> rental.getId().equals(rentalId))
+                .findFirst()
+                .orElseThrow(RuntimeException::new)
+                .setTime(dateTime);
     }
 
     public Iterable<Rental> filterRentalsByMovieName(String name) {
         String regex = ".*" + name + ".*";
         log.trace("Filtering rentals by the movie name {}", name);
         return StreamSupport.stream(rentalRepository.findAll().spliterator(), false)
-                .filter(rental -> movieService.findOne(rental.getId().getMovieId())
+                .filter(rental -> movieRepository.findById(rental.getMovie().getId())
                         .filter(t -> t.getName()
                                 .matches(regex))
                         .isPresent())

@@ -4,5 +4,5 @@ export class Client {
 }
 
 export class Clients {
-  clients: Array<Client>
+  clients: Array<Client>;
 }

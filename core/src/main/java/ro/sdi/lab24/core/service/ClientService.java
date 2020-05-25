@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import ro.sdi.lab24.core.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.core.exception.ElementNotFoundException;
 import ro.sdi.lab24.core.model.Client;
+import ro.sdi.lab24.core.model.serialization.database.ClientTableAdapter;
 import ro.sdi.lab24.core.model.specification.ClientNameSpecification;
-import ro.sdi.lab24.core.repository.Repository;
 import ro.sdi.lab24.core.validation.Validator;
 
 import java.util.Optional;
@@ -22,7 +22,7 @@ public class ClientService {
     private static final Logger log = LoggerFactory.getLogger(ClientService.class);
 
     @Autowired
-    Repository<Integer, Client> clientRepository;
+    ClientTableAdapter clientRepository;
 
     @Autowired
     Validator<Client> clientValidator;
@@ -36,23 +36,14 @@ public class ClientService {
     /**
      * This function adds a client to the repository
      *
-     * @param id:   the ID of the client
      * @param name: the name of the client
      * @throws AlreadyExistingElementException if the client (the ID) is already there
      */
-    public void addClient(int id, String name) {
-        Client client = new Client(id, name);
+    public void addClient(String name) {
+        Client client = Client.builder().name(name).build();
         clientValidator.validate(client);
         log.trace("Adding client {}", client);
-        clientRepository
-                .save(client)
-                .ifPresent(opt ->
-                {
-                    throw new AlreadyExistingElementException(String.format(
-                            "Client %d already exists",
-                            id
-                    ));
-                });
+        clientRepository.save(client);
     }
 
     /**
@@ -63,20 +54,11 @@ public class ClientService {
      */
     public void deleteClient(int id) {
         log.trace("Removing client with id {}", id);
-        clientRepository
-                .delete(id)
-                .ifPresentOrElse(
-                        entity -> Optional
-                                .ofNullable(entityDeletedListener)
-                                .ifPresent(listener -> listener.onEntityDeleted(entity)),
-                        () ->
-                        {
-                            throw new ElementNotFoundException(String.format(
-                                    "Client %d does not exist",
-                                    id
-                            ));
-                        }
-                );
+        clientRepository.findById(id).orElseThrow(() -> new ElementNotFoundException(String.format(
+                "Client %d does not exist",
+                id
+        )));
+        clientRepository.deleteById(id);
     }
 
     /**
@@ -102,15 +84,15 @@ public class ClientService {
      * @throws ElementNotFoundException if the client isn't found in the repository based on their ID
      */
     public void updateClient(int id, String name) {
-        Client client = new Client(id, name);
-        clientValidator.validate(client);
+
+        Client client = clientRepository.findById(id).orElseThrow(() -> new ElementNotFoundException(String.format(
+                "Client %d does not exist",
+                id
+        )));
         log.trace("Updating client {}", client);
-        clientRepository
-                .update(client)
-                .orElseThrow(() -> new ElementNotFoundException(String.format(
-                        "Client %d does not exist",
-                        id
-                )));
+        client.setName(name);
+        clientValidator.validate(client);
+        clientRepository.save(client);
     }
 
     public Iterable<Client> filterClientsByName(String name) {
@@ -137,6 +119,6 @@ public class ClientService {
     }
 
     public Optional<Client> findOne(int clientId) {
-        return clientRepository.findOne(clientId);
+        return clientRepository.findById(clientId);
     }
 }

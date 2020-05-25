@@ -6,11 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ro.sdi.lab24.core.model.Client;
 import ro.sdi.lab24.core.model.Movie;
 import ro.sdi.lab24.core.model.Rental;
-import ro.sdi.lab24.core.repository.Repository;
+import ro.sdi.lab24.core.model.serialization.database.ClientTableAdapter;
+import ro.sdi.lab24.core.model.serialization.database.MovieTableAdapter;
+import ro.sdi.lab24.core.model.serialization.database.RentalTableAdapter;
 import ro.sdi.lab24.core.service.dto.ClientGenre;
 import ro.sdi.lab24.core.service.dto.RentedMovieStatistic;
 import ro.sdi.lab24.core.validation.Validator;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Function;
@@ -23,13 +27,13 @@ public class ReportService {
     private static final Logger log = LoggerFactory.getLogger(ReportService.class);
 
     @Autowired
-    Repository<Integer, Client> clientRepository;
+    ClientTableAdapter clientRepository;
 
     @Autowired
-    Repository<Integer, Movie> movieRepository;
+    MovieTableAdapter movieRepository;
 
     @Autowired
-    Repository<Rental.RentalID, Rental> rentalRepository;
+    RentalTableAdapter rentalRepository;
 
     @Autowired
     Validator<Client> clientValidator;
@@ -40,10 +44,13 @@ public class ReportService {
     @Autowired
     Validator<Rental> rentalValidator;
 
+    @PersistenceContext
+    EntityManager entityManager;
+
     public ReportService(
-            Repository<Integer, Client> clientRepository,
-            Repository<Integer, Movie> movieRepository,
-            Repository<Rental.RentalID, Rental> rentalRepository,
+            ClientTableAdapter clientRepository,
+            MovieTableAdapter movieRepository,
+            RentalTableAdapter rentalRepository,
             Validator<Client> clientValidator,
             Validator<Movie> movieValidator,
             Validator<Rental> rentalValidator
@@ -60,7 +67,7 @@ public class ReportService {
         log.trace("Fetching top 10 rented movies");
         Stream<Rental> rentalStream = StreamSupport.stream(rentalRepository.findAll().spliterator(), false);
         Map<String, Long> occurrenceMap = rentalStream
-                .map(rental -> movieRepository.findOne(rental.getId().getMovieId()).get().getName())
+                .map(rental -> movieRepository.findById(rental.getMovie().getId()).get().getName())
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
 
@@ -80,8 +87,8 @@ public class ReportService {
         log.trace("Fetching client favorite genres");
         return StreamSupport.stream(clientRepository.findAll().spliterator(), false)
                 .map(client -> new ClientGenre(client,
-                                StreamSupport.stream(rentalRepository.findAll().spliterator(), false)
-                                        .filter(rental -> rental.getId().getClientId() == client.getId())
+                        StreamSupport.stream(rentalRepository.findAll().spliterator(), false)
+                                .filter(rental -> rental.getClient().getId() == client.getId())
                                         .map(this::getMovieGenre)
                                         .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                                         .entrySet()
@@ -96,7 +103,7 @@ public class ReportService {
 
     private String getMovieGenre(Rental rental) {
         return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
-                .filter(movie -> movie.getId() == rental.getId().getMovieId())
+                .filter(movie -> movie.getId() == rental.getMovie().getId())
                 .findAny()
                 .map(Movie::getGenre)
                 .orElse("");

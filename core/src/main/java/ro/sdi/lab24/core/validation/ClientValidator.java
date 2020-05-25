@@ -16,7 +16,6 @@ public class ClientValidator implements Validator<Client> {
      */
     @Override
     public void validate(Client entity) throws ValidatorException {
-        Optional.of(entity).filter(client -> client.getId() >= 0).orElseThrow(() -> new ValidatorException(String.format("Client %d has an invalid ID", entity.getId())));
         Optional.of(entity).filter(client -> client.getName().matches("^[a-zA-Z]+$")).orElseThrow(() -> new ValidatorException(String.format("Client %d has an invalid name", entity.getId())));
     }
 }

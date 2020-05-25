@@ -23,11 +23,11 @@ export class RentalService {
   }
 
   updateRental(rental: Rental): Observable<HttpResponse<any>> {
-    return this.httpClient.put<HttpResponse<any>>(`${this.rentalsURL}/${rental.movieId}&${rental.clientId}`, rental, {observe: "response"});
+    return this.httpClient.put<HttpResponse<any>>(`${this.rentalsURL}/${rental.rentalId}`, rental, {observe: "response"});
   }
 
-  deleteRental(movieId: number, clientId: number): Observable<HttpResponse<any>> {
-    return this.httpClient.delete<HttpResponse<any>>(`${this.rentalsURL}/${movieId}&${clientId}`, {observe: "response"});
+  deleteRental(rentalId: number): Observable<HttpResponse<any>> {
+    return this.httpClient.delete<HttpResponse<any>>(`${this.rentalsURL}/${rentalId}`, {observe: "response"});
   }
 
   filterRentalsByMovieName(movieName: string): Observable<Rentals> {

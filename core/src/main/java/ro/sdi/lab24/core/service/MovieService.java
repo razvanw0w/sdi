@@ -11,11 +11,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ro.sdi.lab24.core.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.core.exception.ElementNotFoundException;
-import ro.sdi.lab24.core.exception.SortingException;
 import ro.sdi.lab24.core.model.Movie;
+import ro.sdi.lab24.core.model.serialization.database.MovieTableAdapter;
 import ro.sdi.lab24.core.model.specification.MovieGenreSpecification;
-import ro.sdi.lab24.core.repository.Repository;
-import ro.sdi.lab24.core.repository.SortingRepository;
 import ro.sdi.lab24.core.validation.Validator;
 
 import java.util.Optional;
@@ -25,7 +23,7 @@ public class MovieService {
     private static final Logger log = LoggerFactory.getLogger(MovieService.class);
 
     @Autowired
-    Repository<Integer, Movie> movieRepository;
+    MovieTableAdapter movieRepository;
 
     @Autowired
     Validator<Movie> movieValidator;
@@ -39,21 +37,14 @@ public class MovieService {
     /**
      * This function adds a movie to the repository
      *
-     * @param id:   the ID of the movie
      * @param name: the name of the movie
      * @throws AlreadyExistingElementException if the movie (the ID) is already there
      */
-    public void addMovie(int id, String name, String genre, int rating) {
-        Movie movie = new Movie(id, name, genre, rating);
+    public void addMovie(String name, String genre, int rating) {
+        Movie movie = Movie.builder().name(name).genre(genre).rating(rating).build();
         movieValidator.validate(movie);
         log.trace("Adding movie {}", movie);
-        movieRepository.save(movie).ifPresent(opt ->
-        {
-            throw new AlreadyExistingElementException(String.format(
-                    "Movie %d already exists",
-                    id
-            ));
-        });
+        movieRepository.save(movie);
     }
 
     /**
@@ -64,11 +55,11 @@ public class MovieService {
      */
     public void deleteMovie(int id) {
         log.trace("Deleting movie with id {}", id);
-        movieRepository.delete(id)
-                .orElseThrow(() -> new ElementNotFoundException(String.format(
-                        "Movie %d does not exist",
-                        id
-                )));
+        movieRepository.findById(id).orElseThrow(() -> new ElementNotFoundException(String.format(
+                "Client %d does not exist",
+                id
+        )));
+        movieRepository.deleteById(id);
     }
 
     /**
@@ -102,22 +93,17 @@ public class MovieService {
             String genre,
             Integer rating
     ) {
-        Movie storedMovie = movieRepository.findOne(id)
+        Movie movie = movieRepository.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException(String.format(
                         "Movie %d does not exist",
                         id
                 )));
-        Movie movie = new Movie(id, Optional.ofNullable(name).orElseGet(storedMovie::getName),
-                Optional.ofNullable(genre).orElseGet(storedMovie::getGenre),
-                Optional.ofNullable(rating).orElseGet(storedMovie::getRating)
-        );
+        movie.setName(Optional.ofNullable(name).orElseGet(movie::getName));
+        movie.setGenre(Optional.ofNullable(genre).orElseGet(movie::getGenre));
+        movie.setRating(Optional.ofNullable(rating).orElseGet(movie::getRating));
         movieValidator.validate(movie);
         log.trace("Updating movie {}", movie);
-        movieRepository.update(movie)
-                .orElseThrow(() -> new ElementNotFoundException(String.format(
-                        "Movie %d does not exist",
-                        id
-                )));
+        movieRepository.save(movie);
     }
 
     public Iterable<Movie> filterMoviesByGenre(String genre) {
@@ -131,26 +117,18 @@ public class MovieService {
     }
 
     public Optional<Movie> findOne(int movieId) {
-        return movieRepository.findOne(movieId);
+        return movieRepository.findById(movieId);
     }
 
     public Iterable<Movie> sortMovies(Sort sort) {
         log.trace("Sorting movies");
-        SortingRepository<Integer, Movie> sortingRepo = Optional.of(movieRepository)
-                .filter(repo -> repo instanceof SortingRepository)
-                .map(repo -> (SortingRepository<Integer, Movie>) repo)
-                .orElseThrow(() -> new SortingException("repository doesn't support sorting"));
-        return sortingRepo.findAll(sort);
+        return movieRepository.findAll(sort);
     }
 
     public Iterable<Movie> sortMoviesPaginated(Sort sort, int page, int size) {
         log.trace("Sorting movies");
-        SortingRepository<Integer, Movie> sortingRepo = Optional.of(movieRepository)
-                .filter(repo -> repo instanceof SortingRepository)
-                .map(repo -> (SortingRepository<Integer, Movie>) repo)
-                .orElseThrow(() -> new SortingException("repository doesn't support sorting"));
         Pageable pageable = PageRequest.of(page, size, sort);
-        return sortingRepo.findAll(pageable);
+        return movieRepository.findAll(pageable);
     }
 
     public Page<Movie> filterMoviesByGenrePaginated(String genre, int page, int size) {

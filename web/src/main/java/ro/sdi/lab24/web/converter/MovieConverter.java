@@ -8,7 +8,12 @@ import ro.sdi.lab24.web.dto.MovieDTO;
 public class MovieConverter implements Converter<Movie, MovieDTO> {
     @Override
     public Movie toModel(MovieDTO movieDTO) {
-        return new Movie(movieDTO.getId(), movieDTO.getName(), movieDTO.getGenre(), movieDTO.getRating());
+        Movie movie = Movie.builder()
+                .name(movieDTO.getName())
+                .genre(movieDTO.getGenre())
+                .rating(movieDTO.getRating()).build();
+        movie.setId(movie.getId());
+        return movie;
     }
 
     @Override

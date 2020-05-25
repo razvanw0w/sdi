@@ -27,12 +27,13 @@
     </Appenders>
     <Loggers>
         <!-- Spring framework -->
-        <!--        <Logger name="org.hibernate.stat" level="INFO" />-->
+        <Logger name="org.hibernate.stat" level="INFO"/>
         <Logger name="org.springframework.data" level="WARN"/>
         <Logger name="org.springframework.web" level="WARN"/>
         <Logger name="org.springframework.http.converter.json" level="WARN"/>
         <Logger name="com.fasterxml.jackson.databind" level="WARN"/>
         <Logger name="ro.sdi.lab24" level="TRACE"/>
+
 
         <!-- ROOT -->
         <Root level="WARN">

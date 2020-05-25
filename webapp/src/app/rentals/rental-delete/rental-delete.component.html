@@ -2,43 +2,27 @@
 <form #formDir="ngForm" [formGroup]="rentalForm">
   <div [hidden]="formDir.submitted">
     <div class="form-group">
-      <label for="movieId">Movie ID</label>
-      <input class="form-control" formControlName="movieId" id="movieId" required>
-      <div *ngIf="movieId.invalid && (movieId.dirty || movieId.touched)" class="alert alert-danger">
-        <div *ngIf="movieId.errors.required">
-          movieId is required.
+      <label for="rentalId">Rental ID</label>
+      <input class="form-control" formControlName="rentalId" id="rentalId" required>
+      <div *ngIf="rentalId.invalid && (rentalId.dirty || rentalId.touched)" class="alert alert-danger">
+        <div *ngIf="rentalId.errors.required">
+          rentalId is required.
         </div>
-        <div *ngIf="movieId.errors.min">
-          movieId must be greater or equal than 0.
+        <div *ngIf="rentalId.errors.min">
+          rentalId must be greater or equal than 0.
         </div>
-        <div *ngIf="movieId.errors.pattern">
-          movieId must consist only of digits.
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="clientId">Client ID</label>
-      <input class="form-control" formControlName="clientId" id="clientId" required>
-      <div *ngIf="clientId.invalid && (clientId.dirty || clientId.touched)" class="alert alert-danger">
-        <div *ngIf="clientId.errors.required">
-          clientId is required.
-        </div>
-        <div *ngIf="clientId.errors.min">
-          clientId must be greater or equal than 0.
-        </div>
-        <div *ngIf="clientId.errors.pattern">
-          clientId must consist only of digits.
+        <div *ngIf="rentalId.errors.pattern">
+          rentalId must consist only of digits.
         </div>
       </div>
     </div>
 
-    <button (click)="delete(movieId.value, clientId.value)" [disabled]="rentalForm.invalid" type="submit">
+    <button (click)="delete(rentalId.value)" [disabled]="rentalForm.invalid" type="submit">
       Submit
     </button>
   </div>
   <div *ngIf="formDir.submitted" class="submitted-message">
-    <p *ngIf="successfulDelete">Rental movie:{{rentalForm.value.movieId}} client:{{rentalForm.value.clientId}}
+    <p *ngIf="successfulDelete">Rental movie: {{rentalForm.value.rentalId}}
       deleted!</p>
     <p *ngIf="!successfulDelete">Rental delete failed: rental doesn't exist</p>
   </div>
