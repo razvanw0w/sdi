@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import ro.sdi.lab24.core.exception.AlreadyExistingElementException;
 import ro.sdi.lab24.core.exception.ElementNotFoundException;
 import ro.sdi.lab24.core.model.Movie;
-import ro.sdi.lab24.core.model.serialization.database.MovieTableAdapter;
 import ro.sdi.lab24.core.model.specification.MovieGenreSpecification;
+import ro.sdi.lab24.core.repository.MovieRepository;
 import ro.sdi.lab24.core.validation.Validator;
 
 import java.util.Optional;
@@ -23,7 +23,7 @@ public class MovieService {
     private static final Logger log = LoggerFactory.getLogger(MovieService.class);
 
     @Autowired
-    MovieTableAdapter movieRepository;
+    MovieRepository movieRepository;
 
     @Autowired
     Validator<Movie> movieValidator;

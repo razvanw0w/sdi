@@ -71,28 +71,4 @@ public class AppLocalConfig {
     DateTimeFormatter dateFormatter() {
         return DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     }
-
-//    @Bean
-//    Repository<Integer, Client> clientRepository(
-//            ClientTableAdapter clientTableAdapter,
-//            CopyAdapter<Client> clientCopyAdapter
-//    ) {
-//        return new DatabaseRepository<>(clientTableAdapter, clientCopyAdapter);
-//    }
-//
-//    @Bean
-//    Repository<Integer, Movie> movieRepository(
-//            MovieTableAdapter movieTableAdapter,
-//            CopyAdapter<Movie> movieCopyAdapter
-//    ) {
-//        return new DatabaseRepository<>(movieTableAdapter, movieCopyAdapter);
-//    }
-//
-//    @Bean
-//    Repository<Rental.RentalID, Rental> rentalRepository(
-//            RentalTableAdapter rentalTableAdapter,
-//            CopyAdapter<Rental> rentalCopyAdapter
-//    ) {
-//        return new DatabaseRepository<>(rentalTableAdapter, rentalCopyAdapter);
-//    }
 }

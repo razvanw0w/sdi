@@ -1,4 +1,4 @@
-package ro.sdi.lab24.core.model.serialization.database;
+package ro.sdi.lab24.core.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
@@ -8,7 +8,7 @@ import ro.sdi.lab24.core.model.Movie;
 import java.util.List;
 import java.util.Optional;
 
-public interface MovieTableAdapter extends TableAdapter<Integer, Movie> {
+public interface MovieRepository extends Repository<Integer, Movie> {
     @Query("select distinct movie from Movie movie")
     @EntityGraph(value = "movieWithRentalsAndClients", type = EntityGraph.EntityGraphType.LOAD)
     List<Movie> findAllMoviesWithRentals();

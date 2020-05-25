@@ -19,7 +19,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJpaRepositories({"ro.sdi.lab24.core.model.serialization.database"})
+@EnableJpaRepositories({"ro.sdi.lab24.core.repository"})
 @EnableTransactionManagement
 //@EnableCaching
 public class JPAConfig {

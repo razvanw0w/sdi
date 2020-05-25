@@ -14,10 +14,10 @@ import ro.sdi.lab24.core.exception.ElementNotFoundException;
 import ro.sdi.lab24.core.model.Client;
 import ro.sdi.lab24.core.model.Movie;
 import ro.sdi.lab24.core.model.Rental;
-import ro.sdi.lab24.core.model.serialization.database.ClientTableAdapter;
-import ro.sdi.lab24.core.model.serialization.database.MovieTableAdapter;
-import ro.sdi.lab24.core.model.serialization.database.RentalTableAdapter;
 import ro.sdi.lab24.core.model.specification.RentalDateSpecification;
+import ro.sdi.lab24.core.repository.ClientRepository;
+import ro.sdi.lab24.core.repository.MovieRepository;
+import ro.sdi.lab24.core.repository.RentalRepository;
 import ro.sdi.lab24.core.validation.Validator;
 
 import javax.persistence.EntityManager;
@@ -35,13 +35,13 @@ public class RentalService {
     private static final Logger log = LoggerFactory.getLogger(RentalService.class);
 
     @Autowired
-    ClientTableAdapter clientRepository;
+    ClientRepository clientRepository;
 
     @Autowired
-    MovieTableAdapter movieRepository;
+    MovieRepository movieRepository;
 
     @Autowired
-    RentalTableAdapter rentalRepository;
+    RentalRepository rentalRepository;
 
     @Autowired
     Validator<Rental> rentalValidator;
@@ -64,9 +64,10 @@ public class RentalService {
     @Transactional
     public void addRental(int movieId, int clientId, String time) {
         checkRentalID(movieId, clientId);
-        Rental rental = new Rental(LocalDateTime.parse(time, formatter),
+        Rental rental = new Rental(
                 entityManager.getReference(Client.class, clientId),
-                entityManager.getReference(Movie.class, movieId));
+                entityManager.getReference(Movie.class, movieId),
+                LocalDateTime.parse(time, formatter));
 
         rentalValidator.validate(rental);
         log.trace("Adding rental {}", rental);

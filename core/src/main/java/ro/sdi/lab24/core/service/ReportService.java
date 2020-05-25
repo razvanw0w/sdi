@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ro.sdi.lab24.core.model.Client;
 import ro.sdi.lab24.core.model.Movie;
 import ro.sdi.lab24.core.model.Rental;
-import ro.sdi.lab24.core.model.serialization.database.ClientTableAdapter;
-import ro.sdi.lab24.core.model.serialization.database.MovieTableAdapter;
-import ro.sdi.lab24.core.model.serialization.database.RentalTableAdapter;
+import ro.sdi.lab24.core.repository.ClientRepository;
+import ro.sdi.lab24.core.repository.MovieRepository;
+import ro.sdi.lab24.core.repository.RentalRepository;
 import ro.sdi.lab24.core.service.dto.ClientGenre;
 import ro.sdi.lab24.core.service.dto.RentedMovieStatistic;
 import ro.sdi.lab24.core.validation.Validator;
@@ -27,13 +27,13 @@ public class ReportService {
     private static final Logger log = LoggerFactory.getLogger(ReportService.class);
 
     @Autowired
-    ClientTableAdapter clientRepository;
+    ClientRepository clientRepository;
 
     @Autowired
-    MovieTableAdapter movieRepository;
+    MovieRepository movieRepository;
 
     @Autowired
-    RentalTableAdapter rentalRepository;
+    RentalRepository rentalRepository;
 
     @Autowired
     Validator<Client> clientValidator;
@@ -48,9 +48,9 @@ public class ReportService {
     EntityManager entityManager;
 
     public ReportService(
-            ClientTableAdapter clientRepository,
-            MovieTableAdapter movieRepository,
-            RentalTableAdapter rentalRepository,
+            ClientRepository clientRepository,
+            MovieRepository movieRepository,
+            RentalRepository rentalRepository,
             Validator<Client> clientValidator,
             Validator<Movie> movieValidator,
             Validator<Rental> rentalValidator
