@@ -15,7 +15,9 @@ public class ClientConverter implements Converter<Client, ClientDTO> {
     @Override
     public Client toModel(ClientDTO clientDTO) {
         Client client = Client.builder()
-                .name(clientDTO.getName()).build();
+                .name(clientDTO.getName())
+                .fidelity(clientDTO.getFidelity())
+                .build();
         client.setId(clientDTO.getId());
         return client;
     }
@@ -25,6 +27,7 @@ public class ClientConverter implements Converter<Client, ClientDTO> {
         return ClientDTO.builder()
                 .id(client.getId())
                 .name(client.getName())
+                .fidelity(client.getFidelity())
                 .build();
     }
 }

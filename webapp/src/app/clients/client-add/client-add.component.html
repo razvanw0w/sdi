@@ -13,7 +13,25 @@
         </div>
       </div>
     </div>
-    <button (click)="add(name.value)" [disabled]="clientForm.invalid" type="submit">Submit</button>
+    <div class="form-group">
+      <label for="fidelity">Fidelity</label>
+      <input class="form-control" formControlName="fidelity" id="fidelity" required>
+      <div *ngIf="fidelity.invalid && (fidelity.dirty || fidelity.touched)" class="alert">
+        <div *ngIf="fidelity.errors.required">
+          Name is required.
+        </div>
+        <div *ngIf="fidelity.errors.pattern">
+          Fidelity must consist only of digits
+        </div>
+        <div *ngIf="fidelity.errors.min">
+          Fidelity must be at least 1.
+        </div>
+        <div *ngIf="fidelity.errors.max">
+          Fidelity must be at most 5
+        </div>
+      </div>
+    </div>
+    <button (click)="add(name.value, fidelity.value)" [disabled]="clientForm.invalid" type="submit">Submit</button>
   </div>
   <div *ngIf="formDir.submitted" class="submitted-message">
     <p *ngIf="successfulAdd">New client: {{clientForm.value.name}}!</p>

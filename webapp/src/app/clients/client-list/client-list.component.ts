@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Client} from "../shared/client.model";
 import {ClientService} from "../shared/client.service";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-client-list',
@@ -25,18 +25,7 @@ export class ClientListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.pageForm = new FormGroup({
-      'page': new FormControl("", [
-        Validators.required,
-        Validators.min(0),
-        Validators.pattern("^0$|^[1-9]+[0-9]*$")
-      ]),
-      'size': new FormControl("", [
-        Validators.required,
-        Validators.pattern("^0$|^[1-9]+[0-9]*$")
-      ])
-    });
-    //this.clientService.getClients().subscribe(dto => this.clients = dto.clients);
+    this.clientService.getClients().subscribe(dto => this.clients = dto.clients);
   }
 
   getAllPaginated(page: string, size: string) {

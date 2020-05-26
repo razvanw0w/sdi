@@ -39,8 +39,8 @@ public class ClientService {
      * @param name: the name of the client
      * @throws AlreadyExistingElementException if the client (the ID) is already there
      */
-    public void addClient(String name) {
-        Client client = Client.builder().name(name).build();
+    public void addClient(String name, int fidelity) {
+        Client client = Client.builder().name(name).fidelity(fidelity).build();
         clientValidator.validate(client);
         log.trace("Adding client {}", client);
         clientRepository.save(client);
@@ -68,6 +68,8 @@ public class ClientService {
      */
     public Iterable<Client> getClients() {
         log.trace("Fetching all clients");
+        log.trace("name test {}", clientRepository.findByExactName("Razvan"));
+        log.trace("fidelity test {}", clientRepository.findByExactFidelity(3));
         return clientRepository.findAll();
     }
 
@@ -83,7 +85,7 @@ public class ClientService {
      * @param name: the new name of the client
      * @throws ElementNotFoundException if the client isn't found in the repository based on their ID
      */
-    public void updateClient(int id, String name) {
+    public void updateClient(int id, String name, int fidelity) {
 
         Client client = clientRepository.findById(id).orElseThrow(() -> new ElementNotFoundException(String.format(
                 "Client %d does not exist",
@@ -91,6 +93,7 @@ public class ClientService {
         )));
         log.trace("Updating client {}", client);
         client.setName(name);
+        client.setFidelity(fidelity);
         clientValidator.validate(client);
         clientRepository.save(client);
     }

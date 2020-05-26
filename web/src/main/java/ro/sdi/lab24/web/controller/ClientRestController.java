@@ -43,7 +43,7 @@ public class ClientRestController {
     public ResponseEntity<?> addClient(@RequestBody ClientDTO dto) {
         Client client = clientConverter.toModel(dto);
         try {
-            clientService.addClient(client.getName());
+            clientService.addClient(client.getName(), client.getFidelity());
         } catch (AlreadyExistingElementException e) {
             log.trace("client id = {} already exists", client.getId());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -68,7 +68,7 @@ public class ClientRestController {
     public ResponseEntity<?> updateClient(@PathVariable int id, @RequestBody ClientDTO dto) {
         Client client = clientConverter.toModel(dto);
         try {
-            clientService.updateClient(id, client.getName());
+            clientService.updateClient(id, client.getName(), client.getFidelity());
         } catch (ElementNotFoundException e) {
             log.trace("client id = {} could not be updated", id);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

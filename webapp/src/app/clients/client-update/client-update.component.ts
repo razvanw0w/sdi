@@ -8,8 +8,8 @@ import {ClientService} from "../shared/client.service";
   styleUrls: ['./client-update.component.css']
 })
 export class ClientUpdateComponent implements OnInit {
-  clientForm: FormGroup
-  successfulUpdate: Boolean
+  clientForm: FormGroup;
+  successfulUpdate: Boolean;
 
   constructor(private clientService: ClientService) {
   }
@@ -22,6 +22,10 @@ export class ClientUpdateComponent implements OnInit {
     return this.clientForm.get('name');
   }
 
+  get fidelity() {
+    return this.clientForm.get('fidelity');
+  }
+
   ngOnInit(): void {
     this.clientForm = new FormGroup({
       'id': new FormControl("", [
@@ -32,15 +36,22 @@ export class ClientUpdateComponent implements OnInit {
       'name': new FormControl("", [
         Validators.required,
         Validators.pattern("^[a-zA-Z]+$")
+      ]),
+      'fidelity': new FormControl("", [
+        Validators.required,
+        Validators.min(1),
+        Validators.max(5),
+        Validators.pattern("^[1-9]+[0-9]*$")
       ])
     });
   }
 
-  update(id: string, name: string): void {
+  update(id: string, name: string, fidelity: string): void {
     console.log(id, name);
     this.clientService.updateClient({
       id: +id,
-      name
+      name,
+      fidelity: +fidelity
     }).subscribe(response => this.successfulUpdate = response.status === 200);
   }
 }

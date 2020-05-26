@@ -69,6 +69,8 @@ public class MovieService {
      */
     public Iterable<Movie> getMovies() {
         log.trace("Fetching all movies");
+        log.trace("name test {}", movieRepository.findByExactName("DeadManDown"));
+        log.trace("genre test {}", movieRepository.findByExactGenre("Action"));
         return movieRepository.findAll();
     }
 

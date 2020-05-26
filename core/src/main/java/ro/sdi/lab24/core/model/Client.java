@@ -3,9 +3,10 @@ package ro.sdi.lab24.core.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @javax.persistence.Entity
@@ -34,16 +35,12 @@ public class Client extends Entity<Integer> implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @Min(1)
+    @Max(5)
+    private Integer fidelity;
+
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Rental> rentals;
-
-    public void addRental(Movie movie, LocalDateTime time) {
-        rentals.add(Rental.builder()
-                .time(time)
-                .client(this)
-                .movie(movie)
-                .build());
-    }
 }
