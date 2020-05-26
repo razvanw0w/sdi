@@ -32,7 +32,11 @@ export class MovieService {
   }
 
   filterMoviesByGenre(genre: string): Observable<Movies> {
-    return this.httpClient.get<Movies>(`${this.moviesURL}/filter/${genre}`);
+    return this.httpClient.get<Movies>(`${this.moviesURL}/filter-genre/${genre}`);
+  }
+
+  filterMoviesByName(name: string): Observable<Movies> {
+    return this.httpClient.get<Movies>(`${this.moviesURL}/filter-name/${name}`);
   }
 
   filterMoviesByGenrePaginated(genre: string, page: number, size: number): Observable<Movies> {

@@ -36,21 +36,10 @@ export class MovieFilterGenreComponent implements OnInit {
         Validators.pattern("^[a-zA-Z]+$")
       ])
     });
-    this.pageForm = new FormGroup({
-      'page': new FormControl("", [
-        Validators.required,
-        Validators.min(0),
-        Validators.pattern("^0$|^[1-9]+[0-9]*$")
-      ]),
-      'size': new FormControl("", [
-        Validators.required,
-        Validators.pattern("^0$|^[1-9]+[0-9]*$")
-      ])
-    });
   }
 
-  filterByGenre(genre: string, page: string, size: string): void {
-    this.movieService.filterMoviesByGenrePaginated(genre, +page, +size).subscribe(dto => this.movies = dto.movies);
+  filterByGenre(genre: string): void {
+    this.movieService.filterMoviesByGenre(genre).subscribe(dto => this.movies = dto.movies);
   }
 
   onSelect(movie: Movie): void {

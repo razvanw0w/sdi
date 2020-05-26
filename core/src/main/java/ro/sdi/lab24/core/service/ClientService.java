@@ -105,8 +105,12 @@ public class ClientService {
                 .stream(clientRepository.findAll().spliterator(), false)
                 .filter(client -> client.getName().matches(regex))
                 .collect(Collectors.toUnmodifiableList());*/
-        Specification<Client> specification = new ClientNameSpecification(name);
-        return clientRepository.findAll(specification);
+        return clientRepository.findByExactName(name);
+    }
+
+    public Iterable<Client> filterClientsByFidelity(Integer fidelity) {
+        log.trace("Filtering clients by fidelity {}", fidelity);
+        return clientRepository.findByExactFidelity(fidelity);
     }
 
     public Iterable<Client> filterClientsByNamePaginated(String name, int page, int size) {

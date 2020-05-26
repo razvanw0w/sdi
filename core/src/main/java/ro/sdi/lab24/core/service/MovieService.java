@@ -114,8 +114,12 @@ public class MovieService {
         return StreamSupport.stream(movieRepository.findAll().spliterator(), false)
                 .filter(movie -> movie.getGenre().matches(regex))
                 .collect(Collectors.toUnmodifiableList());*/
-        Specification<Movie> specification = new MovieGenreSpecification(genre);
-        return movieRepository.findAll(specification);
+        return movieRepository.findByExactGenre(genre);
+    }
+
+    public Iterable<Movie> filterMoviesByName(String name) {
+        log.trace("Filtering movies by name {}", name);
+        return movieRepository.findByExactName(name);
     }
 
     public Optional<Movie> findOne(int movieId) {

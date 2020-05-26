@@ -91,10 +91,16 @@ public class MovieRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/movies/filter/{genre}", method = RequestMethod.GET)
+    @RequestMapping(value = "/movies/filter-genre/{genre}", method = RequestMethod.GET)
     public MoviesDTO filterMoviesByGenre(@PathVariable String genre) {
         log.trace("filtered movies by genre = {}", genre);
         return new MoviesDTO(movieConverter.toDTOList(movieService.filterMoviesByGenre(genre)));
+    }
+
+    @RequestMapping(value = "/movies/filter-name/{name}", method = RequestMethod.GET)
+    public MoviesDTO filterMoviesByName(@PathVariable String name) {
+        log.trace("filtered movies by genre = {}", name);
+        return new MoviesDTO(movieConverter.toDTOList(movieService.filterMoviesByName(name)));
     }
 
     @RequestMapping(value = "/movies/filter-paginated/{genre}&page={page}&size={size}", method = RequestMethod.GET)

@@ -87,12 +87,22 @@ public class ClientRestController {
         );
     }
 
-    @RequestMapping(value = "/clients/filter/{name}", method = RequestMethod.GET)
+    @RequestMapping(value = "/clients/filter-name/{name}", method = RequestMethod.GET)
     public ClientsDTO filterClientsByName(@PathVariable String name) {
         log.trace("filtered clients by name = {}", name);
         return new ClientsDTO(
                 clientConverter.toDTOList(
                         clientService.filterClientsByName(name)
+                )
+        );
+    }
+
+    @RequestMapping(value = "/clients/filter-fidelity/{fidelity}", method = RequestMethod.GET)
+    public ClientsDTO filterClientsByFidelity(@PathVariable int fidelity) {
+        log.trace("filtered clients by fidelity = {}", fidelity);
+        return new ClientsDTO(
+                clientConverter.toDTOList(
+                        clientService.filterClientsByFidelity(fidelity)
                 )
         );
     }

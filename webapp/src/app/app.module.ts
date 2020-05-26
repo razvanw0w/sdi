@@ -34,6 +34,8 @@ import {RentalFilterComponent} from './rentals/rental-filter/rental-filter.compo
 import {ClientSortComponent} from './clients/client-sort/client-sort.component';
 import {MovieSortComponent} from './movies/movie-sort/movie-sort.component';
 import {RentalFilterClientComponent} from './rentals/rental-filter-client/rental-filter-client.component';
+import {ClientFilterFidelityComponent} from './clients/client-filter-fidelity/client-filter-fidelity.component';
+import {MovieFilterNameComponent} from './movies/movie-filter-name/movie-filter-name.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,9 @@ import {RentalFilterClientComponent} from './rentals/rental-filter-client/rental
     RentalFilterComponent,
     ClientSortComponent,
     MovieSortComponent,
-    RentalFilterClientComponent
+    RentalFilterClientComponent,
+    ClientFilterFidelityComponent,
+    MovieFilterNameComponent
   ],
   imports: [
     BrowserModule,

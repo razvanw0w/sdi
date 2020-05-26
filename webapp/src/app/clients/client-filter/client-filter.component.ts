@@ -36,22 +36,11 @@ export class ClientFilterComponent implements OnInit {
         Validators.pattern("^[a-zA-Z]+$")
       ])
     });
-    this.pageForm = new FormGroup({
-      'page': new FormControl("", [
-        Validators.required,
-        Validators.min(0),
-        Validators.pattern("^0$|^[1-9]+[0-9]*$")
-      ]),
-      'size': new FormControl("", [
-        Validators.required,
-        Validators.pattern("^0$|^[1-9]+[0-9]*$")
-      ])
-    });
   }
 
-  filterByName(name: string, page: string, size: string): void {
-    console.log(name, page, size);
-    this.clientService.filterClientsByNamePaginated(name, +page, +size).subscribe(dto => this.clients = dto.clients);
+  filterByName(name: string): void {
+    console.log(name);
+    this.clientService.filterClientsByName(name).subscribe(dto => this.clients = dto.clients);
   }
 
   onSelect(client: Client): void {

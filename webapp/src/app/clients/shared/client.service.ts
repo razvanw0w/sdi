@@ -31,7 +31,11 @@ export class ClientService {
   }
 
   filterClientsByName(name: string): Observable<Clients> {
-    return this.httpClient.get<Clients>(`${this.clientsURL}/filter/${name}`);
+    return this.httpClient.get<Clients>(`${this.clientsURL}/filter-name/${name}`);
+  }
+
+  filterClientsByFidelity(fidelity: number): Observable<Clients> {
+    return this.httpClient.get<Clients>(`${this.clientsURL}/filter-fidelity/${fidelity}`);
   }
 
   filterClientsByNamePaginated(name: string, page: number, size: number): Observable<Clients> {
