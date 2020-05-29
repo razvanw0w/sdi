@@ -12,7 +12,6 @@ import ro.sdi.lab24.core.exception.ElementNotFoundException;
 import ro.sdi.lab24.core.model.Client;
 import ro.sdi.lab24.core.service.ClientService;
 import ro.sdi.lab24.web.converter.ClientConverter;
-import ro.sdi.lab24.web.converter.RentalConverter;
 import ro.sdi.lab24.web.dto.ClientDTO;
 import ro.sdi.lab24.web.dto.ClientsDTO;
 
@@ -28,9 +27,6 @@ public class ClientRestController {
 
     @Autowired
     private ClientConverter clientConverter;
-
-    @Autowired
-    private RentalConverter rentalConverter;
 
     @RequestMapping(value = "/clients", method = RequestMethod.GET)
     public ClientsDTO getClients() {
