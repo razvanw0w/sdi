@@ -8,13 +8,23 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ro.sdi.lab24.core.exception.AlreadyExistingElementException;
+import ro.sdi.lab24.core.exception.DateTimeInvalidException;
 import ro.sdi.lab24.core.exception.ElementNotFoundException;
 import ro.sdi.lab24.core.model.Client;
+import ro.sdi.lab24.core.model.Movie;
+import ro.sdi.lab24.core.model.Rental;
 import ro.sdi.lab24.core.model.specification.ClientNameSpecification;
 import ro.sdi.lab24.core.repository.ClientRepository;
 import ro.sdi.lab24.core.validation.Validator;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -26,6 +36,12 @@ public class ClientService {
 
     @Autowired
     Validator<Client> clientValidator;
+
+    public DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    @PersistenceContext
+    EntityManager entityManager;
+    @Autowired
+    Validator<Rental> rentalValidator;
 
     EntityDeletedListener<Client> entityDeletedListener = null;
 
@@ -68,8 +84,8 @@ public class ClientService {
      */
     public Iterable<Client> getClients() {
         log.trace("Fetching all clients");
-        log.trace("name test {}", clientRepository.findByExactName("Razvan"));
-        log.trace("fidelity test {}", clientRepository.findByExactFidelity(3));
+//        log.trace("name test {}", clientRepository.findByExactName("Razvan"));
+//        log.trace("fidelity test {}", clientRepository.findByExactFidelity(3));
         return clientRepository.findAll();
     }
 
@@ -111,6 +127,67 @@ public class ClientService {
     public Iterable<Client> filterClientsByFidelity(Integer fidelity) {
         log.trace("Filtering clients by fidelity {}", fidelity);
         return clientRepository.findByExactFidelity(fidelity);
+    }
+
+    @Transactional
+    public void addRental(int movieId, int clientId, String time) {
+        Rental rental = new Rental(
+                entityManager.getReference(Client.class, clientId),
+                entityManager.getReference(Movie.class, movieId),
+                LocalDateTime.parse(time, formatter));
+
+        rentalValidator.validate(rental);
+        log.trace("Adding rental {}", rental);
+        clientRepository.findByIdWithRentals(clientId).orElseThrow(RuntimeException::new).getRentals().add(rental);
+//        movieRepository.findByIdWithRentals(movieId).orElseThrow(RuntimeException::new).getRentals().add(rental);
+    }
+
+    @Transactional
+    public void deleteRental(int rentalId) {
+        Optional<Rental> optionalRental = clientRepository.findAllClientsWithRentals()
+                .stream()
+                .map(client -> client.getRentals())
+                .flatMap(rentals -> rentals.stream())
+                .filter(rental -> rental.getId().equals(rentalId))
+                .findFirst();
+        optionalRental.ifPresent(
+                rental -> {
+                    Optional<Client> client = clientRepository.findByIdWithRentals(rental.getClient().getId());
+                    client.ifPresent(c -> c.getRentals().remove(rental));
+                }
+        );
+    }
+
+    @Transactional
+    public void updateRental(int rentalId, String time) {
+        LocalDateTime dateTime;
+        try {
+            dateTime = LocalDateTime.parse(time, formatter);
+        } catch (DateTimeParseException e) {
+            throw new DateTimeInvalidException("Date and time invalid");
+        }
+        clientRepository.findAllClientsWithRentals().stream()
+                .map(client -> client.getRentals())
+                .reduce(new ArrayList<>(), (a, b) -> {
+                    a.addAll(b);
+                    return a;
+                })
+                .stream()
+                .filter(rental -> rental.getId().equals(rentalId))
+                .findFirst()
+                .orElseThrow(RuntimeException::new)
+                .setTime(dateTime);
+    }
+
+    public Iterable<Rental> getRentals() {
+        log.trace("Fetching all rentals");
+        return clientRepository.findAllClientsWithRentals()
+                .stream()
+                .map(client -> client.getRentals())
+                .reduce(new ArrayList<>(), (a, b) -> {
+                    a.addAll(b);
+                    return a;
+                });
     }
 
     public Iterable<Client> filterClientsByNamePaginated(String name, int page, int size) {

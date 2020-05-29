@@ -12,18 +12,25 @@ import ro.sdi.lab24.core.exception.ElementNotFoundException;
 import ro.sdi.lab24.core.model.Client;
 import ro.sdi.lab24.core.service.ClientService;
 import ro.sdi.lab24.web.converter.ClientConverter;
+import ro.sdi.lab24.web.converter.RentalConverter;
 import ro.sdi.lab24.web.dto.ClientDTO;
 import ro.sdi.lab24.web.dto.ClientsDTO;
+
+import java.time.format.DateTimeFormatter;
 
 @RestController
 public class ClientRestController {
     private static final Logger log = LoggerFactory.getLogger(ClientRestController.class);
+    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     @Autowired
     private ClientService clientService;
 
     @Autowired
     private ClientConverter clientConverter;
+
+    @Autowired
+    private RentalConverter rentalConverter;
 
     @RequestMapping(value = "/clients", method = RequestMethod.GET)
     public ClientsDTO getClients() {

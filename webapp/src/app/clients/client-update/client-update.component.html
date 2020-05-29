@@ -45,7 +45,9 @@
         </div>
       </div>
     </div>
-    <button (click)="update(id.value, name.value)" [disabled]="clientForm.invalid" type="submit">Submit</button>
+    <button (click)="update(id.value, name.value, fidelity.value)" [disabled]="clientForm.invalid" type="submit">
+      Submit
+    </button>
   </div>
   <div *ngIf="formDir.submitted" class="submitted-message">
     <p *ngIf="successfulUpdate">Client {{this.clientForm.value.id}} updated! New

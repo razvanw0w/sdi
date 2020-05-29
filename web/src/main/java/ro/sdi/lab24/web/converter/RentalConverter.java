@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import ro.sdi.lab24.core.model.Client;
 import ro.sdi.lab24.core.model.Movie;
 import ro.sdi.lab24.core.model.Rental;
-import ro.sdi.lab24.web.controller.RentalRestController;
+import ro.sdi.lab24.web.controller.ClientRestController;
 import ro.sdi.lab24.web.dto.RentalDTO;
 
 import javax.persistence.EntityManager;
@@ -21,7 +21,7 @@ public class RentalConverter implements Converter<Rental, RentalDTO> {
         Rental rental = Rental.builder()
                 .movie(entityManager.getReference(Movie.class, rentalDTO.getMovieId()))
                 .client(entityManager.getReference(Client.class, rentalDTO.getClientId()))
-                .time(LocalDateTime.parse(rentalDTO.getTime(), RentalRestController.formatter))
+                .time(LocalDateTime.parse(rentalDTO.getTime(), ClientRestController.formatter))
                 .build();
         rental.setId(rentalDTO.getRentalId());
         return rental;
@@ -33,7 +33,7 @@ public class RentalConverter implements Converter<Rental, RentalDTO> {
                 .rentalId(rental.getId())
                 .movieId(rental.getMovie().getId())
                 .clientId(rental.getClient().getId())
-                .time(RentalRestController.formatter.format(rental.getTime()))
+                .time(ClientRestController.formatter.format(rental.getTime()))
                 .build();
     }
 }

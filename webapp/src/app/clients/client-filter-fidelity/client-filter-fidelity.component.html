@@ -1,0 +1,50 @@
+<h2>Filter clients by name</h2>
+<form #formDir="ngForm" [formGroup]="clientForm">
+  <div class="form-group">
+    <label for="fidelity">Fidelity</label>
+    <input class="form-control" formControlName="fidelity" id="fidelity" required>
+    <div *ngIf="fidelity.invalid && (fidelity.dirty || fidelity.touched)" class="alert">
+      <div *ngIf="fidelity.errors.required">
+        Fidelity is required.
+      </div>
+      <div *ngIf="fidelity.errors.pattern">
+        Fidelity must consist only of digits.
+      </div>
+      <div *ngIf="fidelity.errors.min">
+        Fidelity must be at least 1
+      </div>
+      <div *ngIf="fidelity.errors.max">
+        Fidelity must be at most 5
+      </div>
+    </div>
+  </div>
+  <button (click)="filterByFidelity(fidelity.value)" [disabled]="clientForm.invalid" type="submit">
+    Filter
+  </button>
+</form>
+
+<ul class="clients">
+  <li (click)="onSelect(client)" *ngFor="let client of clients" [class.selected]="client === selectedClient">
+    <span class="badge">{{client.id}}</span> {{client.name}}
+  </li>
+</ul>
+
+<div *ngIf="selectedClient" class=details>
+  <h3>
+    Details for client {{selectedClient.name}}
+  </h3>
+  <div>
+    <span>Client ID: </span>{{selectedClient.id}}
+  </div>
+  <label>
+    Client name: <input [(ngModel)]="selectedClient.name" placeholder="client name"/>
+  </label>
+  <br>
+  <label>
+    Client fidelity: <input [(ngModel)]="selectedClient.fidelity" placeholder="client name"/>
+  </label>
+</div>
+
+<nav>
+  <div class="panels" routerLink="/clients" routerLinkActive="active">< Back</div>
+</nav>
