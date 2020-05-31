@@ -4,11 +4,11 @@
 </h2>
 <nav>
   <div style="display: flex; flex-direction: row;">
-    <div class="panels" routerLink="/rentals/list" routerLinkActive="active">List</div>
-    <div class="panels" routerLink="/rentals/add" routerLinkActive="active">Add</div>
-    <div class="panels" routerLink="/rentals/update" routerLinkActive="active">Update</div>
-    <div class="panels" routerLink="/rentals/delete" routerLinkActive="active">Delete</div>
-<!--    <div class="panelsWide" routerLink="/rentals/filter/moviename" routerLinkActive="active">Filter by movie name</div>-->
+    <div *ngIf="employeeRole" class="panels" routerLink="/rentals/list" routerLinkActive="active">List</div>
+    <div *ngIf="employeeRole" class="panels" routerLink="/rentals/add" routerLinkActive="active">Add</div>
+    <div *ngIf="employeeRole" class="panels" routerLink="/rentals/update" routerLinkActive="active">Update</div>
+    <div *ngIf="employeeRole" class="panels" routerLink="/rentals/delete" routerLinkActive="active">Delete</div>
+    <!--    <div class="panelsWide" routerLink="/rentals/filter/moviename" routerLinkActive="active">Filter by movie name</div>-->
     <!--    <div class="panelsWide" routerLink="/rentals/filter/date" routerLinkActive="active">Filter by date</div>-->
   </div>
 </nav>

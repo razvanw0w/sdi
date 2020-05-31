@@ -4,12 +4,16 @@
 </h2>
 <nav>
   <div style="display: flex; flex-direction: row;">
-    <div class="panels" routerLink="/clients/list" routerLinkActive="active">List</div>
-    <div class="panels" routerLink="/clients/add" routerLinkActive="active">Add</div>
-    <div class="panels" routerLink="/clients/update" routerLinkActive="active">Update</div>
-    <div class="panels" routerLink="/clients/delete" routerLinkActive="active">Delete</div>
-    <div class="panelsWide" routerLink="/clients/filter/name" routerLinkActive="active">Filter by name</div>
-    <div class="panelsWide" routerLink="/clients/filter/fidelity" routerLinkActive="active">Filter by fidelity</div>
+    <div *ngIf="employeeRole" class="panels" routerLink="/clients/list" routerLinkActive="active">List</div>
+    <div *ngIf="employeeRole" class="panels" routerLink="/clients/add" routerLinkActive="active">Add</div>
+    <div *ngIf="employeeRole" class="panels" routerLink="/clients/update" routerLinkActive="active">Update</div>
+    <div *ngIf="employeeRole" class="panels" routerLink="/clients/delete" routerLinkActive="active">Delete</div>
+    <div *ngIf="employeeRole" class="panelsWide" routerLink="/clients/filter/name" routerLinkActive="active">Filter by
+      name
+    </div>
+    <div *ngIf="employeeRole" class="panelsWide" routerLink="/clients/filter/fidelity" routerLinkActive="active">Filter
+      by fidelity
+    </div>
     <!--    <div class="panels" routerLink="/clients/sort" routerLinkActive="active">Sort</div>-->
   </div>
 </nav>

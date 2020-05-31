@@ -1,0 +1,15 @@
+<form class="form-group" name="login-form">
+  <h2 class="mat-h2">Login</h2>
+  <label>Username</label>
+  <input #userIn="ngModel" [(ngModel)]="name" id="login" matInput name="login-in" required type="text">
+  <br>
+
+  <label>Password</label>
+  <input #passIn="ngModel" [(ngModel)]="password" id="password-in" matInput name="password" required type="password">
+
+  <br>
+  <button (click)="login()" class="button" color="primary">
+    Login
+  </button>
+  <div *ngIf="badLogin">Invalid login!</div>
+</form>

@@ -5,9 +5,9 @@
 <nav>
   <div style="display: flex; flex-direction: row;">
     <div class="panels" routerLink="/movies/list" routerLinkActive="active">List</div>
-    <div class="panels" routerLink="/movies/add" routerLinkActive="active">Add</div>
-    <div class="panels" routerLink="/movies/update" routerLinkActive="active">Update</div>
-    <div class="panels" routerLink="/movies/delete" routerLinkActive="active">Delete</div>
+    <div *ngIf="employeeRole" class="panels" routerLink="/movies/add" routerLinkActive="active">Add</div>
+    <div *ngIf="employeeRole" class="panels" routerLink="/movies/update" routerLinkActive="active">Update</div>
+    <div *ngIf="employeeRole" class="panels" routerLink="/movies/delete" routerLinkActive="active">Delete</div>
     <div class="panelsWide" routerLink="/movies/filter/genre" routerLinkActive="active">Filter by genre</div>
     <div class="panelsWide" routerLink="/movies/filter/name" routerLinkActive="active">Filter by name</div>
     <!--    <div class="panels" routerLink="/movies/sort" routerLinkActive="active">Sort</div>-->

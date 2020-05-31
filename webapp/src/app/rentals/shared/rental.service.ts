@@ -11,7 +11,7 @@ export class RentalService {
   }
 
   getRentals(): Observable<Rentals> {
-    return this.httpClient.get<Rentals>(this.rentalsURL);
+    return this.httpClient.get<Rentals>(this.rentalsURL, {withCredentials: true});
   }
 
   getRentalsPaginated(page: number, size: number): Observable<Rentals> {
@@ -19,19 +19,22 @@ export class RentalService {
   }
 
   addRental(rental: Rental): Observable<HttpResponse<any>> {
-    return this.httpClient.post<HttpResponse<any>>(this.rentalsURL, rental, {observe: "response"});
+    return this.httpClient.post<HttpResponse<any>>(this.rentalsURL, rental, {observe: "response", withCredentials: true});
   }
 
   updateRental(rental: Rental): Observable<HttpResponse<any>> {
-    return this.httpClient.put<HttpResponse<any>>(`${this.rentalsURL}/${rental.rentalId}`, rental, {observe: "response"});
+    return this.httpClient.put<HttpResponse<any>>(`${this.rentalsURL}/${rental.rentalId}`, rental, {
+      observe: "response",
+      withCredentials: true
+    });
   }
 
   deleteRental(rentalId: number): Observable<HttpResponse<any>> {
-    return this.httpClient.delete<HttpResponse<any>>(`${this.rentalsURL}/${rentalId}`, {observe: "response"});
+    return this.httpClient.delete<HttpResponse<any>>(`${this.rentalsURL}/${rentalId}`, {observe: "response", withCredentials: true});
   }
 
   filterRentalsByMovieName(movieName: string): Observable<Rentals> {
-    return this.httpClient.get<Rentals>(`${this.rentalsURL}/filter/${movieName}`);
+    return this.httpClient.get<Rentals>(`${this.rentalsURL}/filter/${movieName}`, {withCredentials: true});
   }
 
   filterRentalsByDate(date: string): Observable<Rentals> {

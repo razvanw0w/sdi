@@ -11,7 +11,7 @@ export class ClientService {
   }
 
   getClients(): Observable<Clients> {
-    return this.httpClient.get<Clients>(this.clientsURL);
+    return this.httpClient.get<Clients>(this.clientsURL, {withCredentials: true});
   }
 
   getClientsPaginated(page: number, size: number): Observable<Clients> {
@@ -19,23 +19,23 @@ export class ClientService {
   }
 
   addClient(client: Client): Observable<HttpResponse<any>> {
-    return this.httpClient.post<HttpResponse<any>>(this.clientsURL, client, {observe: "response"});
+    return this.httpClient.post<HttpResponse<any>>(this.clientsURL, client, {withCredentials: true, observe: "response"});
   }
 
   updateClient(client: Client): Observable<HttpResponse<any>> {
-    return this.httpClient.put<HttpResponse<any>>(`${this.clientsURL}/${client.id}`, client, {observe: "response"});
+    return this.httpClient.put<HttpResponse<any>>(`${this.clientsURL}/${client.id}`, client, {withCredentials: true, observe: "response"});
   }
 
   deleteClient(id: number): Observable<HttpResponse<any>> {
-    return this.httpClient.delete(`${this.clientsURL}/${id}`, {observe: "response"});
+    return this.httpClient.delete(`${this.clientsURL}/${id}`, {withCredentials: true, observe: "response"});
   }
 
   filterClientsByName(name: string): Observable<Clients> {
-    return this.httpClient.get<Clients>(`${this.clientsURL}/filter-name/${name}`);
+    return this.httpClient.get<Clients>(`${this.clientsURL}/filter-name/${name}`, {withCredentials: true});
   }
 
   filterClientsByFidelity(fidelity: number): Observable<Clients> {
-    return this.httpClient.get<Clients>(`${this.clientsURL}/filter-fidelity/${fidelity}`);
+    return this.httpClient.get<Clients>(`${this.clientsURL}/filter-fidelity/${fidelity}`, {withCredentials: true});
   }
 
   filterClientsByNamePaginated(name: string, page: number, size: number): Observable<Clients> {

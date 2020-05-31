@@ -36,6 +36,9 @@ import {MovieSortComponent} from './movies/movie-sort/movie-sort.component';
 import {RentalFilterClientComponent} from './rentals/rental-filter-client/rental-filter-client.component';
 import {ClientFilterFidelityComponent} from './clients/client-filter-fidelity/client-filter-fidelity.component';
 import {MovieFilterNameComponent} from './movies/movie-filter-name/movie-filter-name.component';
+import {LoginComponent} from './login/login.component';
+import {HomeComponent} from './home/home.component';
+import {LoginService} from "./login/login.service";
 
 @NgModule({
   declarations: [
@@ -66,7 +69,9 @@ import {MovieFilterNameComponent} from './movies/movie-filter-name/movie-filter-
     MovieSortComponent,
     RentalFilterClientComponent,
     ClientFilterFidelityComponent,
-    MovieFilterNameComponent
+    MovieFilterNameComponent,
+    LoginComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -75,7 +80,7 @@ import {MovieFilterNameComponent} from './movies/movie-filter-name/movie-filter-
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [ClientService, MovieService, RentalService, ReportService],
+  providers: [ClientService, MovieService, RentalService, ReportService, LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

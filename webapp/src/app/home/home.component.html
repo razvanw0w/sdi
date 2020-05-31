@@ -15,5 +15,14 @@
 <!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
-<h1>{{title}}</h1>
+<nav>
+  <div style="display: flex; flex-direction: row">
+    <div *ngIf="employeeRole" class="panels" routerLink="/clients" routerLinkActive="active">Clients</div>
+    <div class="panels" routerLink="/movies" routerLinkActive="active">Movies</div>
+    <div *ngIf="employeeRole" class="panels" routerLink="/rentals" routerLinkActive="active">Rentals</div>
+    <!--    <div class="panels" routerLink="/reports" routerLinkActive="active">Reports</div>-->
+  </div>
+  <div (click)="logout()" class="panels">Logout</div>
+</nav>
+
 <router-outlet></router-outlet>

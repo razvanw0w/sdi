@@ -12,7 +12,7 @@ export class MovieService {
   }
 
   getMovies(): Observable<Movies> {
-    return this.httpClient.get<Movies>(this.moviesURL);
+    return this.httpClient.get<Movies>(this.moviesURL, {withCredentials: true});
   }
 
   getMoviesPaginated(page: number, size: number): Observable<Movies> {
@@ -20,23 +20,23 @@ export class MovieService {
   }
 
   addMovie(movie: Movie): Observable<HttpResponse<any>> {
-    return this.httpClient.post<HttpResponse<any>>(this.moviesURL, movie, {observe: "response"});
+    return this.httpClient.post<HttpResponse<any>>(this.moviesURL, movie, {observe: "response", withCredentials: true});
   }
 
   updateMovie(movie: Movie): Observable<HttpResponse<any>> {
-    return this.httpClient.put<HttpResponse<any>>(`${this.moviesURL}/${movie.id}`, movie, {observe: "response"});
+    return this.httpClient.put<HttpResponse<any>>(`${this.moviesURL}/${movie.id}`, movie, {observe: "response", withCredentials: true});
   }
 
   deleteMovie(id: number): Observable<HttpResponse<any>> {
-    return this.httpClient.delete<HttpResponse<any>>(`${this.moviesURL}/${id}`, {observe: "response"});
+    return this.httpClient.delete<HttpResponse<any>>(`${this.moviesURL}/${id}`, {observe: "response", withCredentials: true});
   }
 
   filterMoviesByGenre(genre: string): Observable<Movies> {
-    return this.httpClient.get<Movies>(`${this.moviesURL}/filter-genre/${genre}`);
+    return this.httpClient.get<Movies>(`${this.moviesURL}/filter-genre/${genre}`, {withCredentials: true});
   }
 
   filterMoviesByName(name: string): Observable<Movies> {
-    return this.httpClient.get<Movies>(`${this.moviesURL}/filter-name/${name}`);
+    return this.httpClient.get<Movies>(`${this.moviesURL}/filter-name/${name}`, {withCredentials: true});
   }
 
   filterMoviesByGenrePaginated(genre: string, page: number, size: number): Observable<Movies> {

@@ -27,36 +27,43 @@ import {MovieSortComponent} from "./movies/movie-sort/movie-sort.component";
 import {RentalFilterClientComponent} from "./rentals/rental-filter-client/rental-filter-client.component";
 import {ClientFilterFidelityComponent} from "./clients/client-filter-fidelity/client-filter-fidelity.component";
 import {MovieFilterNameComponent} from "./movies/movie-filter-name/movie-filter-name.component";
+import {LoginComponent} from "./login/login.component";
+import {HomeComponent} from "./home/home.component";
+import {EmployeeGuard} from "./employee-auth";
+import {AuthGuard} from "./basic-auth";
 
 
 const routes: Routes = [
-  {path: 'clients', component: ClientsComponent},
-  {path: 'clients/list', component: ClientListComponent},
-  {path: 'clients/add', component: ClientAddComponent},
-  {path: 'clients/update', component: ClientUpdateComponent},
-  {path: 'clients/delete', component: ClientDeleteComponent},
-  {path: 'clients/filter/name', component: ClientFilterComponent},
-  {path: 'clients/filter/fidelity', component: ClientFilterFidelityComponent},
-  {path: 'clients/sort', component: ClientSortComponent},
-  {path: 'movies', component: MoviesComponent},
-  {path: 'movies/list', component: MovieListComponent},
-  {path: 'movies/add', component: MovieAddComponent},
-  {path: 'movies/delete', component: MovieDeleteComponent},
-  {path: 'movies/update', component: MovieUpdateComponent},
-  {path: 'movies/filter/genre', component: MovieFilterGenreComponent},
-  {path: 'movies/filter/rating', component: MovieFilterRatingComponent},
-  {path: 'movies/filter/name', component: MovieFilterNameComponent},
-  {path: 'movies/sort', component: MovieSortComponent},
-  {path: 'rentals', component: RentalsComponent},
-  {path: 'rentals/list', component: RentalListComponent},
-  {path: 'rentals/add', component: RentalAddComponent},
-  {path: 'rentals/update', component: RentalUpdateComponent},
-  {path: 'rentals/delete', component: RentalDeleteComponent},
-  {path: 'rentals/filter/moviename', component: RentalFilterComponent},
-  {path: 'rentals/filter/date', component: RentalFilterClientComponent},
-  {path: 'reports', component: ReportsComponent},
-  {path: 'reports/topmovies', component: ReportTopmoviesComponent},
-  {path: 'reports/clientgenres', component: ReportClientgenresComponent}
+  {path: 'clients', component: ClientsComponent, canActivate: [EmployeeGuard]},
+  {path: 'clients/list', component: ClientListComponent, canActivate: [EmployeeGuard]},
+  {path: 'clients/add', component: ClientAddComponent, canActivate: [EmployeeGuard]},
+  {path: 'clients/update', component: ClientUpdateComponent, canActivate: [EmployeeGuard]},
+  {path: 'clients/delete', component: ClientDeleteComponent, canActivate: [EmployeeGuard]},
+  {path: 'clients/filter/name', component: ClientFilterComponent, canActivate: [EmployeeGuard]},
+  {path: 'clients/filter/fidelity', component: ClientFilterFidelityComponent, canActivate: [EmployeeGuard]},
+  {path: 'clients/sort', component: ClientSortComponent, canActivate: [EmployeeGuard]},
+  {path: 'movies', component: MoviesComponent, canActivate: [AuthGuard]},
+  {path: 'movies/list', component: MovieListComponent, canActivate: [AuthGuard]},
+  {path: 'movies/add', component: MovieAddComponent, canActivate: [EmployeeGuard]},
+  {path: 'movies/delete', component: MovieDeleteComponent, canActivate: [EmployeeGuard]},
+  {path: 'movies/update', component: MovieUpdateComponent, canActivate: [EmployeeGuard]},
+  {path: 'movies/filter/genre', component: MovieFilterGenreComponent, canActivate: [AuthGuard]},
+  {path: 'movies/filter/rating', component: MovieFilterRatingComponent, canActivate: [AuthGuard]},
+  {path: 'movies/filter/name', component: MovieFilterNameComponent, canActivate: [AuthGuard]},
+  {path: 'movies/sort', component: MovieSortComponent, canActivate: [AuthGuard]},
+  {path: 'rentals', component: RentalsComponent, canActivate: [EmployeeGuard]},
+  {path: 'rentals/list', component: RentalListComponent, canActivate: [EmployeeGuard]},
+  {path: 'rentals/add', component: RentalAddComponent, canActivate: [EmployeeGuard]},
+  {path: 'rentals/update', component: RentalUpdateComponent, canActivate: [EmployeeGuard]},
+  {path: 'rentals/delete', component: RentalDeleteComponent, canActivate: [EmployeeGuard]},
+  {path: 'rentals/filter/moviename', component: RentalFilterComponent, canActivate: [EmployeeGuard]},
+  {path: 'rentals/filter/date', component: RentalFilterClientComponent, canActivate: [EmployeeGuard]},
+  {path: 'reports', component: ReportsComponent, canActivate: [AuthGuard]},
+  {path: 'reports/topmovies', component: ReportTopmoviesComponent, canActivate: [AuthGuard]},
+  {path: 'reports/clientgenres', component: ReportClientgenresComponent, canActivate: [AuthGuard]},
+  {path: 'login', component: LoginComponent},
+  {path: 'home', component: HomeComponent},
+  {path: '**', redirectTo: 'login'}
 ];
 
 @NgModule({

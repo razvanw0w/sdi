@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import ro.sdi.lab24.core.model.UserRole;
 import ro.sdi.lab24.web.security.CatalogUserDetailsService;
+import ro.sdi.lab24.web.security.CustomLogoutSuccessHandler;
 import ro.sdi.lab24.web.security.MySavedRequestAwareAuthenticationSuccessHandler;
 import ro.sdi.lab24.web.security.RestAuthenticationEntryPoint;
 
@@ -84,14 +85,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/clients").hasRole(UserRole.EMPLOYEE.toString())
+                .antMatchers("/api/clients*").hasRole(UserRole.EMPLOYEE.toString())
+                .antMatchers("/api/clients/**").hasRole(UserRole.EMPLOYEE.toString())
                 .antMatchers("/api/rentals").hasRole(UserRole.EMPLOYEE.toString())
-                .antMatchers(HttpMethod.GET, "/api/movies").hasRole(UserRole.CLIENT.toString())
-                .antMatchers(HttpMethod.GET, "/api/movies/filter-genre").hasRole(UserRole.CLIENT.toString())
-                .antMatchers(HttpMethod.GET, "/api/movies/filter-name").hasRole(UserRole.CLIENT.toString())
+                .antMatchers("/api/rentals/**").hasRole(UserRole.EMPLOYEE.toString())
                 .antMatchers(HttpMethod.DELETE, "/api/movies").hasRole(UserRole.EMPLOYEE.toString())
                 .antMatchers(HttpMethod.POST, "/api/movies").hasRole(UserRole.EMPLOYEE.toString())
                 .antMatchers(HttpMethod.PUT, "/api/movies").hasRole(UserRole.EMPLOYEE.toString())
+                .antMatchers(HttpMethod.GET, "/api/movies").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/movies/filter-genre/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/movies/filter-name/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -99,7 +102,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(mySavedRequestAwareAuthenticationSuccessHandler)
                 .failureHandler(new SimpleUrlAuthenticationFailureHandler())
                 .and()
-                .logout();
+                .logout()
+                .logoutUrl("/logout").permitAll()
+                .logoutSuccessHandler(new CustomLogoutSuccessHandler())
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true)
+                .permitAll().and().cors();
     }
 
     @Bean
