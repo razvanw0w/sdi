@@ -13,7 +13,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 import ro.sdi.lab24.core.ITConfig;
-import ro.sdi.lab24.core.model.Client;
+import ro.sdi.lab24.core.model.Movie;
 
 import java.util.List;
 
@@ -23,42 +23,43 @@ import static org.junit.Assert.assertEquals;
 @ContextConfiguration(classes = {ITConfig.class})
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
         TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class})
-@DatabaseSetup("/META-INF/dbtest/db-data-clients.xml")
-public class ClientRepositoryTest {
+@DatabaseSetup("/META-INF/dbtest/db-data-movies.xml")
+public class MovieRepositoryTest {
     @Autowired
-    private ClientRepository clientRepository;
+    MovieRepository movieRepository;
 
     @Test
     public void findAll() throws Exception {
-        List<Client> all = clientRepository.findAll();
-        assertEquals("there should be 3 clients", 3, all.size());
+        List<Movie> all = movieRepository.findAll();
+        assertEquals(4, all.size());
     }
 
     @Test
     public void add() throws Exception {
-        Client client = Client.builder()
+        Movie movie = Movie.builder()
                 .name("Mock")
-                .fidelity(3)
+                .genre("mockgenre")
+                .rating(100)
                 .build();
-        client.setId(-1);
-        clientRepository.save(client);
-        List<Client> all = clientRepository.findAll();
-        assertEquals("there should be 4 clients", 4, all.size());
+        movie.setId(-1);
+        movieRepository.save(movie);
+        List<Movie> all = movieRepository.findAll();
+        assertEquals(5, all.size());
     }
 
     @Test
     public void delete() throws Exception {
-        clientRepository.deleteById(2);
-        List<Client> all = clientRepository.findAll();
-        assertEquals("there should be 2 clients", 2, all.size());
+        movieRepository.deleteById(1);
+        List<Movie> all = movieRepository.findAll();
+        assertEquals(3, all.size());
     }
 
     @Test
     @Transactional
     public void update() throws Exception {
-        Client client = clientRepository.findById(1).orElseThrow(RuntimeException::new);
-        client.setName("updated");
-        List<Client> all = clientRepository.findAll();
-        assertEquals("updated entity", all.get(0).getName(), "updated");
+        Movie movie = movieRepository.findById(1).orElseThrow(RuntimeException::new);
+        movie.setName("updated");
+        List<Movie> all = movieRepository.findAll();
+        assertEquals("updated", all.get(0).getName());
     }
 }

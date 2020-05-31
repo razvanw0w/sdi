@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({"ro.sdi.lab24.web.controller", "ro.sdi.lab24.web.converter"})
+@ComponentScan({"ro.sdi.lab24.web.controller", "ro.sdi.lab24.web.converter", "ro.sdi.lab24.web.security"})
 public class WebConfig {
     @Bean
     public WebMvcConfigurer corsConfigurer() {

@@ -1,0 +1,6 @@
+<dataset>
+    <movie movieid="1" name="Movie1" genre="genreOne" rating="89"/>
+    <movie movieid="2" name="Movie2" genre="genreTwo" rating="73"/>
+    <movie movieid="3" name="Movie3" genre="genreOne" rating="93"/>
+    <movie movieid="4" name="Movie4" genre="genreTwo" rating="65"/>
+</dataset>
