@@ -62,7 +62,7 @@ const routes: Routes = [
   {path: 'reports/topmovies', component: ReportTopmoviesComponent, canActivate: [AuthGuard]},
   {path: 'reports/clientgenres', component: ReportClientgenresComponent, canActivate: [AuthGuard]},
   {path: 'login', component: LoginComponent},
-  {path: 'home', component: HomeComponent},
+  {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
   {path: '**', redirectTo: 'login'}
 ];
 
