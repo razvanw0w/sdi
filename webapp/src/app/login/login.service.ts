@@ -13,7 +13,7 @@ export class LoginService {
     observe: 'response'
   };
   currentUser: string = "NONE";
-  private url = 'http://localhost:8080/login';
+  private url = 'http://localhost:8080/api/login';
 
   constructor(private http: HttpClient) {
   }
@@ -42,7 +42,7 @@ export class LoginService {
   }
 
   logout(): Observable<any> {
-    return this.http.post("http://localhost:8080/logout", {}, {
+    return this.http.post("http://localhost:8080/api/logout", {}, {
       headers: new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'}),
       withCredentials: true,
       observe: 'response'

@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
 
   logout(): void {
     console.log("log out frontend");
-    this.loginService.logout();
+    this.loginService.logout().subscribe(result => console.log(result));
     this.router.navigate(["login"]);
   }
 }
